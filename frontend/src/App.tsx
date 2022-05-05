@@ -16,7 +16,8 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          결국은 교촌에 맥주를 먹었다.
+          결국은 교촌에 맥주를 먹었다. 하지만 맥주가 너무 강려크했다 종호는
+          중태에 빠졌다.
         </a>
       </header>
     </div>
