@@ -132,7 +132,6 @@ html {
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
   width: 100%;
-  max-width: 480px;
   margin: 0 auto;
   /* 
     폰트 사이즈 62.5% 한 이유는 rem 단위 통일 시키기 위해서 입니다.
@@ -142,5 +141,6 @@ html {
     예시) 10px === 1rem, 25px === 2.5rem
   */
   font-size: 62.5%;
+  box-sizing: border-box;
 }
 `;
