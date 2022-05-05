@@ -1,26 +1,15 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import { GlobalStyle } from "./styles/GlobalStyle";
+import Router from "./Router";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          결국은 교촌에 맥주를 먹었다. 하지만 맥주가 너무 강려크했다 종호는
-          중태에 빠졌다.
-        </a>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+        <GlobalStyle />
+        <Router />
+      </BrowserRouter>
+    </>
   );
 }
 
