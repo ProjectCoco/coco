@@ -5,6 +5,8 @@ import FavorCard from "../components/FavorCard";
 import { useNavigate } from "react-router-dom";
 
 const StudyBoard = () => {
+  //테스트
+  // 겹치지 않은 파일을 frontend에 합치면?
   const navigate = useNavigate();
 
   return (
