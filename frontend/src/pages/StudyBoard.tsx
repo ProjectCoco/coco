@@ -5,6 +5,7 @@ import FavorCard from "../components/FavorCard";
 import { useNavigate } from "react-router-dom";
 
 const StudyBoard = () => {
+  //테스트
   const navigate = useNavigate();
 
   return (
