@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
+    private final BCryptPasswordEncoder encoder;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
@@ -25,7 +26,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User saveUser(UserLoginDTO userLoginDTO) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
         User user = userRepository.save(new User(userLoginDTO.getEmail(), encoder.encode(userLoginDTO.getPassword())));
 
         return user;
