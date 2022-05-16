@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 interface Prop {
   subject: string;
@@ -6,10 +6,10 @@ interface Prop {
   onClick: () => void;
 }
 
-const FavorCard = ({ subject, content }: Prop) => {
+const FavorCard = ({ subject, content, onClick }: Prop) => {
   return (
     <>
-      <Card>
+      <Card onClick={onClick}>
         <Subject>{subject}</Subject>
         <Content>{content}</Content>
       </Card>
