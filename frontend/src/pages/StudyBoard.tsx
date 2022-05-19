@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import { DuBoardList } from "../dummys/dummy";
-import BoardList from "../components/BoardList";
-import FavorCard from "../components/FavorCard";
-import { useNavigate } from "react-router-dom";
+import styled from 'styled-components';
+import { DuBoardList } from '../dummys/dummy';
+import BoardList from '../components/BoardList';
+import FavorCard from '../components/FavorCard';
+import { useNavigate } from 'react-router-dom';
 
 const StudyBoard = () => {
   //테스트
@@ -14,18 +14,18 @@ const StudyBoard = () => {
       <FavorContainer>
         {DuBoardList.slice(0, 4).map((item, index) => (
           <FavorCard
-            onClick={() => navigate(`:${item.id}`)}
+            onClick={() => navigate(`${item.id}`)}
             key={index}
             subject={item.subject}
             content={item.content}
           />
         ))}
       </FavorContainer>
-      <Search placeholder="검색내용" />
+      <Search placeholder='검색내용' />
       <BoardListContainer>
         {DuBoardList.slice(0, 10).map((item, index) => (
           <BoardList
-            onClick={() => navigate(`:${item.id}`)}
+            id={item.id}
             key={index}
             subject={item.subject}
             content={item.content}
@@ -51,6 +51,8 @@ const Search = styled.input`
   width: 100%;
   margin: 3rem 0;
 `;
-const BoardListContainer = styled.div``;
+const BoardListContainer = styled.div`
+  font-size: 2rem;
+`;
 
 export default StudyBoard;
