@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { useNavigate, useLocation } from "react-router-dom";
-
+import styled from 'styled-components';
+import { useNavigate, useLocation } from 'react-router-dom';
+import coco_logo from '../images/wifi.png';
 const NaviHeader = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -8,23 +8,26 @@ const NaviHeader = () => {
   return (
     <>
       <Container>
-        <Logo onClick={() => navigate("/")}>로고</Logo>
+        <Logo onClick={() => navigate('/')}>
+          <LogoText>COCO</LogoText>
+          <LogoImg src={coco_logo} />
+        </Logo>
         <div>
           <MenuList>
             <MenuListContent
-              isPathMatch={pathname === "/free-board" ? true : false}
+              isPathMatch={pathname === '/free-board' ? true : false}
             >
               자유게시판
             </MenuListContent>
             <MenuListContent
-              isPathMatch={pathname === "/study-board" ? true : false}
-              onClick={() => navigate("/study-board")}
+              isPathMatch={pathname === '/study-board' ? true : false}
+              onClick={() => navigate('/study-board')}
             >
               스터디구인
             </MenuListContent>
             <MenuListContent
-              isPathMatch={pathname === "/login" ? true : false}
-              onClick={() => navigate("/login")}
+              isPathMatch={pathname === '/login' ? true : false}
+              onClick={() => navigate('/login')}
             >
               로그인
             </MenuListContent>
@@ -37,26 +40,40 @@ const NaviHeader = () => {
 
 const Container = styled.div`
   width: 100%;
-  height: 5rem;
-  border: 0.1rem solid black;
+  height: 7rem;
+  border-bottom: 0.1rem solid lightgray;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
-const Logo = styled.button`
-  width: 3rem;
-  height: 2rem;
-  border: 0.1rem solid black;
+const Logo = styled.div`
   margin-left: 1rem;
-  background: url("/image/logo.jpg") no-repeat 50% 50%;
-  z-index: 3;
+  cursor: pointer;
+  display: flex;
 `;
+
+const LogoText = styled.p`
+  font-size: 3rem;
+  font-weight: bold;
+  color: #444;
+  caret-color: rgba(0, 0, 0, 0);
+`;
+
+const LogoImg = styled.img`
+  width: 2.5rem;
+  height: 2.5rem;
+`;
+
 const MenuList = styled.ul`
   display: flex;
 `;
 const MenuListContent = styled.li<{ isPathMatch: boolean }>`
   margin-right: 1rem;
-  color: ${(prop) => (prop.isPathMatch ? "blue" : "black")};
+  font-size: 1.2rem;
+  cursor: pointer;
+  caret-color: rgba(0, 0, 0, 0);
+
+  color: ${(prop) => (prop.isPathMatch ? '#56b6e7' : 'black')};
 `;
 
 export default NaviHeader;
