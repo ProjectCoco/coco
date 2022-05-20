@@ -1,20 +1,36 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { DuBoardList } from "../dummys/dummy";
-import { useNavigate } from "react-router-dom";
+import { IDuBoardDetail, DuBoardDetail, IDuBoardList } from "../dummys/dummy";
+// Import Images
+import profileImg2 from "../images/download.jpg";
+import mainImg from "../images/mainImg.jpg";
+import commentImg from "../images/userProfile.jpg";
 // Import Icons
 import {
   MdOutlineHome,
   MdOutlineFavoriteBorder,
-  MdOutlineKeyboardBackspace,
   MdFavorite,
+  MdOutlineKeyboardBackspace,
 } from "react-icons/md";
 import { AiOutlineComment } from "react-icons/ai";
 import { IoMdPaper } from "react-icons/io";
-import commentImg from "../images/userProfile.jpg";
-import profileImg2 from "../images/download.jpg";
 
-const StudyBoard = () => {
-  const navigator = useNavigate();
+function StudyBoardDetail() {
+  let navigator = useNavigate();
+  let { id } = useParams();
+  const [data, setData] = useState<IDuBoardDetail>();
+  const [posts, setPosts] = useState<IDuBoardList[]>();
+
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+  }
+
+  useEffect(() => {
+    let dummy_data = DuBoardDetail.find((board) => board.id === Number(id));
+    setData(() => dummy_data);
+    setPosts(() => DuBoardDetail);
+  }, []);
 
   return (
     <BoardDetailContainer>
@@ -43,41 +59,55 @@ const StudyBoard = () => {
         </Menubar>
       </LeftDisplay>
       <MainDisplay>
+        <Header>
+          <UserLogo>
+            <UserBox>
+              <UserImg src={profileImg2} />
+              <div>
+                <Author>{data?.author}</Author>
+                <Date>{data?.datetime}</Date>
+              </div>
+            </UserBox>
+            <FavoritBox>
+              {data?.favor ? <MdFavorite /> : <MdOutlineFavoriteBorder />}
+              <h4>{data?.favor}</h4>
+            </FavoritBox>
+          </UserLogo>
+          <Subject>{data?.subject}</Subject>
+          <MainImg src={mainImg} />
+        </Header>
         <Body>
-          <Content>
-            <BoardListContainer>
-              {DuBoardList.slice(0, 10).map((data, index) => (
-                <ContentBox onClick={() => navigator(`${data.id}`)} key={index}>
-                  <Subject>{data.subject}</Subject>
-                  <Content>
-                    {data.content.length > 235
-                      ? `${data.content.slice(0, 235)}...`
-                      : data.content}
-                  </Content>
-                  <UserLogo>
-                    <UserBox>
-                      <UserImg src={profileImg2} />
-                      <div>
-                        <Author>{data.author}</Author>
-                        <Date>{data.datetime}</Date>
-                      </div>
-                    </UserBox>
-                    <div style={{ display: "flex" }}>
-                      <FavoritBox>
-                        <MdFavorite />
-                        <h4>{data.favor}</h4>
-                      </FavoritBox>
-                      <FavoritBox style={{ marginLeft: "2rem" }}>
-                        <AiOutlineComment />
-                        <h4>{data.comment.length}</h4>
-                      </FavoritBox>
+          <Content>{data?.content}</Content>
+          <CommentBox id="CommentBox">
+            <CommentLength>
+              <AiOutlineComment />
+              <p> 댓글 </p>
+            </CommentLength>
+            <CommentForm onSubmit={onSubmit}>
+              <Input
+                type={"text"}
+                placeholder="댓글을 입력하려면 로그인을 해주세요."
+              />
+              <Button>입력</Button>
+            </CommentForm>
+            {data?.comment.map((obj) =>
+              obj.content.map((comment, idx) => (
+                <ShowComment key={idx}>
+                  <CommentProfile>
+                    <div>
+                      <CommentImg src={commentImg} />
                     </div>
-                  </UserLogo>
-                </ContentBox>
-              ))}
-            </BoardListContainer>
-          </Content>
-          <Blank />
+                    <div>
+                      <h1>ghks4{comment.id}</h1>
+                      <h3>2022-05-22</h3>
+                    </div>
+                  </CommentProfile>
+                  <p>{comment.content}</p>
+                </ShowComment>
+              ))
+            )}
+          </CommentBox>
+          <Blank></Blank>
         </Body>
       </MainDisplay>
       <RightDisplay>
@@ -85,10 +115,9 @@ const StudyBoard = () => {
           <LoginButton>Sign In</LoginButton>
           <SignUpButton>Sign Up</SignUpButton>
         </LoginBox>
-        <Search placeholder="검색내용" />
         <MorePosts>
-          <h1>Most View</h1>
-          {DuBoardList?.slice(1, 5).map((post, idx) => (
+          <h1>More Posts</h1>
+          {posts?.slice(1, 5).map((post, idx) => (
             <MorePost key={idx}>
               <MorePostsProfile>
                 <MorePostsImg src={commentImg} />
@@ -102,7 +131,7 @@ const StudyBoard = () => {
             </MorePost>
           ))}
         </MorePosts>
-        <TagBoxTitle>Hot Tags</TagBoxTitle>
+        <TagBoxTitle>Tag</TagBoxTitle>
         <TagBox>
           <Tag># 알고리즘</Tag>
           <Tag># 자바스크립트</Tag>
@@ -114,27 +143,10 @@ const StudyBoard = () => {
       </RightDisplay>
     </BoardDetailContainer>
   );
-};
-//new
-const ContentBox = styled.div`
-  border-bottom: 0.1rem solid;
-  margin-bottom: 3rem;
-  transition: all ease;
-  &:hover {
-    transform: translateX(-3rem);
-  }
-`;
+}
 
-const Search = styled.input`
-  margin: 0 5rem;
-  width: 60%;
-  height: 3rem;
-  border-radius: 2rem;
-  padding-left: 1rem;
-`;
-const BoardListContainer = styled.div`
-  font-size: 2rem;
-`;
+export default StudyBoardDetail;
+
 const BoardDetailContainer = styled.div`
   height: 100vh;
   display: flex;
@@ -222,15 +234,19 @@ const Hr = styled.div`
   padding: 1rem;
 `;
 
-//Main display
-const Subject = styled.h1`
-  @import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
-  font-family: "Anton", sans-serif;
-  font-weight: 700;
-  margin-top: 1rem;
-  font-size: 4rem;
-  letter-spacing: 0.02 rem;
+// Main Display Start
+
+const MainDisplay = styled.div`
+  width: 100%;
+  margin-left: 15%;
+  margin-right: 30%;
 `;
+
+const Header = styled.div`
+  width: 90%;
+  margin: auto;
+`;
+
 const UserLogo = styled.div`
   display: flex;
   align-items: center;
@@ -260,7 +276,7 @@ const FavoritBox = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 3rem;
-  color: skyblue;
+  color: red;
 
   & > h4 {
     color: black;
@@ -268,6 +284,7 @@ const FavoritBox = styled.div`
     font-weight: bold;
   }
 `;
+
 const Author = styled.h4`
   @import url("https://fonts.googleapis.com/css2?family=Radio+Canada:wght@600;700&family=Redressed&family=Roboto+Flex:opsz,wght@8..144,300&family=Signika:wght@500&display=swap");
   margin: 4rem 2rem 0rem;
@@ -286,21 +303,114 @@ const Date = styled.div`
   margin: 0rem 2rem 0rem;
   color: #888;
 `;
-const MainDisplay = styled.div`
-  width: 100%;
-  margin-left: 15%;
-  margin-right: 30%;
+
+const Subject = styled.h1`
+  @import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
+  font-family: "Anton", sans-serif;
+  font-weight: 700;
+  margin-top: 1rem;
+  font-size: 4rem;
+  letter-spacing: 0.02 rem;
 `;
+
+const MainImg = styled.img`
+  margin-top: 3rem;
+  width: 100%;
+`;
+
 const Body = styled.div`
   width: 90%;
   margin: auto;
   margin-top: 3rem;
 `;
+
 const Content = styled.p`
-  margin-top: 1rem;
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   color: #444;
 `;
+
+const CommentBox = styled.div`
+  margin: 10rem auto;
+`;
+
+const CommentLength = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  height: 4rem;
+
+  font-size: 3rem;
+  & > p {
+    font-size: 2rem;
+  }
+`;
+
+const CommentForm = styled.form`
+  width: 100%;
+  display: flex;
+  height: 6rem;
+`;
+
+const Input = styled.input`
+  flex: 9;
+  font-size: 1.5rem;
+  border: solid 2px skyblue;
+  border-color: skyblue;
+`;
+
+const Button = styled.button`
+  flex: 1;
+  background-color: skyblue;
+  color: #fff;
+  font-size: 1.7rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.85;
+  }
+`;
+
+const ShowComment = styled.div`
+  width: 80%;
+  border-bottom: solid 1px skyblue;
+  margin: 2rem 0;
+  padding-top: 2rem;
+  padding-left: 2rem;
+  padding-bottom: 1.5rem;
+
+  & > p {
+    margin-top: 2rem;
+    font-size: 2rem;
+    color: #333;
+  }
+`;
+
+const CommentImg = styled.img`
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+`;
+
+const CommentProfile = styled.div`
+  display: flex;
+  align-items: center;
+
+  & > div > h1 {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  & > div > h3 {
+    font-size: 0.5rem;
+    color: #555;
+  }
+
+  & > div:last-child {
+    padding-left: 1rem;
+  }
+`;
+
 const Blank = styled.div`
   width: 100%;
   height: 0.1rem;
@@ -424,5 +534,3 @@ const Tag = styled.a`
     opacity: 2;
   }
 `;
-
-export default StudyBoard;

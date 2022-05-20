@@ -1,17 +1,19 @@
-import styled from "styled-components";
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 interface Prop {
   subject: string;
   content: string;
   author: string;
   datetime: string;
-  onClick: () => void;
+  id: number;
 }
 
-const BoardList = ({ subject, content, author, datetime }: Prop) => {
+const BoardList = ({ subject, content, author, datetime, id }: Prop) => {
+  let navigator = useNavigate();
   return (
     <>
-      <Board>
+      <Board onClick={() => navigator(`${id}`)}>
         <Header>
           <div>{subject}</div>
           <Author>
