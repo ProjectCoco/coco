@@ -14,7 +14,7 @@ const StudyBoard = () => {
       <FavorContainer>
         {DuBoardList.slice(0, 4).map((item, index) => (
           <FavorCard
-            onClick={() => navigate(`:${item.id}`)}
+            onClick={() => navigate(`${item.id}`)}
             key={index}
             subject={item.subject}
             content={item.content}
@@ -25,7 +25,7 @@ const StudyBoard = () => {
       <BoardListContainer>
         {DuBoardList.slice(0, 10).map((item, index) => (
           <BoardList
-            onClick={() => navigate(`:${item.id}`)}
+            onClick={() => navigate(`${item.id}`)}
             key={index}
             subject={item.subject}
             content={item.content}

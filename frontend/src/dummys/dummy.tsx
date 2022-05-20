@@ -10,20 +10,26 @@ export interface IDuComment {
   id: number;
   content: {
     id: number;
+    author: string;
+    datetime: string;
     content: string;
   }[];
 }
 
-const DuComment = [
+export const DuComment = [
   {
     id: 1,
     content: [
       {
         id: 1,
+        author: "짱구",
+        datetime: "2022-05-06",
         content: "정말 좋은 이야기네요.",
       },
       {
         id: 2,
+        author: "짱아",
+        datetime: "2022-05-07",
         content: "오늘도 좋은 하루 보내시길",
       },
     ],
@@ -33,10 +39,14 @@ const DuComment = [
     content: [
       {
         id: 1,
+        author: "영희",
+        datetime: "2022-05-06",
         content: "꽃이 정말 예뻐요",
       },
       {
         id: 2,
+        author: "철수",
+        datetime: "2022-05-07",
         content: "나랏말싸미",
       },
     ],

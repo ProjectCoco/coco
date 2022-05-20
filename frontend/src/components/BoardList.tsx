@@ -8,12 +8,12 @@ interface Prop {
   onClick: () => void;
 }
 
-const BoardList = ({ subject, content, author, datetime }: Prop) => {
+const BoardList = ({ subject, content, author, datetime, onClick }: Prop) => {
   return (
     <>
       <Board>
         <Header>
-          <div>{subject}</div>
+          <div onClick={onClick}>{subject}</div>
           <Author>
             <div>{author}</div>
             <div>{datetime}</div>
