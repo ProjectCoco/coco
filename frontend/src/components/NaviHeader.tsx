@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 import coco_logo from '../images/wifi.png';
+import React from 'react';
 const NaviHeader = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();

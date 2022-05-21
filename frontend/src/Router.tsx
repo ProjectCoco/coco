@@ -1,11 +1,11 @@
-import { Route, Routes } from "react-router-dom";
-import styled from "styled-components";
-import StudyBoard from "./pages/StudyBoard";
-import Main from "./pages/Main";
-import Login from "./pages/Login";
-import NaviHeader from "./components/NaviHeader";
-import StudyBoardDetail from "./pages/StudyBoardDetail";
-import StudyBoardWrite from "./pages/StudyBoardWrite";
+import { Route, Routes } from 'react-router-dom';
+import StudyBoard from './pages/StudyBoard';
+import Main from './pages/Main';
+import Login from './pages/Login';
+import NaviHeader from './components/NaviHeader';
+import StudyBoardDetail from './pages/StudyBoardDetail';
+import StudyBoardWrite from './pages/StudyBoardWrite';
+import React from 'react';
 
 const Router = () => {
   return (

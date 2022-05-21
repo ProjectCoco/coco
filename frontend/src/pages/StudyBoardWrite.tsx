@@ -1,15 +1,16 @@
-import { useRef, useState } from "react";
-import styled from "styled-components";
-import { Editor } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor.css";
-import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
-import "tui-color-picker/dist/tui-color-picker.css";
-import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
+import { useRef, useState } from 'react';
+import styled from 'styled-components';
+import { Editor } from '@toast-ui/react-editor';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
+import 'tui-color-picker/dist/tui-color-picker.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 // import { _api } from "../../plugins/axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 const StudyBoardWrite = () => {
-  const [title, setTitle] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
 
   const editorRef = useRef<Editor>(null);
   const navigate = useNavigate();
@@ -22,9 +23,9 @@ const StudyBoardWrite = () => {
       datetime: new Date(),
       favor: 30,
       comment: null,
-      author: "짱구",
+      author: '짱구',
     });
-    navigate("/study-board");
+    navigate('/study-board');
   };
 
   return (

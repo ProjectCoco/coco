@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -10,7 +11,7 @@ interface Prop {
 }
 
 const BoardList = ({ subject, content, author, datetime, id }: Prop) => {
-  let navigator = useNavigate();
+  const navigator = useNavigate();
   return (
     <>
       <Board onClick={() => navigator(`${id}`)}>

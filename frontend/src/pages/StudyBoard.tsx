@@ -1,17 +1,18 @@
-import styled from "styled-components";
-import { DuBoardList } from "../dummys/dummy";
-import { useNavigate } from "react-router-dom";
+import styled from 'styled-components';
+import { DuBoardList } from '../dummys/dummy';
+import { useNavigate } from 'react-router-dom';
 // Import Icons
 import {
   MdOutlineHome,
   MdOutlineFavoriteBorder,
   MdOutlineKeyboardBackspace,
   MdFavorite,
-} from "react-icons/md";
-import { AiOutlineComment } from "react-icons/ai";
-import { IoMdPaper } from "react-icons/io";
-import commentImg from "../images/userProfile.jpg";
-import profileImg2 from "../images/download.jpg";
+} from 'react-icons/md';
+import { AiOutlineComment } from 'react-icons/ai';
+import { IoMdPaper } from 'react-icons/io';
+import commentImg from '../images/userProfile.jpg';
+import profileImg2 from '../images/download.jpg';
+import React from 'react';
 
 const StudyBoard = () => {
   const navigator = useNavigate();
@@ -21,17 +22,17 @@ const StudyBoard = () => {
       <LeftDisplay>
         <Menubar>
           <Home>
-            <MdOutlineHome onClick={() => navigator("/")} />
+            <MdOutlineHome onClick={() => navigator('/')} />
           </Home>
           <Favor>
             <MdOutlineFavoriteBorder />
           </Favor>
-          <LinkCommnet href={"#CommentBox"}>
+          <LinkCommnet href={'#CommentBox'}>
             <AiOutlineComment />
           </LinkCommnet>
           <GoBack>
             <MdOutlineKeyboardBackspace
-              onClick={() => navigator("/study-board")}
+              onClick={() => navigator('/study-board')}
             />
           </GoBack>
           <Hr>
@@ -62,12 +63,12 @@ const StudyBoard = () => {
                         <Date>{data.datetime}</Date>
                       </div>
                     </UserBox>
-                    <div style={{ display: "flex" }}>
+                    <div style={{ display: 'flex' }}>
                       <FavoritBox>
                         <MdFavorite />
                         <h4>{data.favor}</h4>
                       </FavoritBox>
-                      <FavoritBox style={{ marginLeft: "2rem" }}>
+                      <FavoritBox style={{ marginLeft: '2rem' }}>
                         <AiOutlineComment />
                         <h4>{data.comment.length}</h4>
                       </FavoritBox>
@@ -224,8 +225,8 @@ const Hr = styled.div`
 
 //Main display
 const Subject = styled.h1`
-  @import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
-  font-family: "Anton", sans-serif;
+  @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+  font-family: 'Anton', sans-serif;
   font-weight: 700;
   margin-top: 1rem;
   font-size: 4rem;
@@ -269,15 +270,15 @@ const FavoritBox = styled.div`
   }
 `;
 const Author = styled.h4`
-  @import url("https://fonts.googleapis.com/css2?family=Radio+Canada:wght@600;700&family=Redressed&family=Roboto+Flex:opsz,wght@8..144,300&family=Signika:wght@500&display=swap");
+  @import url('https://fonts.googleapis.com/css2?family=Radio+Canada:wght@600;700&family=Redressed&family=Roboto+Flex:opsz,wght@8..144,300&family=Signika:wght@500&display=swap');
   margin: 4rem 2rem 0rem;
   font-size: 1.5rem;
   color: black;
   & h4 {
-    font-family: "Radio Canada", sans-serif;
-    font-family: "Redressed", cursive;
-    font-family: "Roboto Flex", sans-serif;
-    font-family: "Signika", sans-serif;
+    font-family: 'Radio Canada', sans-serif;
+    font-family: 'Redressed', cursive;
+    font-family: 'Roboto Flex', sans-serif;
+    font-family: 'Signika', sans-serif;
   }
 `;
 
@@ -322,8 +323,8 @@ const LoginBox = styled.div`
 `;
 
 const LoginButton = styled.button`
-  @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Radio+Canada:wght@600;700&family=Redressed&family=Roboto+Flex:opsz,wght@8..144,300&family=Signika:wght@500&display=swap");
-  font-family: "Playfair Display", serif;
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Radio+Canada:wght@600;700&family=Redressed&family=Roboto+Flex:opsz,wght@8..144,300&family=Signika:wght@500&display=swap');
+  font-family: 'Playfair Display', serif;
   flex: 6.5;
   width: 30%;
   height: 4rem;
@@ -340,8 +341,8 @@ const LoginButton = styled.button`
 `;
 
 const SignUpButton = styled.button`
-  @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Radio+Canada:wght@600;700&family=Redressed&family=Roboto+Flex:opsz,wght@8..144,300&family=Signika:wght@500&display=swap");
-  font-family: "Playfair Display", serif;
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Radio+Canada:wght@600;700&family=Redressed&family=Roboto+Flex:opsz,wght@8..144,300&family=Signika:wght@500&display=swap');
+  font-family: 'Playfair Display', serif;
 
   flex: 3.5;
   height: 4rem;
@@ -386,8 +387,8 @@ const MorePostsImg = styled.img`
 `;
 
 const MorePostTitle = styled.h1`
-  @import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
-  font-family: "Oswald", sans-serif;
+  @import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+  font-family: 'Oswald', sans-serif;
   font-size: 2rem;
   font-weight: bold;
   padding-top: 0.5rem;
