@@ -5,8 +5,13 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import "tui-color-picker/dist/tui-color-picker.css";
 import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
-// import { _api } from "../../plugins/axios";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+
+
+
+
 
 const StudyBoardWrite = () => {
   const [title, setTitle] = useState<string>("");
@@ -15,16 +20,15 @@ const StudyBoardWrite = () => {
   const navigate = useNavigate();
 
   const handlePostingButtonClick = () => {
-    console.log({
+    axios.post("http://localhost:8080/contents",{
       id: Date.now(),
       title: title,
       content: editorRef.current?.getInstance().getHTML(),
       datetime: new Date(),
       favor: 30,
-      comment: null,
       author: "짱구",
     });
-    navigate("/study-board");
+    // navigate("/study-board");
   };
 
   return (
