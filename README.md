@@ -34,7 +34,19 @@ src
 |       └── coco
 └── main
     ├── java
-    |   ├── controller
+    |   ├── contents
+    |   |   ├── controller
+    |   |   ├── domain
+    |   |   ├── repository
+    |   |   └── service
+    |   ├── user
+    |   |   ├── controller
+    |   |   ├── domain
+    |   |   ├── repository
+    |   |   └── service
+    |   |   ├── jwt
+    |   |   └── config
+    |   ├── WebController
     |   └── CocoApplication
     └── resources
 ```
