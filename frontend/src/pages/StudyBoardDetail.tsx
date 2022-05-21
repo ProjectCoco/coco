@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { IDuBoardDetail, DuBoardDetail, IDuBoardList } from "../dummys/dummy";
+import { DuBoardList, IDuBoardList } from "../dummys/dummy";
 // Import Images
 import profileImg2 from "../images/download.jpg";
 import mainImg from "../images/mainImg.jpg";
@@ -19,7 +19,7 @@ import { IoMdPaper } from "react-icons/io";
 function StudyBoardDetail() {
   let navigator = useNavigate();
   let { id } = useParams();
-  const [data, setData] = useState<IDuBoardDetail>();
+  const [data, setData] = useState<IDuBoardList>();
   const [posts, setPosts] = useState<IDuBoardList[]>();
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -27,9 +27,9 @@ function StudyBoardDetail() {
   }
 
   useEffect(() => {
-    let dummy_data = DuBoardDetail.find((board) => board.id === Number(id));
+    let dummy_data = DuBoardList.find((board) => board.id === Number(id));
     setData(() => dummy_data);
-    setPosts(() => DuBoardDetail);
+    setPosts(() => DuBoardList);
   }, []);
 
   return (
