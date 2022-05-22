@@ -13,7 +13,6 @@ public class ContentDTO {
     private String content;
     private Date dateTime;
     private String author;
-
     private Long favor;
 
 
