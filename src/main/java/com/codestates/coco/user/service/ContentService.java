@@ -1,4 +1,4 @@
-package com.codestates.coco.contents.service;
+package com.codestates.coco.user.service;
 
 
 import com.codestates.coco.contents.domain.Content;
