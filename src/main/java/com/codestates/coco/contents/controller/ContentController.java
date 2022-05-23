@@ -31,6 +31,16 @@ public class ContentController {
         return contentService.getContents(id);
     }
 
+
+    //todo auth
+    @DeleteMapping("/{id}")
+    public boolean deleteContents(@PathVariable("id") String id) {
+        return contentService.deleteContents(id);
+    }
+
+
+
+
     @PostMapping("")
     public ResponseEntity<Content> createContent(@RequestBody ContentDTO contentDTO) {
         return new ResponseEntity<>(contentService.createcontent(contentDTO), HttpStatus.OK);

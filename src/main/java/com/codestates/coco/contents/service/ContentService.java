@@ -42,9 +42,26 @@ public class ContentService {
                 content.get().getDateTime(),
                 content.get().getFavor()
                 );
-
         return returnContent;
     }
+
+
+    //todo auth
+    public boolean deleteContents(String id) {
+        try {
+            if (contentRepository.existsById(id)) {
+                contentRepository.deleteById(id);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+
 
     public Content createcontent(ContentDTO contentDTO) {
         return contentRepository.save(contentDTO.toEntity());
