@@ -61,6 +61,22 @@ public class ContentService {
     }
 
 
+    public boolean putContents(String id, ContentDTO contentDTO) {
+        try {
+            if(contentRepository.existsById(id)) {
+                Content content = contentDTO.toEntity();
+                content.set_id(id);
+                contentRepository.save(content);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
 
 
     public Content createcontent(ContentDTO contentDTO) {

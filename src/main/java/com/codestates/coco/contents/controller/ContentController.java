@@ -38,7 +38,12 @@ public class ContentController {
         return contentService.deleteContents(id);
     }
 
-
+    @PutMapping("/{id}")
+    public boolean putContents(
+            @PathVariable("id") String id,
+            @RequestBody ContentDTO contentDTO) {
+        return contentService.putContents(id, contentDTO);
+    }
 
 
     @PostMapping("")
