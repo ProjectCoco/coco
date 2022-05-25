@@ -6,7 +6,9 @@ import com.codestates.coco.contents.domain.ContentDTO;
 import com.codestates.coco.contents.domain.ContentGetDTO;
 import com.codestates.coco.contents.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,15 +36,19 @@ public class ContentService {
     }
 
     public ContentGetDTO getContents(String id) {
-        Optional<Content> content = contentRepository.findById(id);
-        ContentGetDTO returnContent = new ContentGetDTO(
-                content.get().get_id(),
-                content.get().getSubject(),
-                content.get().getContent(),
-                content.get().getDateTime(),
-                content.get().getFavor()
-                );
-        return returnContent;
+        try {
+            Optional<Content> content = contentRepository.findById(id);
+            ContentGetDTO returnContent = new ContentGetDTO(
+                    content.get().get_id(),
+                    content.get().getSubject(),
+                    content.get().getContent(),
+                    content.get().getDateTime(),
+                    content.get().getFavor()
+            );
+            return returnContent;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"ContentId_Not_Found");
+        }
     }
 
 
@@ -56,7 +62,7 @@ public class ContentService {
                 return false;
             }
         } catch (Exception e) {
-            return false;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"ContentId_BAD_REQUEST");
         }
     }
 
@@ -72,7 +78,7 @@ public class ContentService {
                 return false;
             }
         } catch (Exception e) {
-            return false;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"ContentId_Or_ContentBody_BAD_REQUEST");
         }
 
     }
