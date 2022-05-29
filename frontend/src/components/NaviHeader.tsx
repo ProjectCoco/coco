@@ -35,6 +35,7 @@ const NaviHeader = () => {
           </MenuList>
         </div>
       </Container>
+      <div style={{ height: '7rem' }}></div>
     </>
   );
 };
@@ -46,6 +47,9 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
+  background-color: white;
+  z-index: 2;
 `;
 const Logo = styled.div`
   margin-left: 1rem;
