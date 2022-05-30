@@ -15,6 +15,9 @@ import {
 } from 'react-icons/md';
 import { AiOutlineComment } from 'react-icons/ai';
 import { IoMdPaper } from 'react-icons/io';
+// Custom Hooks
+import useScroll from '../hooks/useScroll';
+import { postCommentApi } from '../apis/apiClient';
 
 function StudyBoardDetail() {
   const navigator = useNavigate();
@@ -22,8 +25,22 @@ function StudyBoardDetail() {
   const [data, setData] = useState<IDuBoardList>();
   const [posts, setPosts] = useState<IDuBoardList[]>();
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const { scrollY } = useScroll();
+
+  const [content, setContent] = useState<string>('');
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const comment = {
+      name: 'HwanMin',
+      content,
+    };
+    const response = await postCommentApi(comment);
+    console.log(response);
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setContent(() => e.target.value);
   }
 
   useEffect(() => {
@@ -34,7 +51,7 @@ function StudyBoardDetail() {
 
   return (
     <BoardDetailContainer>
-      <LeftDisplay>
+      <LeftDisplay isScrollY={scrollY}>
         <Menubar>
           <Home>
             <MdOutlineHome onClick={() => navigator('/')} />
@@ -83,10 +100,12 @@ function StudyBoardDetail() {
               <AiOutlineComment />
               <p> 댓글 </p>
             </CommentLength>
-            <CommentForm onSubmit={onSubmit}>
-              <Input
+            <CommentForm onSubmit={handleSubmit}>
+              <CommentInput
                 type={'text'}
                 placeholder="댓글을 입력하려면 로그인을 해주세요."
+                onChange={handleChange}
+                value={content}
               />
               <Button>입력</Button>
             </CommentForm>
@@ -110,10 +129,12 @@ function StudyBoardDetail() {
           <Blank></Blank>
         </Body>
       </MainDisplay>
-      <RightDisplay>
+      <RightDisplay isScrollY={scrollY}>
         <LoginBox>
-          <LoginButton>Sign In</LoginButton>
-          <SignUpButton>Sign Up</SignUpButton>
+          <LoginButton onClick={() => navigator('/login')}>Sign In</LoginButton>
+          <SignUpButton onClick={() => navigator('/signup')}>
+            Sign Up
+          </SignUpButton>
         </LoginBox>
         <MorePosts>
           <h1>More Posts</h1>
@@ -152,13 +173,14 @@ const BoardDetailContainer = styled.div`
   display: flex;
 `;
 // Left  DisPlay Start
-const LeftDisplay = styled.div`
+const LeftDisplay = styled.div<{ isScrollY: number }>`
   border-right: solid 1px lightgray;
   left: 0;
   width: 15%;
   height: 100vh;
+  top: ${(prop) => (prop.isScrollY > 70 ? '0' : null)};
+  transition: 2s;
   position: fixed;
-
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -351,11 +373,12 @@ const CommentForm = styled.form`
   height: 6rem;
 `;
 
-const Input = styled.input`
+const CommentInput = styled.input`
   flex: 9;
   font-size: 1.5rem;
   border: solid 2px skyblue;
   border-color: skyblue;
+  padding-left: 1rem;
 `;
 
 const Button = styled.button`
@@ -417,9 +440,11 @@ const Blank = styled.div`
 `;
 
 // Right Display Start
-const RightDisplay = styled.div`
+const RightDisplay = styled.div<{ isScrollY: number }>`
   border-left: solid 1px lightgray;
   right: 0;
+  top: ${(prop) => (prop.isScrollY > 70 ? '0' : null)};
+  transition: 2s;
   width: 30%;
   height: 100vh;
   position: fixed;
