@@ -26,8 +26,8 @@ public class ContentService {
                 ContentGetDTO.builder()
                         .content(s.getContent())
                         ._id(s.get_id())
-                        .dateTime(s.getDateTime())
-                        .subject(s.getSubject())
+                        .createdDate(s.getCreatedDate())
+                        .title(s.getTitle())
                         .favor(s.getFavor())
                         .build()
         ).collect(Collectors.toList());
@@ -40,9 +40,9 @@ public class ContentService {
             Optional<Content> content = contentRepository.findById(id);
             ContentGetDTO returnContent = new ContentGetDTO(
                     content.get().get_id(),
-                    content.get().getSubject(),
+                    content.get().getTitle(),
                     content.get().getContent(),
-                    content.get().getDateTime(),
+                    content.get().getCreatedDate(),
                     content.get().getFavor()
             );
             return returnContent;

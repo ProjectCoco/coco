@@ -10,17 +10,17 @@ import java.util.Date;
 public class ContentGetDTO {
 
     private String _id;
-    private String subject;
+    private String title;
     private String content;
-    private Date dateTime;
+    private Date createdDate;
     private Long favor;
 
-    public ContentGetDTO(String _id, String subject, String content, Date dateTime, Long favor) {
+    public ContentGetDTO(String _id, String title, String content, Date createdDate, Long favor) {
         super();
         this._id = _id;
-        this.subject = subject;
+        this.title = title;
         this.content = content;
-        this.dateTime = dateTime;
+        this.createdDate = createdDate;
         this.favor = favor;
     }
 }
