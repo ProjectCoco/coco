@@ -12,6 +12,8 @@ public class User {
     private String id;
     private String email;
     private String password;
+    private String username;
+    private String codeNum;
 
     public User(String email, String password) {
         this.email = email;
