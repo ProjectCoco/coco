@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+/* import { useEffect, useState } from 'react';
 import debounce from 'lodash/debounce';
 
 export default function useScroll() {
@@ -20,3 +20,4 @@ export default function useScroll() {
     scrollY,
   };
 }
+ */
