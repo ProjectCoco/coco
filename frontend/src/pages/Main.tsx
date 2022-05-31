@@ -52,7 +52,6 @@ const Main = () => {
 };
 
 const Banner = styled.div`
-  border: 0.1rem solid black;
   height: 100vh;
   font-size: 5rem;
   text-align: center;
