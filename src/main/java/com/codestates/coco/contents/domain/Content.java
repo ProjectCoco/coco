@@ -13,9 +13,9 @@ public class Content {
 
     @Id
     private String _id;
-    private String subject;
+    private String title;
     private String content; //contentBody
-    private Date dateTime;
+    private Date createdDate;
     private String author;
     private Long favor;
 

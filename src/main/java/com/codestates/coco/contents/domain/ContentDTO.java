@@ -9,9 +9,9 @@ import java.util.Date;
 public class ContentDTO {
 
     private String _id;
-    private String subject;
+    private String title;
     private String content;
-    private Date dateTime;
+    private Date createdDate;
     private String author;
     private Long favor;
 
@@ -19,9 +19,9 @@ public class ContentDTO {
     public Content toEntity() {
         Content content = new Content();
         content.set_id(_id);
-        content.setSubject(subject);
+        content.setTitle(title);
         content.setContent(this.content);
-        content.setDateTime(dateTime);
+        content.setCreatedDate(createdDate);
         content.setAuthor(author);
         content.setFavor(favor);
         return content;
