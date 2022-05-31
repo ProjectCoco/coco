@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 import ImgSrc from '../images/Login_logo.png';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import CryptoJS from 'crypto-js';
 import { Link } from 'react-router-dom';
 
 interface IFormInput {
@@ -19,21 +18,6 @@ const Login = () => {
   } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    console.log(data.password);
-
-    const encrypted = CryptoJS.AES.encrypt(
-      JSON.stringify(data.password),
-      'secretKey'
-    ).toString();
-    console.log('암호화된 비밀번호', encrypted);
-
-    const bytes = CryptoJS.AES.decrypt(encrypted, 'secretKey');
-    console.log('bytes', bytes);
-
-    const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    console.log('복호화 비밀번호', decrypted);
-
-    data.password = encrypted;
     const response = await postLoginApi(data);
     console.log(response);
   };
