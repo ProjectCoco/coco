@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import ImgSrc from '../images/Login_logo.png';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import CryptoJS from 'crypto-js';
+import { Link } from 'react-router-dom';
+
 interface IFormInput {
   email: string;
   password: string;
@@ -50,6 +52,7 @@ const Login = () => {
           <EmailInput
             {...register('email', {
               required: true,
+              pattern: /\S+@\S+.\S+/,
               minLength: 10,
               maxLength: 30,
             })}
@@ -62,12 +65,13 @@ const Login = () => {
           <PasswordInput
             {...register('password', {
               required: true,
-              pattern: /(?=.*?[a-z])(?=.*?[A-Z])/,
+              pattern: /(?=.?[a-z])(?=.?[0-9])/,
               maxLength: 30,
               minLength: 8,
             })}
             type={'password'}
             name="password"
+            autoComplete="off"
           />
         </PasswordInputBox>
         <ErrorText>
@@ -75,6 +79,10 @@ const Login = () => {
         </ErrorText>
         <LoginButton>Login</LoginButton>
       </LoginForm>
+      <ForgotBox>
+        <Link to={'/signup'}>회원가입</Link> |
+        <Link to={'/'}>아이디 · 패스워드 찾기 </Link>
+      </ForgotBox>
     </LoginContainer>
   );
 };
@@ -153,6 +161,7 @@ const LoginButton = styled.button`
   color: #fff;
   height: 4rem;
   width: 50%;
+  font-weight: 600;
   margin-left: 25%;
   border: none;
   border-radius: 1rem;
@@ -167,4 +176,22 @@ const LoginButton = styled.button`
 const ErrorText = styled.p`
   margin-top: 0.1rem;
   color: red;
+`;
+
+const ForgotBox = styled.div`
+  margin-top: 2rem;
+
+  & a {
+    color: #444;
+
+    text-decoration: none;
+  }
+
+  & a:first-child {
+    padding-right: 1rem;
+  }
+
+  & a:last-child {
+    padding-left: 1rem;
+  }
 `;
