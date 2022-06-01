@@ -10,13 +10,25 @@ import commentImg from '../images/userProfile.jpg';
 import { MdOutlineFavoriteBorder, MdFavorite } from 'react-icons/md';
 import { AiOutlineComment } from 'react-icons/ai';
 import ContentLayout from '../components/ContentLayout';
+import { postCommentApi } from '../apis/apiClient';
 
 const StudyBoardDetail = () => {
   const { id } = useParams();
   const [data, setData] = useState<IDuBoardList>();
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const [comment, setComment] = useState<string>('');
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const commentForm = {
+      name: 'hwanmin',
+      content: comment,
+    };
+    const response = await postCommentApi(commentForm);
+    console.log(response);
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setComment(e.target.value);
   }
 
   useEffect(() => {
@@ -51,10 +63,11 @@ const StudyBoardDetail = () => {
             <AiOutlineComment />
             <p> 댓글 </p>
           </CommentLength>
-          <CommentForm onSubmit={onSubmit}>
-            <Input
+          <CommentForm onSubmit={handleSubmit}>
+            <CommentInput
               type={'text'}
               placeholder="댓글을 입력하려면 로그인을 해주세요."
+              onChange={handleChange}
             />
             <Button>입력</Button>
           </CommentForm>
@@ -175,11 +188,12 @@ const CommentForm = styled.form`
   display: flex;
   height: 6rem;
 `;
-const Input = styled.input`
+const CommentInput = styled.input`
   flex: 9;
   font-size: 1.5rem;
   border: solid 2px skyblue;
   border-color: skyblue;
+  padding-left: 1rem;
 `;
 const Button = styled.button`
   flex: 1;
