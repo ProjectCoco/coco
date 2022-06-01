@@ -1,8 +1,7 @@
 import { postLoginApi } from '../apis/apiClient';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import ImgSrc from '../images/Login_logo.png';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 interface IFormInput {
@@ -11,16 +10,69 @@ interface IFormInput {
 }
 
 const Login = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IFormInput>();
+  const [formdata, setFormData] = useState<IFormInput>({
+    email: '',
+    password: '',
+  });
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    const response = await postLoginApi(data);
-    console.log(response);
-  };
+  const [errorText, setErrorText] = useState<string>('');
+
+  function handleValidation(formData: IFormInput): boolean {
+    let email_check = false;
+    let password_check = false;
+
+    // 이메일 유효성 검사
+    // 길이가 10자 이상 30자 이하
+    // [@ , .] 이 무조건 들어있어야 통과
+    if (formData.email.length >= 10 && formData.email.length <= 30) {
+      const mailformat =
+        /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+      if (mailformat.test(formData.email)) {
+        email_check = true;
+      }
+    }
+
+    // 패스워드 유효성 검사
+    // 길이가 8자 이상 30자 이하
+    // 영어 [대문자 , 숫자] 무조건 조합이 되어야 통과
+    if (formData.password.length >= 8 && formData.password.length <= 30) {
+      const mailformat = /(?=.?[a-z])(?=.?[0-9])/;
+      if (mailformat.test(formData.password)) {
+        password_check = true;
+      }
+    }
+
+    // 이메일 패스워드 유효성 성공 시 true 반환, 아니면 false 반환
+    if (password_check === false || email_check === false) {
+      return false;
+    }
+    return true;
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const result = handleValidation(formdata);
+    if (result === false)
+      setErrorText(
+        'email 혹은 비밀번호를 잘못 입력하셨거나 등록되지 않은 email 입니다.'
+      );
+    else setErrorText('');
+    if (result) {
+      const response = await postLoginApi(formdata);
+      console.log(response);
+      // 만약 response 성공이라면 리 다이렉트
+      // TODO {}
+      // 만약 response 실패라면
+      // TODO {}
+    }
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setFormData((pre) => ({
+      ...pre,
+      [e.target.name]: e.target.value,
+    }));
+  }
   return (
     <LoginContainer>
       <LoginImgBox>
@@ -30,37 +82,21 @@ const Login = () => {
         <LoginMainText>Login</LoginMainText>
         <LoginSubText>Sign in to continue</LoginSubText>
       </LoginTextBox>
-      <LoginForm onSubmit={handleSubmit(onSubmit)}>
+      <LoginForm onSubmit={handleSubmit}>
         <EmailInputBox>
           <label>EMAIL</label>
-          <EmailInput
-            {...register('email', {
-              required: true,
-              pattern: /\S+@\S+.\S+/,
-              minLength: 10,
-              maxLength: 30,
-            })}
-            name={'email'}
-            type={'email'}
-          />
+          <EmailInput name={'email'} type={'email'} onChange={handleChange} />
         </EmailInputBox>
         <PasswordInputBox>
           <label>PASSWORD</label>
           <PasswordInput
-            {...register('password', {
-              required: true,
-              pattern: /(?=.?[a-z])(?=.?[0-9])/,
-              maxLength: 30,
-              minLength: 8,
-            })}
             type={'password'}
             name="password"
             autoComplete="off"
+            onChange={handleChange}
           />
         </PasswordInputBox>
-        <ErrorText>
-          {errors.password && '이메일 또는 비밀번호를 확인하세요'}
-        </ErrorText>
+        <ErrorText>{errorText}</ErrorText>
         <LoginButton>Login</LoginButton>
       </LoginForm>
       <ForgotBox>
