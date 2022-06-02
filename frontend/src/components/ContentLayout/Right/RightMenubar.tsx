@@ -17,8 +17,12 @@ const RightMenubar = () => {
   return (
     <>
       <S.LoginBox>
-        <S.LoginButton>Sign In</S.LoginButton>
-        <S.SignUpButton>Sign Up</S.SignUpButton>
+        <S.LoginButton onClick={() => navigator('/login')}>
+          Sign In
+        </S.LoginButton>
+        <S.SignUpButton onClick={() => navigator('/signup')}>
+          Sign Up
+        </S.SignUpButton>
       </S.LoginBox>
       <S.MorePosts>
         <h1>More Posts</h1>
