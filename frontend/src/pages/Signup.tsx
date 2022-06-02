@@ -1,23 +1,148 @@
-import React from 'react';
+import { postSignupApi } from '../apis/apiClient';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import selectArrow from '../images/selectArrow.png';
-import { SubmitHandler, useForm } from 'react-hook-form';
 
 type SignupInfo = {
   email: string;
   password: string;
+  passwordConfirm: string;
   username: string;
   groupInfo: string;
 };
 
 const Signup = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignupInfo>();
+  const [signupData, setSignupData] = useState<SignupInfo>({
+    email: '',
+    password: '',
+    passwordConfirm: '',
+    username: '',
+    groupInfo: '',
+  });
 
-  const onSubmit: SubmitHandler<SignupInfo> = (data) => console.log(data);
+  const [emailMessage, setEmailMessage] = useState<string>('');
+  const [passwrodMessage, setPasswrodMessage] = useState<string>('');
+  const [passwordConfirmMessage, setPasswordConfirmMessage] =
+    useState<string>('');
+  const [usernameMessage, setUsernameMessage] = useState<string>('');
+  const [groupInfoMessage, setGroupInfoMessage] = useState<string>('');
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSignupData({ ...signupData, [event?.target.name]: event?.target.value });
+  };
+
+  const handleGroupInfoChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSignupData({ ...signupData, groupInfo: event.target.value });
+  };
+
+  const isValid = (signupData: SignupInfo) => {
+    const emailFormat =
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    const passwordFormat = /(?=.?[a-z])(?=.?[0-9])/;
+    const usernameFormat = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
+
+    const { email, password, passwordConfirm, username, groupInfo } =
+      signupData;
+
+    let isValidEmail = false;
+    let isValidPassword = false;
+    let isValidPasswordConfirm = false;
+    let isValidUsername = false;
+    let isValidGroupInfo = false;
+
+    // 이메일 유효성 검사
+    // 길이 10자 이상 30자 이하, [@ , .] 이 포함되어야 통과
+    if (!emailFormat.test(email) || email.length < 10 || email.length > 30) {
+      setEmailMessage('이메일 형식을 확인해주세요.');
+    } else {
+      setEmailMessage('');
+      isValidEmail = true;
+    }
+
+    // 비밀번호 유효성 검사
+    // 길이 8자 이상 30자 이하, 영문 소문자, 숫자가 최소 1자 이상 포함되어야 통과
+    if (
+      !passwordFormat.test(password) ||
+      password.length < 8 ||
+      password.length > 30
+    ) {
+      setPasswrodMessage(
+        '비밀번호는 영문 소문자, 숫자를 포함하여 8자 이상 30자 이하로 입력해주세요.'
+      );
+    } else {
+      setPasswrodMessage('');
+      isValidPassword = true;
+    }
+
+    // 비밀번호 확인 유효성 검사
+    // 길이 8자 이상 30자 이하, 영문 소문자, 숫자가 최소 1자 이상 포함 && 비밀번호와 일치해야 통과
+    if (passwordConfirm.length < 1) {
+      setPasswordConfirmMessage(
+        '비밀번호는 영문 소문자, 숫자를 포함하여 8자 이상 30자 이하로 입력해주세요.'
+      );
+    } else if (password !== passwordConfirm) {
+      setPasswordConfirmMessage('비밀번호가 일치하지 않습니다.');
+    } else {
+      setPasswordConfirmMessage('');
+      isValidPasswordConfirm = true;
+    }
+
+    // 사용자 이름 유효성 검사
+    // 영문 또는 한글 또는 숫자 포함하여 길이 2자 이상 16자 이하로 작성되어야 통과
+    if (
+      username.length < 2 ||
+      username.length > 16 ||
+      !usernameFormat.test(username)
+    ) {
+      setUsernameMessage(
+        '유저이름은 영문 또는 숫자 또는 한글을 포함하여 2자 이상 16자 이하로 입력해주세요.'
+      );
+    } else {
+      setUsernameMessage('');
+      isValidUsername = true;
+    }
+
+    // 그룹 정보 유효성 검사
+    // 길이가 최소 1자 이상이여야 통과
+    if (groupInfo.length < 1) {
+      setGroupInfoMessage('기수 정보를 입력해주세요.');
+    } else {
+      setGroupInfoMessage('');
+      isValidGroupInfo = true;
+    }
+
+    if (
+      isValidEmail &&
+      isValidPassword &&
+      isValidPasswordConfirm &&
+      isValidUsername &&
+      isValidGroupInfo
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
+  useEffect(() => {
+    if (isSubmitted) {
+      isValid(signupData);
+    }
+  }, [signupData]);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitted(true);
+
+    if (isValid(signupData)) {
+      const response = await postSignupApi(signupData);
+      console.log(response, signupData);
+      // TODO: response 성공, 실패
+    }
+  };
 
   return (
     <>
@@ -27,73 +152,62 @@ const Signup = () => {
             <SignUpMainText>Sign Up</SignUpMainText>
             <SignUpSubText>Sign up to join</SignUpSubText>
           </SignUpTextBox>
-          <SignUpForm onSubmit={handleSubmit(onSubmit)}>
+          <SignUpForm onSubmit={handleSubmit}>
             <EmailInputBox>
               <label>EMAIL</label>
               <EmailInput
-                {...register('email', {
-                  required: true,
-                  pattern: /\S+@\S+\.\S+/,
-                  minLength: 10,
-                  maxLength: 30,
-                })}
                 name="email"
                 type="eamil"
+                value={signupData.email}
                 autoComplete="off"
+                onChange={handleChange}
               />
-              {errors.email && (
-                <ErrorText>이메일 형식을 확인해주세요.</ErrorText>
-              )}
+              <ErrorText>{emailMessage}</ErrorText>
             </EmailInputBox>
             <PasswordInputBox>
               <label>PASSWORD</label>
               <PasswordInput
-                {...register('password', {
-                  required: true,
-                  pattern: /(?=.*?[a-z])(?=.*?[0-9])/,
-                  minLength: 8,
-                  maxLength: 30,
-                })}
                 name="password"
                 type="password"
+                value={signupData.password}
+                autoComplete="off"
+                onChange={handleChange}
               />
-              {errors.password && (
-                <ErrorText>
-                  비밀번호는 8자 이상 30자 이하, 최소 1자 이상의 영문, 숫자로
-                  입력해주세요.
-                </ErrorText>
-              )}
+              <ErrorText>{passwrodMessage}</ErrorText>
+            </PasswordInputBox>
+            <PasswordInputBox>
+              <label>CONFIRM PASSWORD</label>
+              <PasswordInput
+                name="passwordConfirm"
+                type="password"
+                value={signupData.passwordConfirm}
+                autoComplete="off"
+                onChange={handleChange}
+              />
+              <ErrorText>{passwordConfirmMessage}</ErrorText>
             </PasswordInputBox>
             <UsernameInputBox>
               <label>USERNAME</label>
               <UsernameInput
-                {...register('username', {
-                  required: true,
-                  minLength: 2,
-                })}
                 name="username"
+                value={signupData.username}
+                onChange={handleChange}
                 autoComplete="off"
               />
-
-              {errors.username && (
-                <ErrorText>사용자 이름은 2자 이상 입력해주세요.</ErrorText>
-              )}
+              <ErrorText>{usernameMessage}</ErrorText>
             </UsernameInputBox>
             <GroupInfoInputBox>
               <label>GROUPINFO</label>
               <GroupInfoInput
-                {...register('groupInfo', {
-                  required: true,
-                })}
                 name="groupInfo"
-                value="CodeStates 기수를 선택해주세요."
+                value={signupData.groupInfo}
+                onChange={handleGroupInfoChange}
               >
+                <option value="">선택</option>
                 <option value="39">39th</option>
                 <option value="40">40th</option>
-                {errors.groupInfo && (
-                  <ErrorText>CodeStates 기수 정보를 입력해주세요.</ErrorText>
-                )}
               </GroupInfoInput>
+              <ErrorText>{groupInfoMessage}</ErrorText>
             </GroupInfoInputBox>
             <SignUpButton>Sign Up</SignUpButton>
           </SignUpForm>
