@@ -5,27 +5,59 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
-// import { _api } from "../../plugins/axios";
 // import { useNavigate } from 'react-router-dom';
 import React from 'react';
+import { postStudyBoardWriteApi } from '../apis/apiClient';
+
+type StudyBoardPost = {
+  title: string;
+  content: string;
+  author: string;
+};
 
 const StudyBoardWrite = () => {
-  const [title, setTitle] = useState<string>('');
+  const [newPost, setNewPost] = useState<StudyBoardPost>({
+    title: '',
+    content: '',
+    author: 'sunny',
+  });
 
   const editorRef = useRef<Editor>(null);
   // const navigate = useNavigate();
 
-  const handlePostingButtonClick = () => {
-    console.log({
-      id: Date.now(),
-      title: title,
-      content: editorRef.current?.getInstance().getHTML(),
-      datetime: new Date(),
-      favor: 30,
-      comment: null,
-      author: '짱구',
+  const handleTitleChange = (event: { target: { value: string } }) => {
+    setNewPost({ ...newPost, title: event.target.value });
+  };
+
+  const handleContentChange = () => {
+    setNewPost({
+      ...newPost,
+      content: editorRef.current?.getInstance().getMarkdown() || '',
     });
-    // navigate('/study-board');
+  };
+
+  const isValid = (newPost: StudyBoardPost): boolean => {
+    const removeContentBlank = newPost.content.replace(/\n|\r|\s*/g, '');
+    if (
+      newPost.title.trim().length >= 1 &&
+      removeContentBlank.trim().length >= 1
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    if (!isValid(newPost)) {
+      alert('제목과 내용은 최소 1자 이상 입력되어야 합니다.');
+    } else {
+      const response = await postStudyBoardWriteApi(newPost);
+      console.log(response, newPost);
+      // TODO: response 성공, 실패
+
+      // navigate(-1);
+    }
   };
 
   return (
@@ -33,8 +65,8 @@ const StudyBoardWrite = () => {
       <StudyBoardWirteContainer>
         <Title
           placeholder="제목을 입력해주세요."
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={newPost.title}
+          onChange={handleTitleChange}
           autoFocus
         />
         <Editor
@@ -46,8 +78,9 @@ const StudyBoardWrite = () => {
           useCommandShortcut={true}
           ref={editorRef}
           autofocus={false}
+          onChange={handleContentChange}
         />
-        <WriteButton onClick={handlePostingButtonClick}>글쓰기</WriteButton>
+        <WriteButton onClick={handleSubmit}>글쓰기</WriteButton>
       </StudyBoardWirteContainer>
     </div>
   );
