@@ -19,13 +19,15 @@ frontend
 ├── package.json
 ├── tsconfig.json
 └── src
+    ├── apis
     ├── components
     ├── dummys
-    ├── hooks (예정)
-    ├── lib (예정)
+    ├── hooks
+    ├── images
+    ├── lib
+    |   └── types
     ├── pages
-    ├── recoil (예정)
-    └── utils
+    └── styles
 ```
 ### 백엔드
 ```
