@@ -4,12 +4,15 @@ package com.codestates.coco.contents.service;
 import com.codestates.coco.contents.domain.Content;
 import com.codestates.coco.contents.domain.ContentDTO;
 import com.codestates.coco.contents.domain.ContentGetDTO;
+import com.codestates.coco.contents.domain.ContentTitleDTO;
 import com.codestates.coco.contents.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,6 +22,10 @@ import java.util.stream.Collectors;
 public class ContentService {
     private final ContentRepository contentRepository;
 
+
+    public List<ContentTitleDTO> getTitleContents(int page) {
+        return contentRepository.findBy(PageRequest.of(page,10));
+    }
 
     public List<ContentGetDTO> getAllContents() {
         List<ContentGetDTO> all = contentRepository.findAll().stream()
@@ -86,6 +93,7 @@ public class ContentService {
 
 
     public Content createcontent(ContentDTO contentDTO) {
+        contentDTO.setCreatedDate(new Date());
         return contentRepository.save(contentDTO.toEntity());
     }
 }
