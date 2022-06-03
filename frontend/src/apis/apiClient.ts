@@ -33,3 +33,35 @@ export async function postLoginApi(LoginForm: {
     return err;
   }
 }
+
+// @HTTP: POST
+// @Route: /signup
+export async function postSignupApi(SignupForm: {
+  email: string;
+  password: string;
+  passwordConfirm: string;
+  username: string;
+  groupInfo: string;
+}) {
+  try {
+    const response = await axios.post('/comment', SignupForm);
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+}
+
+// @HTTP: POST
+// @Route: /study-board-write
+export async function postStudyBoardWriteApi(WriteForm: {
+  title: string;
+  content: string;
+  author: string;
+}) {
+  try {
+    const response = await axios.post('/comment', WriteForm);
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+}

@@ -24,13 +24,13 @@ const LeftMenubar = () => {
         <AiOutlineComment />
       </S.LinkCommnet>
       <S.GoBack>
-        <MdOutlineKeyboardBackspace onClick={() => navigator('/study-board')} />
+        <MdOutlineKeyboardBackspace onClick={() => navigator(-1)} />
       </S.GoBack>
       <S.Hr>
         <hr />
       </S.Hr>
       <S.Write>
-        <IoMdPaper />
+        <IoMdPaper onClick={() => navigator('/study-board-write')} />
       </S.Write>
     </S.Container>
   );
