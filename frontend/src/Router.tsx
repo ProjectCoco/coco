@@ -3,7 +3,7 @@ import Main from './pages/Main';
 import Login from './pages/Login';
 import NaviHeader from './components/NaviHeader';
 import React from 'react';
-import Signup from './pages/Signup';
+import Signup from './pages/Signuptest';
 import StudyBoardWrite from './pages/StudyBoardWrite';
 import StudyBoardDetail from './pages/StudyBoardDetail';
 import StudyBoard from './pages/StudyBoard/StudyBoard';
