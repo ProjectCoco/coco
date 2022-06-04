@@ -37,3 +37,11 @@ export interface RulesOptionProp {
   equalLength?: RulesDetailProp;
   password?: RulesDetailProp;
 }
+
+export interface SignupInfo {
+  email: string;
+  password: string;
+  passwordConfirm: string;
+  username: string;
+  groupInfo?: string;
+}
