@@ -1,6 +1,6 @@
 package com.codestates.coco.contents.repository;
 import com.codestates.coco.contents.domain.Content;
-import com.codestates.coco.contents.domain.ContentTitleDTO;
+import com.codestates.coco.contents.domain.ContentGetDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -13,5 +13,5 @@ import java.util.List;
 @Repository
 public interface ContentRepository extends MongoRepository<Content, String> {
     @Query(sort = "{_id:-1}")
-    List<ContentTitleDTO> findBy(Pageable pageable);
+    List<ContentGetDTO> findBy(Pageable pageable);
 }

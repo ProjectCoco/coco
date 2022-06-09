@@ -15,45 +15,40 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/contents")
+@RequestMapping("/content")
 @RequiredArgsConstructor
 public class ContentController {
     private final ContentService contentService;
 
 
-    @GetMapping("/page/{page}")
-    public List<ContentTitleDTO> getTitle(@PathVariable("page") int page) {
-        return contentService.getTitleContents(page);
-    }
-
     @GetMapping("")
-    public List<ContentGetDTO> getContents() {
-        return contentService.getAllContents();
+    public ResponseEntity<List<ContentGetDTO>> getTitle(@RequestParam("page") int page) {
+        return new ResponseEntity<>(contentService.getTitleContents(page), HttpStatus.OK);
     }
 
     //todo e
     @GetMapping("/{id}")
-    public ContentGetDTO detailContents(@PathVariable("id") String id) {
-        return contentService.getContents(id);
+    public ResponseEntity<ContentGetDTO> detailContents(@PathVariable("id") String id) {
+        return new ResponseEntity<>(contentService.getContents(id), HttpStatus.OK);
     }
 
 
     //todo auth
     @DeleteMapping("/{id}")
-    public boolean deleteContents(@PathVariable("id") String id) {
-        return contentService.deleteContents(id);
+    public ResponseEntity<Boolean> deleteContents(@PathVariable("id") String id) {
+        return new ResponseEntity<>(contentService.deleteContents(id), HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
-    public boolean putContents(
+    public ResponseEntity<Boolean> putContents(
             @PathVariable("id") String id,
             @RequestBody ContentDTO contentDTO) {
-        return contentService.putContents(id, contentDTO);
+        return new ResponseEntity<>(contentService.putContents(id, contentDTO), HttpStatus.CREATED);
     }
 
 
     @PostMapping("")
     public ResponseEntity<Content> createContent(@RequestBody ContentDTO contentDTO) {
-        return new ResponseEntity<>(contentService.createcontent(contentDTO), HttpStatus.OK);
+        return new ResponseEntity<>(contentService.createcontent(contentDTO), HttpStatus.CREATED);
     }
 }

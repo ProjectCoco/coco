@@ -23,7 +23,7 @@ public class ContentService {
     private final ContentRepository contentRepository;
 
 
-    public List<ContentTitleDTO> getTitleContents(int page) {
+    public List<ContentGetDTO> getTitleContents(int page) {
         return contentRepository.findBy(PageRequest.of(page,10));
     }
 
