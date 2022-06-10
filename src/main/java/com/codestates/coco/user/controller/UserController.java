@@ -1,7 +1,7 @@
 package com.codestates.coco.user.controller;
 
 import com.codestates.coco.user.domain.User;
-import com.codestates.coco.user.domain.UserLoginDTO;
+import com.codestates.coco.user.domain.UserDTO;
 import com.codestates.coco.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,9 @@ public class UserController {
 
     private final UserService userService;
     //
-    @PostMapping("/join")
-    public ResponseEntity<User> saveUser(@RequestBody UserLoginDTO userLoginDTO) {
+    @PostMapping("/signup")
+    public ResponseEntity<User> saveUser(@RequestBody UserDTO userLoginDTO) {
 
-        return new ResponseEntity<>(userService.saveUser(userLoginDTO), HttpStatus.OK);
+        return new ResponseEntity<>(userService.signUp(userLoginDTO), HttpStatus.CREATED);
     }
 }
