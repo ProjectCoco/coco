@@ -17,9 +17,11 @@ const Main = () => {
         </S.BannerTitle>
         <SubTitle subTitleTimer={subTitleTimer} />
         <S.ButtonBox>
-          <CustomButton onClick={() => navigator('/')}>스디게시판</CustomButton>
-          <CustomButton onClick={() => navigator('/study-board')}>
+          <CustomButton weight="bold" onClick={() => navigator('/')}>
             자유게시판
+          </CustomButton>
+          <CustomButton weight="bold" onClick={() => navigator('/study-board')}>
+            스터디게시판
           </CustomButton>
         </S.ButtonBox>
       </S.TextBox>
