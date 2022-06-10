@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { handleValidation, IFormInput } from '../lib/handleValidation';
 import * as S from '../style';
 import CustomButton from '../../../components/CustomButton';
+import { setCookie } from '../../../lib/cookie/cookie';
+import jwt_decode from 'jwt-decode';
 
 function LoginForm() {
   const [errorText, setErrorText] = useState<string>('');
@@ -14,14 +16,18 @@ function LoginForm() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const result = handleValidation(formdata);
-    result === false
-      ? setErrorText(
-          'email 혹은 비밀번호를 잘못 입력하셨거나 등록되지 않은 email 입니다.'
-        )
-      : setErrorText('');
-    if (result) {
-      const response = await postLoginApi(formdata);
-      console.log(response);
+    if (result === false) {
+      setErrorText(
+        'email 혹은 비밀번호를 잘못 입력하셨거나 등록되지 않은 email 입니다.'
+      );
+    } else if (result) {
+      const token = await postLoginApi(formdata);
+      setCookie('userToken', token, {
+        path: '/',
+        secure: true,
+      });
+      const decoded = jwt_decode(token); // decoded는 user 정보가 담긴 객체
+      console.log('Token Decode : ', decoded);
     }
   }
 
