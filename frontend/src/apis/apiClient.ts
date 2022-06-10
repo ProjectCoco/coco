@@ -1,5 +1,12 @@
 import axios from 'axios';
 import { SERVER_URL } from './apiEnv';
+// import { getCookie } from '../lib/cookie/cookie';
+
+/* 나중에 인증 부분에 header에 token 넣어서 요청 보내줘야함 (그때 사용 고고 ~)*/
+// headers: {
+//   "Content-Type": "aplication/json",
+//   Authorization : `Bearer ${getCookie('userToken')}`
+// }
 
 export const apiClient = axios.create({
   baseURL: SERVER_URL,
