@@ -4,7 +4,6 @@ package com.codestates.coco.contents.controller;
 import com.codestates.coco.contents.domain.Content;
 import com.codestates.coco.contents.domain.ContentDTO;
 import com.codestates.coco.contents.domain.ContentGetDTO;
-import com.codestates.coco.contents.domain.ContentTitleDTO;
 import com.codestates.coco.contents.service.ContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
