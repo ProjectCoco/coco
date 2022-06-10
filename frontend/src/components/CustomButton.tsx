@@ -13,7 +13,6 @@ interface PropsType {
 }
 
 function CustomButton(props: PropsType) {
-  console.log(props);
   return <Button {...props}>{props.children}</Button>;
 }
 
