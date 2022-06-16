@@ -15,25 +15,3 @@ export interface IDuComment {
     content: string;
   }[];
 }
-
-export type RulesProp = {
-  [key: string]: RulesOptionProp;
-};
-
-export interface RulesDetailProp {
-  message: string;
-  value?: any;
-}
-
-export interface RulesOptionProp {
-  required?: RulesDetailProp;
-  email?: RulesDetailProp;
-  minLength?: RulesDetailProp;
-  maxLength?: RulesDetailProp;
-  equal?: RulesDetailProp;
-  notEqual?: RulesDetailProp;
-  greater?: RulesDetailProp;
-  lesser?: RulesDetailProp;
-  equalLength?: RulesDetailProp;
-  password?: RulesDetailProp;
-}
