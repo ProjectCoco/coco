@@ -2,8 +2,8 @@ import CustomButton from '../../components/CustomButton';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Banner1 from '../../images/BannerImage.png';
-import SubTitle from './components/SubTitle';
-import Typewriters from './components/Typewriter';
+import SubTitle from '../../components/Main/SubTitle';
+import Typewriters from '../../components/Main/Typewriter';
 import * as S from './style';
 
 const Main = () => {
