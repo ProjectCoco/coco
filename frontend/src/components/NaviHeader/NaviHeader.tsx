@@ -2,10 +2,14 @@ import * as S from './style';
 import { useNavigate, useLocation } from 'react-router-dom';
 import coco_logo from '../../images/wifi.png';
 import React from 'react';
+import { UserState } from '../../lib/atom';
+import { useRecoilValue } from 'recoil';
+import DropDwonMenu from '../DropDownMenu';
+
 const NaviHeader = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
+  const user = useRecoilValue(UserState); // 유저 정보를 가져와서 유저 정보가 있으면 Header 상태를 바꿈
   return (
     <>
       <S.Container>
@@ -26,12 +30,16 @@ const NaviHeader = () => {
             >
               스터디구인
             </S.MenuListContent>
-            <S.MenuListContent
-              isPathMatch={pathname === '/login' ? true : false}
-              onClick={() => navigate('/login')}
-            >
-              로그인
-            </S.MenuListContent>
+            {user.email.length > 0 ? (
+              <DropDwonMenu />
+            ) : (
+              <S.MenuListContent
+                isPathMatch={pathname === '/login' ? true : false}
+                onClick={() => navigate('/login')}
+              >
+                로그인
+              </S.MenuListContent>
+            )}
           </S.MenuList>
         </div>
       </S.Container>
