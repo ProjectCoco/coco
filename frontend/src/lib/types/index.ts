@@ -37,3 +37,9 @@ export interface RulesOptionProp {
   equalLength?: RulesDetailProp;
   password?: RulesDetailProp;
 }
+
+export interface UserStateType {
+  email: string;
+  exp: number;
+  sub: string;
+}
