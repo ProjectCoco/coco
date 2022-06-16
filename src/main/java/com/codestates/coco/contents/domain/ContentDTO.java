@@ -2,6 +2,7 @@ package com.codestates.coco.contents.domain;
 
 
 import lombok.Data;
+import javax.validation.constraints.NotBlank;
 
 import java.util.Date;
 
@@ -9,12 +10,19 @@ import java.util.Date;
 public class ContentDTO {
 
     private String _id;
-    private String title;
-    private String content;
-    private Date createdDate;
-    private String author;
-    private Long favor;
 
+    @NotBlank
+    private String title;
+
+    @NotBlank
+    private String content;
+
+    private Date createdDate;
+
+    @NotBlank
+    private String author;
+
+    private Long favor;
 
     public Content toEntity() {
         Content content = new Content();
