@@ -1,7 +1,7 @@
 import React from 'react';
 import ImgSrc from '../../images/Login_logo.png';
 import { Link } from 'react-router-dom';
-import LoginForm from './components/LoginForm';
+import LoginForm from '../../components/LoginForm';
 import * as S from './style';
 
 const Login = () => {
