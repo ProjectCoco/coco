@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Header from './components/Header';
-import Body from './components/Body';
+import Header from '../../components/StudyDetail/Header';
+import Body from '../../components/StudyDetail/Body';
 import { DuBoardList, IDuBoardList } from '../../dummys/dummy';
 import ContentLayout from '../../components/ContentLayout';
 import Loading from '../../components/Loading/Loading';
