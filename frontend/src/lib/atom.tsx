@@ -1,4 +1,6 @@
 import { atom, selector } from 'recoil';
+import { UserStateType } from './types';
+// import { recoilPersist } from 'recoil-persist';
 
 export const __Session = atom({
   key: 'session',
@@ -17,4 +19,20 @@ export const getUserLogin = selector({
 export const StudyBoardState = atom({
   key: 'studyBoardState',
   default: [],
+});
+
+// User 정보를 새로고침 해도 유지하기
+// const { persistAtom } = recoilPersist({
+//   key: 'userState',
+//   storage: localStorage,
+// });
+
+export const UserState = atom<UserStateType>({
+  key: 'userState',
+  default: {
+    email: '',
+    exp: 0,
+    sub: '',
+  },
+  // effects_UNSTABLE: [persistAtom],
 });
