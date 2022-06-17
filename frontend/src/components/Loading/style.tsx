@@ -5,6 +5,12 @@ export const LoadingContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  background-color: rgb(0, 0, 0, 255);
+  opacity: 0.9;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
 `;
 
 export const LoadingImg = styled.img`

@@ -2,15 +2,23 @@ import { GlobalStyle } from './styles/GlobalStyle';
 import Router from './Router';
 import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
-import { RecoilRoot } from 'recoil';
+import { RecoilRoot, useRecoilValue } from 'recoil';
 import { CookiesProvider } from 'react-cookie';
+import { __isLoading } from './lib/atom';
+import Loading from './components/Loading';
 
-function App() {
+const LoadingHooker = () => {
+  const isLoading = useRecoilValue(__isLoading);
+  return isLoading ? <Loading /> : null;
+};
+
+const App = () => {
   return (
     <>
       <CookiesProvider>
         <RecoilRoot>
           <BrowserRouter>
+            <LoadingHooker />
             <GlobalStyle />
             <Router />
           </BrowserRouter>
@@ -18,6 +26,6 @@ function App() {
       </CookiesProvider>
     </>
   );
-}
+};
 
 export default App;
