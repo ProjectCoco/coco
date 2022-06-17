@@ -5,20 +5,25 @@ import * as S from './style';
 import { MdFavorite } from 'react-icons/md';
 import { AiOutlineComment } from 'react-icons/ai';
 import profileImg2 from '../../images/download.jpg';
-import { IDuBoardList } from '../../dummys/dummy';
 import { useNavigate } from 'react-router-dom';
 
-interface Prop {
-  data: IDuBoardList;
+interface IBoard {
+  data: {
+    _id: string;
+    title: string;
+    content: string;
+    createdDate: string;
+    favor: number | null;
+  };
 }
 
-const BoardContentBox = ({ data }: Prop) => {
+const BoardContentBox = ({ data }: IBoard) => {
   const navigator = useNavigate();
 
   return (
     <>
-      <S.ContentBox onClick={() => navigator(`${data.id}`)}>
-        <S.Subject>{data.subject}</S.Subject>
+      <S.ContentBox onClick={() => navigator(`${data._id}`)}>
+        <S.Subject>{data.title}</S.Subject>
         <S.Content>
           {data.content.length > 235
             ? `${data.content.slice(0, 235)}...`
@@ -28,8 +33,8 @@ const BoardContentBox = ({ data }: Prop) => {
           <S.UserBox>
             <S.UserImg src={profileImg2} />
             <div>
-              <S.Author>{data.author}</S.Author>
-              <S.Date>{data.datetime}</S.Date>
+              <S.Author>{data._id}</S.Author>
+              <S.Date>{data.createdDate}</S.Date>
             </div>
           </S.UserBox>
           <div style={{ display: 'flex' }}>
@@ -39,7 +44,7 @@ const BoardContentBox = ({ data }: Prop) => {
             </S.FavoritBox>
             <S.FavoritBox style={{ marginLeft: '2rem' }}>
               <AiOutlineComment />
-              <h4>{data.comment.length}</h4>
+              {/* <h4>{data.comment.length}</h4> */}
             </S.FavoritBox>
           </div>
         </S.UserLogo>
