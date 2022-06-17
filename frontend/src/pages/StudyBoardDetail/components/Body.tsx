@@ -4,19 +4,21 @@ import { IDuBoardList } from '../../../dummys/dummy';
 import commentImg from '../../../images/userProfile.jpg';
 import { AiOutlineComment } from 'react-icons/ai';
 import { postCommentApi } from '../../../apis/apiClient';
-
+import { useRecoilValue } from 'recoil';
+import { UserState } from '../../../lib/atom';
 type DataProps = {
   data: IDuBoardList;
 };
 
 function Body({ data }: DataProps) {
   const [comment, setComment] = useState<string>('');
+  const user = useRecoilValue(UserState);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const commentForm = {
-      name: 'hwanmin',
-      content: comment,
+      author: user.email,
+      comment: comment,
     };
     const response = await postCommentApi(commentForm);
     console.log(response);
@@ -37,8 +39,13 @@ function Body({ data }: DataProps) {
         <S.CommentForm onSubmit={handleSubmit}>
           <S.CommentInput
             type={'text'}
-            placeholder="댓글을 입력하려면 로그인을 해주세요."
+            placeholder={
+              user.email.length >= 1
+                ? '댓글을 입력해 주세요.'
+                : '댓글을 입력하려면 로그인을 해주세요.'
+            }
             onChange={handleChange}
+            disabled={user.email.length > 1 ? false : true}
           />
           <S.Button>입력</S.Button>
         </S.CommentForm>
