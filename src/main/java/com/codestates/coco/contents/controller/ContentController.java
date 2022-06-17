@@ -8,8 +8,11 @@ import com.codestates.coco.contents.service.ContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -33,21 +36,24 @@ public class ContentController {
 
 
     //todo auth
+    @Secured("ROLE_USER")
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteContents(@PathVariable("id") String id) {
         return new ResponseEntity<>(contentService.deleteContents(id), HttpStatus.NO_CONTENT);
     }
 
+    @Secured("ROLE_USER")
     @PutMapping("/{id}")
     public ResponseEntity<Boolean> putContents(
             @PathVariable("id") String id,
-            @RequestBody ContentDTO contentDTO) {
+            @Valid
+            @RequestBody ContentDTO contentDTO, BindingResult bindingResult) {
         return new ResponseEntity<>(contentService.putContents(id, contentDTO), HttpStatus.CREATED);
     }
 
-
+    @Secured("ROLE_USER")
     @PostMapping("")
-    public ResponseEntity<Content> createContent(@RequestBody ContentDTO contentDTO) {
+    public ResponseEntity<Content> createContent(@Valid @RequestBody ContentDTO contentDTO, BindingResult bindingResult) {
         return new ResponseEntity<>(contentService.createcontent(contentDTO), HttpStatus.CREATED);
     }
 }
