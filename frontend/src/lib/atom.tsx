@@ -21,9 +21,13 @@ export const getUserLogin = selector({
   },
 });
 
-export const StudyBoardState = atom({
-  key: 'studyBoardState',
-  default: [],
+export const StudyBoardList = selector({
+  key: 'studyBoardList',
+  get: async () => {
+    const response = await fetch('http://localhost:8080/content?page=1');
+    const data = await response.json();
+    return data;
+  },
 });
 
 // User 정보를 새로고침 해도 유지하기
