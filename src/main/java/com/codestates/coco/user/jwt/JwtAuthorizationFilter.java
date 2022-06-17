@@ -2,6 +2,7 @@ package com.codestates.coco.user.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.codestates.coco.user.config.auth.PrincipalDetails;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.repository.UserRepository;
@@ -28,7 +29,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository, JwtProperties jwtProperties) {
         super(authenticationManager);
         this.userRepository = userRepository;
-        this.jwtProperties = jwtProperties;
+        this.jwtProperties = jwtProperties;//authorization : noExist
     }
 
     // 인증 또는 권한요청이 올때 해당 필터 사용
@@ -45,7 +46,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // JWT 검증
         String jwtToken = request.getHeader(jwtProperties.getHeader()).replace("Bearer ", "");
 
-        String email = JWT.require(Algorithm.HMAC512(jwtProperties.getSecret())).build().verify(jwtToken).getClaim("email").asString();
+        String email = null;
+        try {
+            email = JWT.require(Algorithm.HMAC512(jwtProperties.getSecret())).build().verify(jwtToken).getClaim("email").asString();
+        } catch (JWTDecodeException e) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         // 서명이 정상적으로 되면 username이 담긴다.
         if (email != null) {

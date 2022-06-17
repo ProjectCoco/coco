@@ -1,27 +1,20 @@
 import axios from 'axios';
 import { SERVER_URL } from './apiEnv';
-// import { getCookie } from '../lib/cookie/cookie';
-
-/* 나중에 인증 부분에 header에 token 넣어서 요청 보내줘야함 (그때 사용 고고 ~)*/
-// headers: {
-//   "Content-Type": "aplication/json",
-//   Authorization : `Bearer ${getCookie('userToken')}`
-// }
-
+import { getCookie } from '../lib/cookie/cookie';
+import * as T from './types';
 export const apiClient = axios.create({
   baseURL: SERVER_URL,
-  timeout: 1000,
+  headers: {
+    Authorization: `Bearer ${getCookie('accessToken')}`,
+  },
 });
 
 // @HTTP: POST
 // @Route: /comment
-export async function postCommentApi(commentForm: {
-  name: string;
-  content: string;
-}) {
+export async function postCommentApi(commentForm: T.commentForm) {
   try {
-    const response = await axios.post('/comment', commentForm);
-    return response.data;
+    const response = await apiClient.post('/comment', commentForm);
+    return response;
   } catch (err) {
     return err;
   }
@@ -29,13 +22,10 @@ export async function postCommentApi(commentForm: {
 
 // @HTTP: POST
 // @Route: /login
-export async function postLoginApi(LoginForm: {
-  email: string;
-  password: string;
-}) {
+export async function postLoginApi(LoginForm: T.LoginForm) {
   try {
-    const response = await axios.post('/comment', LoginForm);
-    return response.data;
+    const response = await apiClient.post('/login', LoginForm);
+    return response.headers.authorization.split(' ')[1];
   } catch (err) {
     return err;
   }
@@ -43,15 +33,9 @@ export async function postLoginApi(LoginForm: {
 
 // @HTTP: POST
 // @Route: /signup
-export async function postSignupApi(SignupForm: {
-  email: string;
-  password: string;
-  passwordConfirm: string;
-  username: string;
-  groupInfo: string;
-}) {
+export async function postSignupApi(SignupForm: T.SignupForm) {
   try {
-    const response = await axios.post('/comment', SignupForm);
+    const response = await apiClient.post('/signup', SignupForm);
     return response.data;
   } catch (err) {
     return err;
@@ -60,13 +44,9 @@ export async function postSignupApi(SignupForm: {
 
 // @HTTP: POST
 // @Route: /study-board-write
-export async function postStudyBoardWriteApi(WriteForm: {
-  title: string;
-  content: string;
-  author: string;
-}) {
+export async function postStudyBoardWriteApi(WriteForm: T.WriteForm) {
   try {
-    const response = await axios.post('/comment', WriteForm);
+    const response = await apiClient.post('/content', WriteForm);
     return response.data;
   } catch (err) {
     return err;

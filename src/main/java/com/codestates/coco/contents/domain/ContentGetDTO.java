@@ -2,6 +2,7 @@ package com.codestates.coco.contents.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import javax.validation.constraints.NotBlank;
 
 import java.util.Date;
 
@@ -10,9 +11,15 @@ import java.util.Date;
 public class ContentGetDTO {
 
     private String _id;
+
+    @NotBlank
     private String title;
+
+    @NotBlank
     private String content;
+
     private Date createdDate;
+
     private Long favor;
 
     public ContentGetDTO(String _id, String title, String content, Date createdDate, Long favor) {

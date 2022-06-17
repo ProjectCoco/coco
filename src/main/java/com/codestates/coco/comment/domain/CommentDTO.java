@@ -2,12 +2,19 @@ package com.codestates.coco.comment.domain;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 public class CommentDTO {
 
     private String _id;
+
     private String contentId; // 관련된 content_id
-    private String comment; //commentBody
+
+    @NotBlank
+    private String comment;
+    //commentBody
+    @NotBlank
     private String author;
 
     /*@Builder
