@@ -1,13 +1,19 @@
 import { postLoginApi } from '../../../apis/apiClient';
 import React, { useState } from 'react';
-import { handleValidation, IFormInput } from '../lib/handleValidation';
+import { handleValidation, IFormInput } from '../lib/loginhandleValidation';
 import * as S from '../style';
 import CustomButton from '../../../components/CustomButton';
-import { setCookie } from '../../../lib/cookie/cookie';
+import { getCookie, setCookie } from '../../../lib/cookie/cookie';
 import jwt_decode from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { UserState } from '../../../lib/atom';
+import { UserStateType } from '../../../lib/types';
 
 function LoginForm() {
+  const navigate = useNavigate();
   const [errorText, setErrorText] = useState<string>('');
+  const SetUserInfo = useSetRecoilState(UserState);
   const [formdata, setFormData] = useState<IFormInput>({
     email: '',
     password: '',
@@ -15,19 +21,20 @@ function LoginForm() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const result = handleValidation(formdata);
+    const result = handleValidation(formdata); // 유효성 검사
     if (result === false) {
       setErrorText(
         'email 혹은 비밀번호를 잘못 입력하셨거나 등록되지 않은 email 입니다.'
       );
     } else if (result) {
-      const token = await postLoginApi(formdata);
-      setCookie('userToken', token, {
+      const token = await postLoginApi(formdata); // 1. 로그인 정보를 서버로 보내서 성공하면 token 받음
+      // 2. token을 쿠키에 저장
+      setCookie('accessToken', String(token), {
         path: '/',
-        secure: true,
       });
-      const decoded = jwt_decode(token); // decoded는 user 정보가 담긴 객체
-      console.log('Token Decode : ', decoded);
+      const decoded: UserStateType = jwt_decode(String(token)); // 3. token payload값만 decode
+      SetUserInfo(decoded); // 4. decode 된 값을 atom 저장 (localStorage)
+      getCookie('accessToken') && navigate('/'); // 5. 토큰 값이 잘 저장되었으면 홈으로 리다이렉트
     }
   }
 
@@ -54,7 +61,6 @@ function LoginForm() {
         />
       </S.PasswordInputBox>
       <S.ErrorText>{errorText}</S.ErrorText>
-      {/* <S.LoginButton>Login</S.LoginButton> */}
       <S.ButtonBox>
         <CustomButton
           height="4rem"

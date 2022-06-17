@@ -16,24 +16,8 @@ export interface IDuComment {
   }[];
 }
 
-export type RulesProp = {
-  [key: string]: RulesOptionProp;
-};
-
-export interface RulesDetailProp {
-  message: string;
-  value?: any;
-}
-
-export interface RulesOptionProp {
-  required?: RulesDetailProp;
-  email?: RulesDetailProp;
-  minLength?: RulesDetailProp;
-  maxLength?: RulesDetailProp;
-  equal?: RulesDetailProp;
-  notEqual?: RulesDetailProp;
-  greater?: RulesDetailProp;
-  lesser?: RulesDetailProp;
-  equalLength?: RulesDetailProp;
-  password?: RulesDetailProp;
+export interface UserStateType {
+  email: string;
+  exp: number;
+  sub: string;
 }

@@ -43,7 +43,7 @@ export const isValidPasswordConfirm = (
 };
 
 export const isValidUsername = (inputString: string) => {
-  const usernameFormat = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
+  const usernameFormat = /^(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9가-힣]{2,16}$/;
 
   // 사용자 이름 유효성 검사
   // 영문 또는 한글 또는 숫자 포함하여 길이 2자 이상 16자 이하로 작성되어야 통과
