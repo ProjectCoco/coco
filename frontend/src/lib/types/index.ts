@@ -15,3 +15,9 @@ export interface IDuComment {
     content: string;
   }[];
 }
+
+export interface UserStateType {
+  email: string;
+  exp: number;
+  sub: string;
+}
