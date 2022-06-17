@@ -7,6 +7,11 @@ export const __Session = atom({
   default: '',
 });
 
+export const __isLoading = atom({
+  key: 'loading',
+  default: false,
+});
+
 export const getUserLogin = selector({
   key: 'userLogin',
   get: async () => {
