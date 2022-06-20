@@ -20,19 +20,25 @@ public class CommentService {
         commentRepository.save(commentDTO.toEntity(commentDTO));
     }
 
-    public List<Comment> getAllComment(String contentId){
+    public List<CommentDTO> getAllComment(String contentId){
         return commentRepository.findAllByContentId(contentId);
     }
 
     @Transactional
-    public Comment putComment(String id, CommentDTO commentDTO){
+    public CommentDTO putComment(String id, CommentDTO commentDTO){
         Comment comment = commentRepository.findById(id).orElse(null);
         if(!commentDTO.equals(comment)) {
             comment.update(commentDTO.getComment());
         }
 
         commentRepository.save(comment);
-        return comment;
+        return CommentDTO.builder()
+                ._id(comment.get_id())
+                .comment(comment.getComment())
+                .author(comment.getAuthor())
+                .contentId(comment.getContentId())
+                .createdDate(comment.getCreatedDate())
+                .build();
     }
 
     @Transactional

@@ -1,6 +1,5 @@
 package com.codestates.coco.comment.controller;
 
-import com.codestates.coco.comment.domain.Comment;
 import com.codestates.coco.comment.domain.CommentDTO;
 import com.codestates.coco.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +27,13 @@ public class CommentController {
     }
 
     @GetMapping("/{contentId}")
-    public ResponseEntity<List<Comment>> getComment(@PathVariable String contentId){
+    public ResponseEntity<List<CommentDTO>> getComment(@PathVariable String contentId){
         return new ResponseEntity<>(commentService.getAllComment(contentId), HttpStatus.OK);
     }
 
     @Secured("ROLE_USER")
     @PutMapping("/{id}")
-    public ResponseEntity<Comment> updateComment(@PathVariable String id, @RequestBody CommentDTO commentDTO){
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable String id, @RequestBody CommentDTO commentDTO){
         return new ResponseEntity<>(commentService.putComment(id, commentDTO), HttpStatus.OK);
     }
 

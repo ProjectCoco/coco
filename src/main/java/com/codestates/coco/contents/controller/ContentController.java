@@ -3,7 +3,6 @@ package com.codestates.coco.contents.controller;
 
 import com.codestates.coco.contents.domain.Content;
 import com.codestates.coco.contents.domain.ContentDTO;
-import com.codestates.coco.contents.domain.ContentGetDTO;
 import com.codestates.coco.contents.service.ContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,13 +23,13 @@ public class ContentController {
 
 
     @GetMapping("")
-    public ResponseEntity<List<ContentGetDTO>> getTitle(@RequestParam("page") int page) {
+    public ResponseEntity<List<ContentDTO>> getTitle(@RequestParam("page") int page) {
         return new ResponseEntity<>(contentService.getTitleContents(page), HttpStatus.OK);
     }
 
     //todo e
     @GetMapping("/{id}")
-    public ResponseEntity<ContentGetDTO> detailContents(@PathVariable("id") String id) {
+    public ResponseEntity<ContentDTO> detailContents(@PathVariable("id") String id) {
         return new ResponseEntity<>(contentService.getContents(id), HttpStatus.OK);
     }
 

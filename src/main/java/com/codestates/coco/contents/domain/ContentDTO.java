@@ -1,12 +1,18 @@
 package com.codestates.coco.contents.domain;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import javax.validation.constraints.NotBlank;
+import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ContentDTO {
 
     private String _id;
@@ -17,21 +23,22 @@ public class ContentDTO {
     @NotBlank
     private String content;
 
-    private Date createdDate;
-
     @NotBlank
     private String author;
 
+    private LocalDateTime createdDate;
+
     private Long favor;
 
+
+    // 생성자 -> 빌더패턴으로 객체 생성 전략 변경
     public Content toEntity() {
-        Content content = new Content();
-        content.set_id(_id);
-        content.setTitle(title);
-        content.setContent(this.content);
-        content.setCreatedDate(createdDate);
-        content.setAuthor(author);
-        content.setFavor(favor);
-        return content;
+        return Content.builder()
+                ._id(_id)
+                .title(title)
+                .content(content)
+                .author(author)
+                .favor(favor)
+                .build();
     }
 }
