@@ -6,7 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Document
@@ -18,11 +18,11 @@ public class Comment {
     private String comment; //commentBody
 
     @CreatedDate
-    private Date createdDate;
+    private LocalDateTime createdDate;
     private String author;
 
     @Builder
-    public Comment(String _id, String contentId, String comment, Date createdDate, String author) {
+    public Comment(String _id, String contentId, String comment, LocalDateTime createdDate, String author) {
         this._id = _id;
         this.contentId = contentId;
         this.comment = comment;
