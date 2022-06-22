@@ -1,6 +1,8 @@
 package com.codestates.coco.contents.controller;
 
 
+import com.codestates.coco.common.CustomException;
+import com.codestates.coco.common.ErrorCode;
 import com.codestates.coco.contents.domain.Content;
 import com.codestates.coco.contents.domain.ContentDTO;
 import com.codestates.coco.contents.service.ContentService;
@@ -11,12 +13,13 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.List;
 
 
 @RestController
-@RequestMapping("/content")
+@RequestMapping("/api/content")
 @RequiredArgsConstructor
 public class ContentController {
     private final ContentService contentService;
@@ -54,5 +57,10 @@ public class ContentController {
     @PostMapping("")
     public ResponseEntity<Content> createContent(@Valid @RequestBody ContentDTO contentDTO, BindingResult bindingResult) {
         return new ResponseEntity<>(contentService.createcontent(contentDTO), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/testerr")
+    public void testcode(){
+        throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
     }
 }
