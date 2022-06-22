@@ -3,6 +3,9 @@ package com.codestates.coco.comment.service;
 import com.codestates.coco.comment.domain.Comment;
 import com.codestates.coco.comment.domain.CommentDTO;
 import com.codestates.coco.comment.repository.CommentRepository;
+import com.codestates.coco.common.CustomException;
+import com.codestates.coco.common.ErrorCode;
+import com.codestates.coco.contents.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +17,7 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final ContentRepository contentRepository;
 
     @Transactional
     public void createComment(CommentDTO commentDTO){
@@ -21,12 +25,13 @@ public class CommentService {
     }
 
     public List<CommentDTO> getAllComment(String contentId){
+        contentRepository.findById(contentId).orElseThrow(() ->  new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
         return commentRepository.findAllByContentId(contentId);
     }
 
     @Transactional
     public CommentDTO putComment(String id, CommentDTO commentDTO){
-        Comment comment = commentRepository.findById(id).orElse(null);
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_COMMENT));
         if(!commentDTO.equals(comment)) {
             comment.update(commentDTO.getComment());
         }
@@ -43,7 +48,11 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(String id){
-        commentRepository.deleteById(id);
+        try {
+            commentRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.CANNOT_FOUND_COMMENT);
+        }
     }
 
 }

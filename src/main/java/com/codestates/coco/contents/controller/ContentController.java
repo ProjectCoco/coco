@@ -58,9 +58,4 @@ public class ContentController {
     public ResponseEntity<Content> createContent(@Valid @RequestBody ContentDTO contentDTO, BindingResult bindingResult) {
         return new ResponseEntity<>(contentService.createcontent(contentDTO), HttpStatus.CREATED);
     }
-
-    @GetMapping("/testerr")
-    public void testcode(){
-        throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-    }
 }
