@@ -3,8 +3,6 @@ package com.codestates.coco.contents.service;
 
 import com.codestates.coco.contents.domain.Content;
 import com.codestates.coco.contents.domain.ContentDTO;
-import com.codestates.coco.contents.domain.ContentGetDTO;
-import com.codestates.coco.contents.domain.ContentTitleDTO;
 import com.codestates.coco.contents.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -12,10 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,38 +18,28 @@ public class ContentService {
     private final ContentRepository contentRepository;
 
 
-    public List<ContentGetDTO> getTitleContents(int page) {
-        return contentRepository.findBy(PageRequest.of(page,10));
+    public List<ContentDTO> getTitleContents(int page) {
+        return contentRepository.findBy(PageRequest.of(page, 10));
     }
 
-    public List<ContentGetDTO> getAllContents() {
-        List<ContentGetDTO> all = contentRepository.findAll().stream()
-                .map(s ->
-                ContentGetDTO.builder()
-                        .content(s.getContent())
-                        ._id(s.get_id())
-                        .createdDate(s.getCreatedDate())
-                        .title(s.getTitle())
-                        .favor(s.getFavor())
-                        .build()
-        ).collect(Collectors.toList());
-        return all;
-
+    /* 더이상 사용하지 않는 전체 조회코드
+    public List<ContentDTO> getAllContents() {
+        return contentRepository.findAllBy();
     }
+    */
 
-    public ContentGetDTO getContents(String id) {
+    public ContentDTO getContents(String id) {
         try {
-            Optional<Content> content = contentRepository.findById(id);
-            ContentGetDTO returnContent = new ContentGetDTO(
-                    content.get().get_id(),
-                    content.get().getTitle(),
-                    content.get().getContent(),
-                    content.get().getCreatedDate(),
-                    content.get().getFavor()
-            );
-            return returnContent;
+            Content content = contentRepository.findById(id).orElse(null);
+            return ContentDTO.builder()
+                    ._id(content.get_id())
+                    .title(content.getTitle())
+                    .content(content.getContent())
+                    .createdDate(content.getCreatedDate())
+                    .favor(content.getFavor())
+                    .build();
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"ContentId_Not_Found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ContentId_Not_Found");
         }
     }
 
@@ -69,31 +54,30 @@ public class ContentService {
                 return false;
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"ContentId_BAD_REQUEST");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ContentId_BAD_REQUEST");
         }
     }
 
 
     public boolean putContents(String id, ContentDTO contentDTO) {
-        try {
-            if(contentRepository.existsById(id)) {
+
+        Content content = contentRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "ContentId_Or_ContentBody_BAD_REQUEST"));
+
+        content.update(contentDTO.getTitle(), contentDTO.getContent());
+        contentRepository.save(content);
+
+        return true;
+
+            /*  아래와 같이 작성하는 경우, Controller에서 받아온 title, content 등을 제외한 나머지 favor, author 등은 삭제된 채 업데이트된다.
                 Content content = contentDTO.toEntity();
                 content.set_id(id);
                 contentRepository.save(content);
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"ContentId_Or_ContentBody_BAD_REQUEST");
-        }
+            */
 
     }
 
 
-
     public Content createcontent(ContentDTO contentDTO) {
-        contentDTO.setCreatedDate(new Date());
         return contentRepository.save(contentDTO.toEntity());
     }
 }
