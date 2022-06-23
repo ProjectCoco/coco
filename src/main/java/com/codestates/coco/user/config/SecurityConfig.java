@@ -7,6 +7,7 @@ import com.codestates.coco.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,6 +24,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtProperties jwtProperties;
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        // 정적자원 권한요청에서 제외
+        web.ignoring().antMatchers("/static/**", "/favicon*");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -35,11 +42,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                                                                  // AuthenticationManager를 WebSecurityConfigurerAdapter가 가지고 있다.
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, jwtProperties))
                 .authorizeRequests()
+                .mvcMatchers("/").permitAll()
                 .antMatchers("/api/user/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER')")
                 .antMatchers("/api/manager/**")
                 .access("hasRole('ROLE_MANAGER')")// 세션방식 x
-                .anyRequest().permitAll();
+                .antMatchers("/").hasAnyRole("ANONYMOUS");
 
     }
 
