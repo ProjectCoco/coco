@@ -8,9 +8,7 @@ import com.codestates.coco.contents.domain.ContentDTO;
 import com.codestates.coco.contents.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -76,7 +74,14 @@ public class ContentService {
     }
 
 
-    public Content createcontent(ContentDTO contentDTO) {
-        return contentRepository.save(contentDTO.toEntity());
+    public ContentDTO createcontent(ContentDTO contentDTO) {
+        Content content = contentRepository.save(contentDTO.toEntity());
+        return ContentDTO.builder()
+                ._id(content.get_id())
+                .title(content.getTitle())
+                .content(content.getContent())
+                .createdDate(content.getCreatedDate())
+                .favor(content.getFavor())
+                .build();
     }
 }

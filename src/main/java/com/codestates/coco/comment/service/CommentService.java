@@ -20,8 +20,15 @@ public class CommentService {
     private final ContentRepository contentRepository;
 
     @Transactional
-    public void createComment(CommentDTO commentDTO){
-        commentRepository.save(commentDTO.toEntity(commentDTO));
+    public CommentDTO createComment(CommentDTO commentDTO){
+        Comment comment = commentRepository.save(commentDTO.toEntity(commentDTO));
+        return CommentDTO.builder()
+                ._id(comment.get_id())
+                .comment(comment.getComment())
+                .author(comment.getAuthor())
+                .contentId(comment.getContentId())
+                .createdDate(comment.getCreatedDate())
+                .build();
     }
 
     public List<CommentDTO> getAllComment(String contentId){
@@ -47,10 +54,11 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(String id){
-        try {
+    public Boolean deleteComment(String id){
+        if(commentRepository.existsById(id)) {
             commentRepository.deleteById(id);
-        } catch (Exception e) {
+            return true;
+        } else {
             throw new CustomException(ErrorCode.CANNOT_FOUND_COMMENT);
         }
     }
