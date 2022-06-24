@@ -4,7 +4,7 @@ import Login from './pages/Login';
 import NaviHeader from './components/NaviHeader';
 import React from 'react';
 import Signup from './pages/Signup/Signup';
-import StudyBoardWrite from './pages/StudyBoardWrite';
+import BoardWrite from './pages/BoardWrite';
 import StudyBoardDetail from './pages/StudyBoardDetail';
 import StudyBoard from './pages/StudyBoard/StudyBoard';
 
@@ -14,11 +14,13 @@ const Router = () => {
       <NaviHeader />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/study-board" element={<StudyBoard />} />
+        <Route path="/study-board">
+          <Route path="" element={<StudyBoard />} />
+          <Route path=":id" element={<StudyBoardDetail />} />
+          <Route path="write" element={<BoardWrite />} />
+        </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />;
-        <Route path="/study-board/:id" element={<StudyBoardDetail />} />
-        <Route path="/study-board-write" element={<StudyBoardWrite />} />
       </Routes>
     </>
   );
