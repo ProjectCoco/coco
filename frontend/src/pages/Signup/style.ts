@@ -45,12 +45,18 @@ export const InputBox = styled.div`
     color: #444;
   }
 `;
+
+export const EmailInputBox = styled.div`
+  display: flex;
+`;
+
 export const Input = styled.input`
   border: none;
   background-color: #ececec;
   height: 4rem;
   border-radius: 1rem;
   padding-left: 1rem;
+  flex-grow: 2;
 `;
 
 export const GroupInfoInput = styled.select`
@@ -63,6 +69,23 @@ export const GroupInfoInput = styled.select`
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+`;
+
+export const EmailCheckButton = styled.button`
+  background-color: #5de0e6;
+  color: #fff;
+  font-weight: 600;
+  height: 4rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  flex-grow: 1;
+  margin-left: 0.5rem;
+
+  &:hover {
+    transform: scale(0.98);
+  }
 `;
 
 export const SignUpButton = styled.button`

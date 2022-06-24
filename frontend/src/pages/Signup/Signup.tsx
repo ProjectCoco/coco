@@ -23,23 +23,47 @@ const Signup = () => {
   const groupInfo = useSelect('', isValidGroupInfo);
 
   const debounceUsername = useDebounce(username.input, 500);
-  const [duplicateMessage, setDuplicateMessage] = useState<string>('');
+  const [duplicateMessage, setDuplicateMessage] = useState({
+    email: '',
+    username: '',
+  });
+
+  const checkEmail = async (email: string) => {
+    try {
+      const response = await apiClient.post(`/api/email/${email}/check`, email);
+      if (response) setDuplicateMessage({ ...duplicateMessage, email: '' });
+      else
+        setDuplicateMessage({
+          ...duplicateMessage,
+          email: '이미 등록된 이메일입니다. 이메일을 다시 확인해주세요.',
+        });
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  const checkUsername = async (username: string) => {
+    try {
+      const response = await apiClient.post(
+        `/api/username/${username}/check`,
+        username
+      );
+      if (response) setDuplicateMessage({ ...duplicateMessage, username: '' });
+      else
+        setDuplicateMessage({
+          ...duplicateMessage,
+          username: '이미 등록된 유저이름입니다. 다른 유저이름을 입력해주세요.',
+        });
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
 
   useEffect(() => {
     if (username.input && !username.errorMessage) {
       checkUsername(username.input);
     }
   }, [debounceUsername]);
-
-  const checkUsername = async (username: string) => {
-    try {
-      const request = await apiClient.post(username);
-      console.log('request', request);
-    } catch (error) {
-      setDuplicateMessage('서버 통신 에러입니다.'); // 추후 삭제
-      console.log('error', error);
-    }
-  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -54,7 +78,8 @@ const Signup = () => {
       !password.errorMessage &&
       !passwordConfirm.errorMessage &&
       !username.errorMessage &&
-      !groupInfo.errorMessage
+      !groupInfo.errorMessage &&
+      !duplicateMessage
     ) {
       const response = await postSignupApi({
         email: email.input,
@@ -81,14 +106,25 @@ const Signup = () => {
           <S.SignUpForm onSubmit={handleSubmit}>
             <S.InputBox>
               <label>EMAIL</label>
-              <S.Input
-                name="email"
-                type="email"
-                value={email.input}
-                onChange={email.handleInput}
-                autoComplete="off"
-              />
-              <S.ErrorText>{email.errorMessage}</S.ErrorText>
+              <S.EmailInputBox>
+                <S.Input
+                  name="email"
+                  type="email"
+                  value={email.input}
+                  onChange={email.handleInput}
+                  autoComplete="off"
+                />
+                <S.EmailCheckButton
+                  type="button"
+                  onClick={() => checkEmail(email.input)}
+                  disabled={email.input && !email.errorMessage ? false : true}
+                >
+                  중복 확인
+                </S.EmailCheckButton>
+              </S.EmailInputBox>
+              <S.ErrorText>
+                {email.errorMessage || duplicateMessage.email}
+              </S.ErrorText>
             </S.InputBox>
             <S.InputBox>
               <label>PASSWORD</label>
@@ -122,7 +158,7 @@ const Signup = () => {
                 autoComplete="off"
               />
               <S.ErrorText>
-                {username.errorMessage || duplicateMessage}
+                {username.errorMessage || duplicateMessage.username}
               </S.ErrorText>
             </S.InputBox>
             <S.InputBox>

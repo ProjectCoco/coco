@@ -1,19 +1,17 @@
 export interface IDuBoardList {
-  id: number;
-  subject: string;
-  content: string;
-  datetime: string;
-  favor: number;
-  comment: IDuComment[];
+  _id: string;
   author: string;
+  title: string;
+  content: string;
+  createdDate: string;
+  favor: number | null;
 }
 
 export interface IDuComment {
-  id: number;
-  content: {
-    id: number;
-    content: string;
-  }[];
+  _id: string;
+  comment: string;
+  createdDate: string;
+  author: string;
 }
 
 export interface UserStateType {

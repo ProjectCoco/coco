@@ -24,7 +24,7 @@ export const getUserLogin = selector({
 export const StudyBoardList = selector({
   key: 'studyBoardList',
   get: async () => {
-    const response = await fetch('http://localhost:8080/content?page=1');
+    const response = await fetch('http://localhost:8080/content?page=0');
     const data = await response.json();
     return data;
   },

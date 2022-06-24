@@ -2,28 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from './components/Header';
 import Body from './components/Body';
-import { DuBoardList, IDuBoardList } from '../../dummys/dummy';
 import ContentLayout from '../../components/ContentLayout';
 import Loading from '../../components/Loading/Loading';
+import { useQuery } from 'react-query';
 
 const StudyBoardDetail = () => {
   const { id } = useParams();
-  const [data, setData] = useState<IDuBoardList>();
-
-  useEffect(() => {
-    DuBoardList.find((board) =>
-      board.id === Number(id) ? setData(board) : null
-    );
-  }, [id]);
+  const fetchData = async ({ pageParam = id }) => {
+    const res = await fetch(`http://localhost:8080/content/${pageParam}`);
+    return res.json();
+  };
+  const { isLoading, data } = useQuery('data', fetchData);
 
   return (
     <ContentLayout>
-      {data ? (
-        <>
-          <Header data={data} /> <Body data={data} />
-        </>
-      ) : (
+      {isLoading ? (
         <Loading />
+      ) : (
+        <>
+          <Header data={data} />
+          <Body board={data} />
+        </>
       )}
     </ContentLayout>
   );
