@@ -5,6 +5,7 @@ import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { UserState } from '../lib/atom';
 import { useNavigate } from 'react-router-dom';
+import { CgProfile, CgLogOut, CgClose } from 'react-icons/cg';
 
 function DropDwonMenu() {
   const [isDrop, setIsDrop] = useState<boolean>(false);
@@ -25,6 +26,7 @@ function DropDwonMenu() {
     });
     removeCookie('accessToken'); // 2. 쿠키에서 토큰 삭제
     navigate('/'); // ( 유저정보 초기화 , 토큰삭제 ) 했으면 홈으로 리 다이렉트
+    location.reload(); // 토큰값 제대로 없애기 위해서 새로고침 (그냥 리다이렉트만 된 상태면 토큰이 제대로 안사라져있음)
   }
 
   return (
@@ -32,9 +34,16 @@ function DropDwonMenu() {
       <AiOutlineUser className="DropMenu" />
       {isDrop ? (
         <DropMenu>
-          <DropMenuList>프로필 수정</DropMenuList>
-          <DropMenuList onClick={handleLogOut}>로그아웃</DropMenuList>
-          <DropMenuList>X</DropMenuList>
+          <DropMenuList>
+            <CgProfile /> Profile
+          </DropMenuList>
+          <DropMenuList onClick={handleLogOut}>
+            <CgLogOut />
+            LogOut
+          </DropMenuList>
+          <DropMenuList>
+            <CgClose /> Exit
+          </DropMenuList>
         </DropMenu>
       ) : null}
     </UserIcon>
@@ -45,12 +54,16 @@ export default DropDwonMenu;
 
 const UserIcon = styled.div`
   position: relative;
-  font-size: 2rem;
+  font-size: 1.6rem;
   cursor: pointer;
   margin-right: 2rem;
 `;
 
 const DropMenu = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   width: 10rem;
   right: 0.2rem;
@@ -63,4 +76,11 @@ const DropMenu = styled.div`
 const DropMenuList = styled.div`
   font-size: 1.5rem;
   color: #444;
+  padding-left: 1.2rem;
+  width: 90%;
+
+  &:hover {
+    background-color: #444;
+    color: white;
+  }
 `;
