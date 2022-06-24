@@ -14,7 +14,7 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // 서버응답 시 json을 자바스크립트에서 처리할 수 있게
-        config.addAllowedOrigin("*"); // 모든 ip의 응답 허용
+        config.addAllowedOrigin("http://localhost:3000"); // 모든 ip의 응답 허용
         config.addAllowedHeader("*"); // 모든 헤더의 응답을 허용
         config.addAllowedMethod("*"); // 모든 get post put delete patch 요청 허용
 
