@@ -18,12 +18,12 @@ public class CommentDTO {
 
     private String contentId; // 관련된 content_id
 
-    @NotBlank
+    @NotBlank(message = "댓글 내용은 공백일 수 없습니다.")
     private String comment; //commentBody
 
     private LocalDateTime createdDate;
 
-    @NotBlank
+    @NotBlank(message = "게시자는 공백일 수 없습니다.")
     private String author;
 
     /*@Builder

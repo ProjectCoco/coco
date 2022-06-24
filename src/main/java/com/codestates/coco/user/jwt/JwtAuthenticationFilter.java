@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.codestates.coco.user.config.auth.PrincipalDetails;
 import com.codestates.coco.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,12 +22,18 @@ import java.util.Date;
 // UsernamePasswordAuthenticationFilter가 동작함.
 // 로그인을 진행하는 AuthenticationManager를 추가해주어야 한다.
 // 즉, 해당 클래스는 로그인 인증 전반에 관한 내용이다.
-@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtProperties jwtProperties;
 
-/*    @Value("${jwt.header}")
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtProperties jwtProperties) {
+        // login process url을 새로이 설정
+        super.setFilterProcessesUrl("/api/login");
+        this.authenticationManager = authenticationManager;
+        this.jwtProperties = jwtProperties;
+    }
+
+    /*    @Value("${jwt.header}")
     private String header;
     @Value("${jwt.secret}")
     private String secret;

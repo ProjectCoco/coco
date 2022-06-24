@@ -1,14 +1,14 @@
 package com.codestates.coco.contents.service;
 
 
+import com.codestates.coco.common.CustomException;
+import com.codestates.coco.common.ErrorCode;
 import com.codestates.coco.contents.domain.Content;
 import com.codestates.coco.contents.domain.ContentDTO;
 import com.codestates.coco.contents.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class ContentService {
     }
     */
 
-    public ContentDTO getContents(String id) {
+    public ContentDTO getContents(String id){
         try {
             Content content = contentRepository.findById(id).orElse(null);
             return ContentDTO.builder()
@@ -39,29 +39,26 @@ public class ContentService {
                     .favor(content.getFavor())
                     .build();
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ContentId_Not_Found");
+            throw new CustomException(ErrorCode.CANNOT_FOUND_CONTENT);
         }
     }
 
 
     //todo auth
     public boolean deleteContents(String id) {
-        try {
-            if (contentRepository.existsById(id)) {
-                contentRepository.deleteById(id);
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ContentId_BAD_REQUEST");
+
+        if (contentRepository.existsById(id)) {
+            contentRepository.deleteById(id);
+            return true;
+        } else {
+            throw new CustomException(ErrorCode.CANNOT_FOUND_CONTENT);
         }
     }
 
 
     public boolean putContents(String id, ContentDTO contentDTO) {
 
-        Content content = contentRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "ContentId_Or_ContentBody_BAD_REQUEST"));
+        Content content = contentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
 
         content.update(contentDTO.getTitle(), contentDTO.getContent());
         contentRepository.save(content);
@@ -77,7 +74,14 @@ public class ContentService {
     }
 
 
-    public Content createcontent(ContentDTO contentDTO) {
-        return contentRepository.save(contentDTO.toEntity());
+    public ContentDTO createcontent(ContentDTO contentDTO) {
+        Content content = contentRepository.save(contentDTO.toEntity());
+        return ContentDTO.builder()
+                ._id(content.get_id())
+                .title(content.getTitle())
+                .content(content.getContent())
+                .createdDate(content.getCreatedDate())
+                .favor(content.getFavor())
+                .build();
     }
 }
