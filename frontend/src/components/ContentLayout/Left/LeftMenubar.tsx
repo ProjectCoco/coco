@@ -8,9 +8,13 @@ import {
 import { AiOutlineComment } from 'react-icons/ai';
 import { IoMdPaper } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { UserState } from '../../../lib/atom';
 
 const LeftMenubar = () => {
   const navigator = useNavigate();
+
+  const user = useRecoilValue(UserState);
 
   return (
     <S.Container>
@@ -30,7 +34,13 @@ const LeftMenubar = () => {
         <hr />
       </S.Hr>
       <S.Write>
-        <IoMdPaper onClick={() => navigator('/study-board-write')} />
+        <IoMdPaper
+          onClick={() => {
+            user.email
+              ? navigator('/study-board/write')
+              : alert('글을 작성하시려면 로그인해주세요.');
+          }}
+        />
       </S.Write>
     </S.Container>
   );
