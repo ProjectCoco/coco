@@ -46,7 +46,7 @@ export async function postSignupApi(SignupForm: T.SignupForm) {
 
 // @HTTP: POST
 // @Route: /study-board-write
-export async function postStudyBoardWriteApi(WriteForm: T.WriteForm) {
+export async function postBoardWriteApi(WriteForm: T.WriteForm) {
   try {
     const response = await apiClient.post('/api/content', WriteForm, headers);
     return response.data;
