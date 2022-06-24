@@ -10,6 +10,7 @@ const NaviHeader = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const user = useRecoilValue(UserState); // 유저 정보를 가져와서 유저 정보가 있으면 Header 상태를 바꿈
+
   return (
     <>
       <S.Container>
