@@ -14,7 +14,7 @@ type DataProps = {
 
 function Body({ board }: DataProps) {
   const fetchComment = async () => {
-    const res = await fetch(`http://localhost:8080/comment/${board._id}`);
+    const res = await fetch(`http://localhost:8080/api/comment/${board._id}`);
     return res.json();
   };
   const { data } = useQuery('comment', fetchComment);

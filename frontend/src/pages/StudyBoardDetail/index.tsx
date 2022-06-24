@@ -9,7 +9,7 @@ import { useQuery } from 'react-query';
 const StudyBoardDetail = () => {
   const { id } = useParams();
   const fetchData = async ({ pageParam = id }) => {
-    const res = await fetch(`http://localhost:8080/content/${pageParam}`);
+    const res = await fetch(`http://localhost:8080/api/content/${pageParam}`);
     return res.json();
   };
   const { isLoading, data } = useQuery('data', fetchData);

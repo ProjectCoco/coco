@@ -11,7 +11,7 @@ import axios from 'axios';
 
 const fetchData = async (page: number) => {
   return await axios
-    .get(`http://localhost:8080/content?page=${page}`)
+    .get(`http://localhost:8080/api/content?page=${page}`)
     .then((res) => res.data);
 };
 
