@@ -7,7 +7,7 @@ import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import { postStudyBoardWriteApi } from '../apis/apiClient';
+import { postBoardWriteApi } from '../apis/apiClient';
 import { useRecoilValue } from 'recoil';
 import { UserState } from '../lib/atom';
 
@@ -56,7 +56,7 @@ const BoardWrite = () => {
     if (!isValid(newPost)) {
       alert('제목과 내용은 최소 1자 이상 입력되어야 합니다.');
     } else {
-      const response = await postStudyBoardWriteApi(newPost); //
+      const response = await postBoardWriteApi(newPost); //
       console.log(response, newPost);
       // TODO: response 성공, 실패
       navigate(-1);
