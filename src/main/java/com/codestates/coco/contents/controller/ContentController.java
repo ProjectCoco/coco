@@ -1,15 +1,12 @@
 package com.codestates.coco.contents.controller;
 
 
-import com.codestates.coco.common.CustomValidException;
-import com.codestates.coco.common.ErrorCode;
 import com.codestates.coco.contents.domain.ContentDTO;
 import com.codestates.coco.contents.service.ContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -47,19 +44,13 @@ public class ContentController {
     public ResponseEntity<Boolean> putContents(
             @PathVariable("id") String id,
             @Valid
-            @RequestBody ContentDTO contentDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new CustomValidException(ErrorCode.INVALID_CONTENT_FORM, bindingResult);
-        }
+            @RequestBody ContentDTO contentDTO) {
         return new ResponseEntity<>(contentService.putContents(id, contentDTO), HttpStatus.CREATED);
     }
 
     @Secured("ROLE_USER")
     @PostMapping("")
-    public ResponseEntity<ContentDTO> createContent(@Valid @RequestBody ContentDTO contentDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new CustomValidException(ErrorCode.INVALID_CONTENT_FORM, bindingResult);
-        }
+    public ResponseEntity<ContentDTO> createContent(@Valid @RequestBody ContentDTO contentDTO) {
             return new ResponseEntity<>(contentService.createcontent(contentDTO), HttpStatus.CREATED);
         }
     }

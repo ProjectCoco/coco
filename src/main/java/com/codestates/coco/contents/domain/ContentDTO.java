@@ -17,13 +17,13 @@ public class ContentDTO {
 
     private String _id;
 
-    @NotBlank
+    @NotBlank(message = "제목은 공백일 수 없습니다.")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "게시글 내용은 공백일 수 없습니다.")
     private String content;
 
-    @NotBlank
+    @NotBlank(message = "게시자는 공백일 수 없습니다.")
     private String author;
 
     private LocalDateTime createdDate;

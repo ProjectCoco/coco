@@ -8,16 +8,16 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class UserDTO {
 
-    @Email(message = "NOT_VALID_EMAIL")
+    @Email(message = "Email 형식을 갖춰야합니다.")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호는 공백일 수 없습니다.")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "기수는 공백일 수 없습니다.")
     private String codeNum;
 
-    @NotBlank
+    @NotBlank(message = "Usename은 공백일 수 없습니다.")
     private String username;
 
     public User toEntity(UserDTO userDTO) {
