@@ -35,6 +35,7 @@ public class ContentService {
                     ._id(content.get_id())
                     .title(content.getTitle())
                     .content(content.getContent())
+                    .author(content.getAuthor())
                     .createdDate(content.getCreatedDate())
                     .favor(content.getFavor())
                     .build();
