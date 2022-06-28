@@ -35,6 +35,9 @@ export const FavoritBox = styled.div`
     font-size: 1.8rem;
     font-weight: bold;
   }
+  & > svg {
+    cursor: pointer;
+  }
 `;
 export const Author = styled.h4`
   @import url('https://fonts.googleapis.com/css2?family=Radio+Canada:wght@600;700&family=Redressed&family=Roboto+Flex:opsz,wght@8..144,300&family=Signika:wght@500&display=swap');
@@ -112,11 +115,9 @@ export const Button = styled.button`
   }
 `;
 export const ShowComment = styled.div`
-  width: 80%;
   border-bottom: solid 1px skyblue;
-  margin: 2rem 0;
+  margin: 1rem 0;
   padding-top: 2rem;
-  padding-left: 2rem;
   padding-bottom: 1.5rem;
   & > p {
     margin-top: 2rem;
@@ -132,6 +133,13 @@ export const CommentImg = styled.img`
 export const CommentProfile = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
+  & > div:first-child {
+    width: 10%;
+  }
+  & > div:nth-child(2) {
+    width: 80%;
+  }
   & > div > h1 {
     font-size: 1.2rem;
     font-weight: bold;
@@ -147,4 +155,22 @@ export const CommentProfile = styled.div`
 export const Blank = styled.div`
   width: 100%;
   height: 0.1rem;
+`;
+export const IconAlign = styled.div`
+  width: 20%;
+  & > svg {
+    width: 2rem;
+    height: 2rem;
+    margin-left: 1rem;
+  }
+`;
+export const EditComment = styled.div`
+  display: flex;
+  & > textarea {
+    flex: 9;
+    font-size: 1.5rem;
+    border: solid 2px skyblue;
+    border-color: skyblue;
+    padding-left: 1rem;
+  }
 `;

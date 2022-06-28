@@ -4,7 +4,7 @@ export interface IDuBoardList {
   title: string;
   content: string;
   createdDate: string;
-  favor: number | null;
+  favor: number;
 }
 
 export interface IDuComment {

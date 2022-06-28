@@ -6,7 +6,8 @@ import { MdFavorite } from 'react-icons/md';
 import { AiOutlineComment } from 'react-icons/ai';
 import profileImg2 from '../../images/download.jpg';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from 'react-query';
+import { Viewer } from '@toast-ui/react-editor';
+import { IDuComment } from '../../lib/types';
 
 interface IBoard {
   board: {
@@ -17,15 +18,11 @@ interface IBoard {
     createdDate: string;
     favor: number | null;
   };
+  comment: () => Promise<unknown>;
 }
 
-const BoardContentBox = ({ board }: IBoard) => {
+const BoardContentBox = ({ board, comment }: IBoard) => {
   const navigator = useNavigate();
-  const fetchComment = async () => {
-    const res = await fetch(`http://localhost:8080/api/comment/${board._id}`);
-    return res.json();
-  };
-  const { data } = useQuery('comment', fetchComment);
   const parseDate = new Date(board.createdDate);
 
   return (
@@ -33,9 +30,11 @@ const BoardContentBox = ({ board }: IBoard) => {
       <S.ContentBox onClick={() => navigator(`${board._id}`)}>
         <S.Subject>{board.title}</S.Subject>
         <S.Content>
-          {board.content.length > 235
-            ? `${board.content.slice(0, 235)}...`
-            : board.content}
+          {board.content.length > 235 ? (
+            <Viewer initialValue={`${board.content.slice(0, 235)}...`} />
+          ) : (
+            <Viewer initialValue={board.content} />
+          )}
         </S.Content>
         <S.UserLogo>
           <S.UserBox>
@@ -43,7 +42,7 @@ const BoardContentBox = ({ board }: IBoard) => {
             <div>
               <S.Author>{board.author}</S.Author>
               <S.Date>
-                {parseDate.toLocaleDateString()}.
+                {`${parseDate.toLocaleDateString()} `}
                 {parseDate.toLocaleTimeString()}
               </S.Date>
             </div>
@@ -51,11 +50,11 @@ const BoardContentBox = ({ board }: IBoard) => {
           <div style={{ display: 'flex' }}>
             <S.FavoritBox>
               <MdFavorite />
-              {board.favor !== null ? <h4>{board.favor}</h4> : <h4>0</h4>}
+              <h4>{board.favor ?? 0}</h4>
             </S.FavoritBox>
             <S.FavoritBox style={{ marginLeft: '2rem' }}>
               <AiOutlineComment />
-              {data !== undefined ? <h4>{data.length}</h4> : <h4>0</h4>}
+              <h4>{comment.length ?? 0}</h4>
             </S.FavoritBox>
           </div>
         </S.UserLogo>

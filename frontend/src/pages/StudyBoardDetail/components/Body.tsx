@@ -2,82 +2,108 @@ import React, { useState } from 'react';
 import * as S from '../style';
 import { IDuBoardList, IDuComment } from '../../../lib/types';
 import commentImg from '../../../images/userProfile.jpg';
-import { AiOutlineComment } from 'react-icons/ai';
+import { AiOutlineComment, AiFillEdit, AiOutlineDelete } from 'react-icons/ai';
 import { postCommentApi } from '../../../apis/apiClient';
 import { useRecoilValue } from 'recoil';
 import { UserState } from '../../../lib/atom';
-import { useQuery } from 'react-query';
+import { Viewer } from '@toast-ui/react-editor';
+import axios from 'axios';
 
-type DataProps = {
+interface DataProps {
   board: IDuBoardList;
+  comment: IDuComment[];
+}
+
+const removeComment = async (id: string) => {
+  return await axios.delete(`http://localhost:8080/api/comment/${id}`);
+};
+const putComment = async (id: string, data: string) => {
+  return await axios.put(`http://localhost:8080/api/comment/${id}`, data);
 };
 
-function Body({ board }: DataProps) {
-  const fetchComment = async () => {
-    const res = await fetch(`http://localhost:8080/api/comment/${board._id}`);
-    return res.json();
-  };
-  const { data } = useQuery('comment', fetchComment);
-  const [comment, setComment] = useState<string>('');
+const Body = ({ board, comment }: DataProps) => {
+  const [string, setString] = useState<string>('');
+  const [editString, setEditString] = useState('');
+  const [edit, setEdit] = useState(false);
   const user = useRecoilValue(UserState);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const commentForm = {
-      _id: board._id,
+      contentId: board._id,
       author: user.email,
-      comment: comment,
+      comment: string,
       createdDate: new Date(Date.now()).toISOString(),
     };
-    const response = await postCommentApi(commentForm);
-    if (response) setComment('');
-    console.log(response);
+    async () => await postCommentApi(commentForm).then(() => setString(''));
   }
 
   return (
     <S.Body>
-      <S.Content>{board.content}</S.Content>
+      <S.Content>
+        <Viewer initialValue={board?.content} />
+      </S.Content>
       <S.CommentBox id="CommentBox">
         <S.CommentLength>
           <AiOutlineComment />
-          <p> 댓글 </p>
+          <p>{comment.length ?? 0}</p>
         </S.CommentLength>
         <S.CommentForm onSubmit={handleSubmit}>
           <S.CommentInput
             type={'text'}
             placeholder={
-              user !== undefined
+              user.email.length > 1
                 ? '댓글을 입력해 주세요.'
                 : '댓글을 입력하려면 로그인을 해주세요.'
             }
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            value={string}
+            onChange={(e) => setString(e.target.value)}
             disabled={user.email.length > 1 ? false : true}
           />
           <S.Button>입력</S.Button>
         </S.CommentForm>
-        {data === undefined ? (
-          <></>
-        ) : (
-          data.map((comment: IDuComment) => (
-            <S.ShowComment key={comment._id}>
-              <S.CommentProfile>
-                <div>
-                  <S.CommentImg src={commentImg} />
-                </div>
-                <div>
-                  <h1>{comment.author}</h1>
-                  <h3>{comment.createdDate}</h3>
-                </div>
-              </S.CommentProfile>
+        {comment.map((comment) => (
+          <S.ShowComment key={comment._id}>
+            <S.CommentProfile>
+              <div>
+                <S.CommentImg src={commentImg} />
+              </div>
+              <div>
+                <h1>{comment.author}</h1>
+                <h3>{comment.createdDate}</h3>
+              </div>
+              {user.email === comment.author ? (
+                <S.IconAlign>
+                  <AiFillEdit onClick={() => setEdit((prev) => !prev)} />
+                  <AiOutlineDelete onClick={() => removeComment(comment._id)} />
+                </S.IconAlign>
+              ) : (
+                <></>
+              )}
+            </S.CommentProfile>
+            {edit ? (
+              <S.EditComment>
+                <textarea
+                  value={comment.comment}
+                  onChange={(e) => setEditString(e.target.value)}
+                />
+                <S.Button
+                  onClick={async () =>
+                    await putComment(comment._id, editString)
+                  }
+                >
+                  수정완료
+                </S.Button>
+              </S.EditComment>
+            ) : (
               <p>{comment.comment}</p>
-            </S.ShowComment>
-          ))
-        )}
+            )}
+          </S.ShowComment>
+        ))}
       </S.CommentBox>
       <S.Blank />
     </S.Body>
   );
-}
+};
 
 export default Body;
