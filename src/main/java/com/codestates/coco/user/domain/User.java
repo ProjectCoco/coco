@@ -30,6 +30,8 @@ public class User {
 
     private String groupInfo;
 
+    private String profileImg;
+
     private String role;
 
     public User(String email, String password) {
@@ -37,11 +39,12 @@ public class User {
         this.password = password;
     }
 
-    public User(String email, String password, String username, String groupInfo) {
+    public User(String email, String password, String username, String groupInfo, String profileImg) {
         this.email = email;
         this.password = password;
         this.username = username;
         this.groupInfo = groupInfo;
+        this.profileImg = profileImg;
         this.role = "ROLE_USER";
     }
 
