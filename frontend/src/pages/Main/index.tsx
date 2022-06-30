@@ -5,10 +5,14 @@ import Banner1 from '../../images/BannerImage.png';
 import SubTitle from './components/SubTitle';
 import Typewriters from './components/Typewriter';
 import * as S from './style';
+import Toast from '../../components/Toast/Toast';
+import { useRecoilValue } from 'recoil';
+import { UserState } from '../../lib/atom';
 
 const Main = () => {
   const navigator = useNavigate();
   const [subTitleTimer, setSubTitleTimer] = useState<boolean>(false);
+  const userstate = useRecoilValue(UserState);
   return (
     <S.Banner>
       <S.TextBox>
@@ -28,6 +32,9 @@ const Main = () => {
       <S.ImgBox>
         <S.BannerImg src={Banner1}></S.BannerImg>
       </S.ImgBox>
+      {userstate.email ? (
+        <Toast msg="Andrew Hwan님 환영합니다." status="success" />
+      ) : null}
     </S.Banner>
   );
 };
