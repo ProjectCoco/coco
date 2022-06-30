@@ -26,13 +26,6 @@ public class CommentDTO {
     @NotBlank(message = "게시자는 공백일 수 없습니다.")
     private String author;
 
-    /*@Builder
-    public CommentDTO(String contentId, String comment, String author) {
-        this.contentId = contentId;
-        this.comment = comment;
-        this.author = author;
-    }*/
-
     public Comment toEntity(CommentDTO commentDTO) {
         return Comment.builder()
                 ._id(commentDTO.get_id())
