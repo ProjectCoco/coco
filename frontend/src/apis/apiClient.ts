@@ -15,8 +15,9 @@ const headers: AxiosRequestHeaders = {
 // @Route: /comment
 export async function postCommentApi(commentForm: T.commentForm) {
   try {
-    const response = await apiClient.post('/api/comment', commentForm, headers);
-    return response;
+    return await apiClient.post('/api/comment', commentForm, {
+      headers,
+    });
   } catch (err) {
     return err;
   }
@@ -27,6 +28,7 @@ export async function postCommentApi(commentForm: T.commentForm) {
 export async function postLoginApi(LoginForm: T.LoginForm) {
   try {
     const response = await apiClient.post('/api/login', LoginForm);
+    console.log(response);
     return response.headers.authorization.split(' ')[1];
   } catch (err) {
     return err;
@@ -48,9 +50,33 @@ export async function postSignupApi(SignupForm: T.SignupForm) {
 // @Route: /study-board-write
 export async function postBoardWriteApi(WriteForm: T.WriteForm) {
   try {
-    const response = await apiClient.post('/api/content', WriteForm, headers);
+    const response = await apiClient.post('/api/content', WriteForm, {
+      headers,
+    });
     return response.data;
   } catch (err) {
     return err;
   }
 }
+
+// @HTTP: POST
+// @Route: /username/${username}/check
+// export async function checkUsernameApi(username: string) {
+//   try {
+//     const response = await apiClient.get(`/api/username/${username}/check`);
+//     return response;
+//   } catch (err) {
+//     return err;
+//   }
+// }
+
+// @HTTP: POST
+// @Route: /username/${email}/check
+// export async function checkEmailApi(email: string) {
+//   try {
+//     const response = await apiClient.get(`/api/email/${email}/check`);
+//     return response;
+//   } catch (err) {
+//     return err;
+//   }
+// }

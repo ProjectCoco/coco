@@ -1,6 +1,9 @@
 import { postLoginApi } from '../../apis/apiClient';
 import React, { useState } from 'react';
-import { handleValidation, IFormInput } from '../../lib/loginhandleValidation';
+import {
+  handleValidation,
+  IFormInput,
+} from '../../lib/validation/loginhandleValidation';
 import * as S from '../../pages/Login/style';
 import CustomButton from '../CustomButton';
 import { getCookie, setCookie } from '../../lib/cookie/cookie';
