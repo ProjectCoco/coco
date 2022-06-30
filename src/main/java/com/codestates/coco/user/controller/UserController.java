@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
@@ -30,5 +32,17 @@ public class UserController {
     @GetMapping("/api/username/{username}/check")
     public ResponseEntity<Boolean> usernameCheck(@PathVariable String username){
         return new ResponseEntity<>(userService.usernameCheck(username), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/token")
+    public ResponseEntity<String> reissueToken(HttpServletRequest request, HttpServletResponse response) {
+        userService.reissueToken(request, response);
+        return new ResponseEntity<>("재발급 성공", HttpStatus.OK);
+    }
+
+    @PostMapping("/api/logout")
+    public ResponseEntity<Object> logout(HttpServletRequest request, HttpServletResponse response) {
+        userService.logout(request, response);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

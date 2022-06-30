@@ -1,7 +1,5 @@
 package com.codestates.coco.user.jwt;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.codestates.coco.user.config.auth.PrincipalDetails;
 import com.codestates.coco.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 
 // login 요청 시 username 및 password를 post 전송하면
 // UsernamePasswordAuthenticationFilter가 동작함.
@@ -24,23 +21,14 @@ import java.util.Date;
 // 즉, 해당 클래스는 로그인 인증 전반에 관한 내용이다.
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
-    private final JwtProperties jwtProperties;
+    private final JwtProvider jwtProvider;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtProperties jwtProperties) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
         // login process url을 새로이 설정
         super.setFilterProcessesUrl("/api/login");
         this.authenticationManager = authenticationManager;
-        this.jwtProperties = jwtProperties;
+        this.jwtProvider = jwtProvider;
     }
-
-    /*    @Value("${jwt.header}")
-    private String header;
-    @Value("${jwt.secret}")
-    private String secret;
-    @Value("${jwt.token-validity-in-milliseconds}")
-    private long expire;*/
-
-
 
     // login 요청 시 로그인 시도를 하는 함수
     @Override
@@ -75,13 +63,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // attemptAuthentication() 결과가 authResult로 담겨온다.
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
-        String jwtToken = JWT.create()
-                .withSubject(principalDetails.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getExpire())) // 만료시간 설정
-                .withClaim("email", principalDetails.getUser().getEmail()) // private claim
-                .sign(Algorithm.HMAC512(jwtProperties.getSecret())); // Secret-key 설정
-
-        response.addHeader(jwtProperties.getHeader(), "Bearer "+jwtToken);
+        response.addHeader(jwtProvider.getRefreshHeader(), "Bearer "+jwtProvider.createRefreshToken(principalDetails));
+        response.addHeader(jwtProvider.getAccessHeader(), "Bearer "+jwtProvider.createToken(principalDetails));
         
     }
 }

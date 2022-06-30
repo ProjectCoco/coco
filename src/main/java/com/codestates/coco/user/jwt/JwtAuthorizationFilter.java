@@ -1,13 +1,6 @@
 package com.codestates.coco.user.jwt;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.codestates.coco.user.config.auth.PrincipalDetails;
-import com.codestates.coco.user.domain.User;
-import com.codestates.coco.user.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -22,52 +15,40 @@ import java.io.IOException;
 // 권한이나 인증이 필요한 특정 주소를 요청했을 때 해당 필터를 사용한다.
 // 권한이나 인증이 필요하지 않다면 사용하지 않는다.
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
-    
-    private UserRepository userRepository;
-    private JwtProperties jwtProperties;
+    private JwtProvider jwtProvider;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository, JwtProperties jwtProperties) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
         super(authenticationManager);
-        this.userRepository = userRepository;
-        this.jwtProperties = jwtProperties;//authorization : noExist
+        this.jwtProvider = jwtProvider;
     }
 
     // 인증 또는 권한요청이 올때 해당 필터 사용
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String jwtHeader = request.getHeader(jwtProperties.getHeader());
+        String accessHeader = request.getHeader(jwtProvider.getAccessHeader());
 
         // Token이 존재하는 지 확인
-        if (jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
-            chain.doFilter(request, response);
-            return;
+        if (accessHeader != null && accessHeader.startsWith("Bearer")) {
+            // JWT 검증
+            try {
+                String jwtToken = jwtProvider.resovleToken(request.getHeader(jwtProvider.getAccessHeader()));
+
+                // 서명이 정상적으로 되면 username이 담긴다.
+                if (jwtProvider.validateToken(jwtToken) && !jwtProvider.hasBlackList(jwtToken)) {
+                    // AuthenticationManager를 통한 생성이 아닌 Jwt 토큰 서명을 통해 Authentication 객체를 생성
+                    Authentication authentication = jwtProvider.getAuthentication(jwtToken);
+
+                    // 강제로 시큐리티의 세션영역에 접근해서 Authentication 저장.
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                }else{
+                    System.out.println("검증 실패 또는 blacklist 예외 추가 처리");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Authorization 예외발생");
+            }
         }
-
-        // JWT 검증
-        String jwtToken = request.getHeader(jwtProperties.getHeader()).replace("Bearer ", "");
-
-        String email = null;
-        try {
-            email = JWT.require(Algorithm.HMAC512(jwtProperties.getSecret())).build().verify(jwtToken).getClaim("email").asString();
-        } catch (JWTDecodeException e) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        // 서명이 정상적으로 되면 username이 담긴다.
-        if (email != null) {
-            User userEntity = userRepository.findByEmail(email);
-
-            PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
-
-            // AuthenticationManager를 통한 생성이 아닌 Jwt 토큰 서명을 통해 Authentication 객체를 생성
-            Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
-
-            // 강제로 시큐리티의 세션영역에 접근해서 Authentication 저장.
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            chain.doFilter(request, response);
-
-        }
+        chain.doFilter(request, response);
     }
 }
