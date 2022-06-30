@@ -42,6 +42,8 @@ export const UserState = atom<UserStateType>({
     email: '',
     exp: 0,
     sub: '',
+    profileImg: '',
+    username: '',
   },
   effects_UNSTABLE: [persistAtom],
 });
