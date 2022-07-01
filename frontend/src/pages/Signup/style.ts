@@ -110,5 +110,5 @@ export const ErrorText = styled.p`
   height: 2rem;
   font-size: 1rem;
   padding-left: 0.1rem;
-  color: red;
+  color: ${(props) => props.color};
 `;
