@@ -9,6 +9,7 @@ import StudyBoardDetail from './pages/StudyBoardDetail';
 import StudyBoard from './pages/StudyBoard/StudyBoard';
 import PrivateRouter from './PrivateRouter';
 import FreeBoard from './pages/FreeBoard';
+import UserProfile from './pages/UserProfile';
 
 const Router = () => {
   return (
@@ -26,6 +27,7 @@ const Router = () => {
           <Route path="/free-board">
             <Route path="" element={<FreeBoard />} />
           </Route>
+          <Route path="/profile" element={<UserProfile />} />;
         </Route>
         {/* login 하지 않은 경우에만 접근 가능 */}
         <Route element={<PrivateRouter authentication={false} />}>
