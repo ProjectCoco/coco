@@ -30,8 +30,12 @@ const Signup = () => {
 
   const checkEmail = async (email: string) => {
     try {
-      const response = await apiClient.post(`/api/email/${email}/check`, email);
-      if (response) setDuplicateMessage({ ...duplicateMessage, email: '' });
+      const response = await apiClient.get(`/api/email/${email}/check`);
+      if (response)
+        setDuplicateMessage({
+          ...duplicateMessage,
+          email: '사용 가능한 이메일 주소입니다.',
+        });
       else
         setDuplicateMessage({
           ...duplicateMessage,
@@ -44,12 +48,13 @@ const Signup = () => {
 
   const checkUsername = async (username: string) => {
     try {
-      const response = await apiClient.post(
-        `/api/username/${username}/check`,
-        username
-      );
-      if (response) setDuplicateMessage({ ...duplicateMessage, username: '' });
-      else
+      const response = await apiClient.get(`/api/username/${username}/check`);
+      if (response) {
+        setDuplicateMessage({
+          ...duplicateMessage,
+          username: '사용 가능한 유저 이름입니다.',
+        });
+      } else
         setDuplicateMessage({
           ...duplicateMessage,
           username: '이미 등록된 유저이름입니다. 다른 유저이름을 입력해주세요.',
@@ -79,7 +84,8 @@ const Signup = () => {
       !passwordConfirm.errorMessage &&
       !username.errorMessage &&
       !groupInfo.errorMessage &&
-      !duplicateMessage
+      duplicateMessage.email.includes('사용 가능') &&
+      duplicateMessage.username.includes('사용 가능')
     ) {
       const response = await postSignupApi({
         email: email.input,
@@ -122,7 +128,11 @@ const Signup = () => {
                   중복 확인
                 </S.EmailCheckButton>
               </S.EmailInputBox>
-              <S.ErrorText>
+              <S.ErrorText
+                color={
+                  duplicateMessage.email.includes('사용 가능') ? 'green' : 'red'
+                }
+              >
                 {email.errorMessage || duplicateMessage.email}
               </S.ErrorText>
             </S.InputBox>
@@ -157,7 +167,13 @@ const Signup = () => {
                 onChange={username.handleInput}
                 autoComplete="off"
               />
-              <S.ErrorText>
+              <S.ErrorText
+                color={
+                  duplicateMessage.username.includes('사용 가능')
+                    ? 'green'
+                    : 'red'
+                }
+              >
                 {username.errorMessage || duplicateMessage.username}
               </S.ErrorText>
             </S.InputBox>

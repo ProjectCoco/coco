@@ -18,4 +18,6 @@ export interface UserStateType {
   email: string;
   exp: number;
   sub: string;
+  profileImg: ProgressEvent<FileReader> | File | Blob | string;
+  username: string;
 }
