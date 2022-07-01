@@ -15,12 +15,14 @@ public class UserDTO {
     private String password;
 
     @NotBlank(message = "기수는 공백일 수 없습니다.")
-    private String codeNum;
+    private String groupInfo;
 
     @NotBlank(message = "Usename은 공백일 수 없습니다.")
     private String username;
 
+    private String profileImg;
+
     public User toEntity(UserDTO userDTO) {
-        return new User(userDTO.getEmail(), userDTO.getPassword(), userDTO.username,userDTO.getCodeNum());
+        return new User(userDTO.getEmail(), userDTO.getPassword(), userDTO.getUsername(), userDTO.getGroupInfo(), userDTO.getProfileImg());
     }
 }

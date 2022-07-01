@@ -13,21 +13,22 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/api/signup")
+    @PostMapping("/signup")
     public ResponseEntity<User> saveUser(@Valid @RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(userService.signUp(userDTO), HttpStatus.CREATED);
     }
 
-    @GetMapping("/api/email/{email}/check")
+    @GetMapping("/email/{email}/check")
     public ResponseEntity<Boolean> emailCheck(@PathVariable String email){
         return new ResponseEntity<>(userService.emailCheck(email), HttpStatus.OK);
     }
 
-    @GetMapping("/api/username/{username}/check")
+    @GetMapping("/username/{username}/check")
     public ResponseEntity<Boolean> usernameCheck(@PathVariable String username){
         return new ResponseEntity<>(userService.usernameCheck(username), HttpStatus.OK);
     }

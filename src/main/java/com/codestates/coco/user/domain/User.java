@@ -28,7 +28,9 @@ public class User {
     @Indexed(unique = true)
     private String username;
 
-    private String codeNum;
+    private String groupInfo;
+
+    private String profileImg;
 
     private String role;
 
@@ -37,11 +39,12 @@ public class User {
         this.password = password;
     }
 
-    public User(String email, String password, String username, String codeNum) {
+    public User(String email, String password, String username, String groupInfo, String profileImg) {
         this.email = email;
         this.password = password;
         this.username = username;
-        this.codeNum = codeNum;
+        this.groupInfo = groupInfo;
+        this.profileImg = profileImg;
         this.role = "ROLE_USER";
     }
 

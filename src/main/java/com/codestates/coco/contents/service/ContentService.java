@@ -46,9 +46,10 @@ public class ContentService {
 
 
     //todo auth
-    public boolean deleteContents(String id) {
-
-        if (contentRepository.existsById(id)) {
+    public boolean deleteContents(String id, String username) {
+        Content content = contentRepository.findById(id).orElse(null);
+        if (content!=null) {
+            if (!content.getAuthor().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
             contentRepository.deleteById(id);
             return true;
         } else {
@@ -57,9 +58,11 @@ public class ContentService {
     }
 
 
-    public boolean putContents(String id, ContentDTO contentDTO) {
+    public boolean putContents(String id, ContentDTO contentDTO, String username) {
 
         Content content = contentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
+
+        if(!content.getAuthor().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
 
         content.update(contentDTO.getTitle(), contentDTO.getContent());
         contentRepository.save(content);

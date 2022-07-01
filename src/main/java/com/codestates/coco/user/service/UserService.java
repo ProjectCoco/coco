@@ -4,6 +4,7 @@ import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.domain.UserDTO;
 import com.codestates.coco.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    @Value("${user.profileImg}")
+    private String basicProfileImg;
+
     public User signUp(UserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        userDTO.setProfileImg(basicProfileImg);
         return userRepository.save(userDTO.toEntity(userDTO));
     }
 

@@ -18,6 +18,9 @@ public enum ErrorCode {
     INVALID_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),
     UNAUTHORIZED_MEMBER(HttpStatus.UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다."),
 
+    /* 403 FORBIDDEN : 권한 없는 사용자 */
+    FORBIDDEN_MEMBER(HttpStatus.FORBIDDEN, "해당 페이지에 권한이 없습니다."),
+
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     CANNOT_FOUND_CONTENT(HttpStatus.NOT_FOUND, "Content_ID를 찾을 수 없습니다."),
     CANNOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "Comment_ID를 찾을 수 없습니다."),
