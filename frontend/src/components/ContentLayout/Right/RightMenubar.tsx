@@ -7,7 +7,7 @@ import { DuBoardList, IDuBoardList } from '../../../dummys/dummy';
 import commentImg from '../../../images/userProfile.jpg';
 
 const RightMenubar = () => {
-  const navigator = useNavigate();;
+  const navigator = useNavigate();
   const [posts, setPosts] = useState<IDuBoardList[]>();
 
   useEffect(() => {
