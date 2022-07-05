@@ -48,10 +48,22 @@ public class User {
         this.role = "ROLE_USER";
     }
 
+    public User(String email, String username, String groupInfo, String profileImg) {
+        this.email = email;
+        this.username = username;
+        this.groupInfo = groupInfo;
+        this.profileImg = profileImg;
+    }
+
     public List<String> roleList() {
         if (this.role.length() > 0) {
             return Arrays.asList(this.role.split(","));
         }
         return new ArrayList<>();
+    }
+
+    public void update(String groupInfo, String profileImg) {
+        this.groupInfo = groupInfo;
+        this.profileImg = profileImg;
     }
 }

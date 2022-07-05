@@ -1,7 +1,13 @@
 package com.codestates.coco.user.service;
 
+import com.codestates.coco.comment.domain.Comment;
+import com.codestates.coco.comment.domain.CommentDTO;
+import com.codestates.coco.common.CustomException;
+import com.codestates.coco.common.ErrorCode;
+import com.codestates.coco.contents.domain.Content;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.domain.UserDTO;
+import com.codestates.coco.user.domain.UserProfileDTO;
 import com.codestates.coco.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,5 +36,30 @@ public class UserService {
 
     public Boolean usernameCheck(String username) {
         return !userRepository.existsByUsername(username);
+    }
+
+    public UserProfileDTO getProfile(String username, String loginUsername){
+
+        if (username.equals(loginUsername)) {
+            User user = userRepository.findByUsername(username);
+            return new UserProfileDTO(
+                    user.getEmail(),
+                    user.getGroupInfo(),
+                    user.getUsername(),
+                    user.getProfileImg());
+        } else {
+            throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
+        }
+    }
+
+    public UserProfileDTO putProfile(UserProfileDTO userProfileDTO, String username, String loginUsername){
+        if (username.equals(loginUsername)) {
+            User user = userRepository.findByUsername(username);
+            user.update(userProfileDTO.getGroupInfo(), userProfileDTO.getProfileImg());
+            userRepository.save(user);
+            return userProfileDTO;
+        } else {
+            throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
+        }
     }
 }
