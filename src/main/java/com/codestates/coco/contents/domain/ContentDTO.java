@@ -24,7 +24,7 @@ public class ContentDTO {
     private String content;
 
     @NotBlank(message = "게시자는 공백일 수 없습니다.")
-    private String author;
+    private String username;
 
     private LocalDateTime createdDate;
 
@@ -37,7 +37,7 @@ public class ContentDTO {
                 ._id(_id)
                 .title(title)
                 .content(content)
-                .author(author)
+                .username(username)
                 .favor(favor)
                 .build();
     }

@@ -24,7 +24,7 @@ public class Content {
     // Auditing 추가
     @CreatedDate
     private LocalDateTime createdDate;
-    private String author;
+    private String username;
     private Long favor;
 
     public void update(String title, String content) {

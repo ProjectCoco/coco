@@ -19,15 +19,15 @@ public class Comment {
 
     @CreatedDate
     private LocalDateTime createdDate;
-    private String author;
+    private String username;
 
     @Builder
-    public Comment(String _id, String contentId, String comment, LocalDateTime createdDate, String author) {
+    public Comment(String _id, String contentId, String comment, LocalDateTime createdDate, String username) {
         this._id = _id;
         this.contentId = contentId;
         this.comment = comment;
         this.createdDate = createdDate;
-        this.author = author;
+        this.username = username;
     }
 
     public void update(String comment) {
