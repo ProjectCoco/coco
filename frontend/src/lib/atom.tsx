@@ -1,5 +1,5 @@
-import { atom, selector } from 'recoil';
-import { UserStateType } from './types';
+import { atom } from 'recoil';
+import { IDuBoardList, UserStateType } from './types';
 import { recoilPersist } from 'recoil-persist';
 
 export const __Session = atom({
@@ -10,24 +10,6 @@ export const __Session = atom({
 export const __isLoading = atom({
   key: 'loading',
   default: false,
-});
-
-export const getUserLogin = selector({
-  key: 'userLogin',
-  get: async () => {
-    const response = await fetch('http://localhost:8080/apitest/jwt');
-    const userData = await response.json();
-    return userData;
-  },
-});
-
-export const StudyBoardList = selector({
-  key: 'studyBoardList',
-  get: async () => {
-    const response = await fetch('http://localhost:8080/content?page=0');
-    const data = await response.json();
-    return data;
-  },
 });
 
 // User 정보를 새로고침 해도 유지하기
@@ -45,5 +27,11 @@ export const UserState = atom<UserStateType>({
     profileImg: '',
     username: '',
   },
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const FavorBoardList = atom<IDuBoardList[]>({
+  key: 'favorList',
+  default: [],
   effects_UNSTABLE: [persistAtom],
 });
