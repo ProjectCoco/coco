@@ -18,3 +18,11 @@ export interface WriteForm {
   content: string;
   author: string;
 }
+export interface BoardForm {
+  _id: string;
+  author: string;
+  title: string;
+  content: string;
+  createdDate: string;
+  favor: number;
+}
