@@ -22,7 +22,7 @@ const LeftMenubar = () => {
         <MdOutlineHome onClick={() => navigator('/')} />
       </S.Home>
       <S.Favor>
-        <MdOutlineFavoriteBorder />
+        <MdOutlineFavoriteBorder onClick={() => navigator('/my-favor')} />
       </S.Favor>
       <S.LinkCommnet href={'#CommentBox'}>
         <AiOutlineComment />
