@@ -73,7 +73,7 @@ export const Body = styled.div`
   margin: auto;
   margin-top: 3rem;
 `;
-export const Content = styled.p`
+export const Content = styled.div`
   font-size: 2.5rem;
   color: #444;
 `;
