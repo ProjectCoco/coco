@@ -1,39 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import Header from './components/Header';
 import Body from './components/Body';
 import ContentLayout from '../../components/ContentLayout';
 import Loading from '../../components/Loading/Loading';
-import { useQuery } from 'react-query';
-import axios from 'axios';
-
-const fetchData = async (pageParam: string) => {
-  return axios
-    .get(`http://localhost:8080/api/content/${pageParam}`)
-    .then((res) => res.data);
-};
-const fetchComment = async (id: string) => {
-  return axios
-    .get(`http://localhost:8080/api/comment/${id}`)
-    .then((res) => res.data);
-};
+import { useQueries } from 'react-query';
+import { getBoardDetail, getCommentAll } from '../../apis/apiClient';
 
 const StudyBoardDetail = () => {
   const { id } = useParams();
-  const { isLoading: boardLoading, data: board } = useQuery(
-    ['data', id],
-    async () => await fetchData(String(id))
-  );
-  const { isLoading: commentLoading, data: comment } = useQuery(
-    ['comment', id],
-    async () => await fetchComment(String(id))
-  );
+  const allQuery = useQueries([
+    {
+      queryKey: ['data', id],
+      queryFn: async () => await getBoardDetail(String(id)),
+    },
+    {
+      queryKey: ['comment', id],
+      queryFn: async () => await getCommentAll(String(id)),
+    },
+  ]);
+  const loading = allQuery.some((result) => result.isLoading);
 
-  if (boardLoading || commentLoading) return <Loading />;
+  if (loading) return <Loading />;
   return (
     <ContentLayout>
-      <Header board={board} />
-      <Body board={board} comment={comment} />
+      <Header board={allQuery[0].data} />
+      <Body board={allQuery[0].data} comment={allQuery[1].data} />
     </ContentLayout>
   );
 };

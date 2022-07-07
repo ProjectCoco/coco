@@ -80,3 +80,70 @@ export async function postBoardWriteApi(WriteForm: T.WriteForm) {
 //     return err;
 //   }
 // }
+
+// @HTTP: GET
+// @Route: /content/${id}
+export async function getBoardPage(page: number) {
+  try {
+    const response = await apiClient.get(`/api/content?page=${page}`);
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+}
+
+// @HTTP: GET
+// @Route: /content/${id}
+export async function getBoardDetail(id: string) {
+  try {
+    const response = await apiClient.get(`/api/content/${id}`);
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+}
+
+// @HTTP: PUT
+// @Route: /content/${id}
+export async function putBoard(id: string, data: T.BoardForm) {
+  try {
+    return await apiClient.put(`/api/content/${id}`), data, { headers };
+  } catch (err) {
+    return err;
+  }
+}
+
+// @HTTP: GET
+// @Route: /comment/${id}
+export async function getCommentAll(id: string) {
+  try {
+    const response = await apiClient.get(`/api/comment/${id}`);
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+}
+
+// @HTTP: PUT
+// @Route: /comment/${id}
+export async function putComment(id: string, commentForm: T.commentForm) {
+  try {
+    return await apiClient.put(`/api/comment/${id}`, commentForm, {
+      headers,
+    });
+  } catch (err) {
+    return err;
+  }
+}
+
+// @HTTP: DELETE
+// @Route: /comment/${id}
+export async function removeComment(id: string) {
+  try {
+    return await apiClient.delete(`/api/comment/${id}`, {
+      headers,
+    });
+  } catch (err) {
+    return err;
+  }
+}

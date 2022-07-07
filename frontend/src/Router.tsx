@@ -10,6 +10,7 @@ import StudyBoard from './pages/StudyBoard/StudyBoard';
 import PrivateRouter from './PrivateRouter';
 import FreeBoard from './pages/FreeBoard';
 import UserProfile from './pages/UserProfile';
+import MyFavorPage from './pages/MyFavorPage';
 
 const Router = () => {
   return (
@@ -19,6 +20,7 @@ const Router = () => {
         <Route path="/" element={<Main />} />
         {/* login 되어 있어야만 접근 가능 */}
         <Route element={<PrivateRouter authentication={true} />}>
+          <Route path="/my-favor" element={<MyFavorPage />} />
           <Route path="/study-board">
             <Route path="" element={<StudyBoard />} />
             <Route path=":id" element={<StudyBoardDetail />} />

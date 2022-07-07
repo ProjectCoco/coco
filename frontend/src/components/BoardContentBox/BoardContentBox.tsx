@@ -7,7 +7,6 @@ import { AiOutlineComment } from 'react-icons/ai';
 import profileImg2 from '../../images/download.jpg';
 import { useNavigate } from 'react-router-dom';
 import { Viewer } from '@toast-ui/react-editor';
-import { IDuComment } from '../../lib/types';
 
 interface IBoard {
   board: {
@@ -18,7 +17,7 @@ interface IBoard {
     createdDate: string;
     favor: number | null;
   };
-  comment: () => Promise<unknown>;
+  comment?: number;
 }
 
 const BoardContentBox = ({ board, comment }: IBoard) => {
@@ -27,11 +26,15 @@ const BoardContentBox = ({ board, comment }: IBoard) => {
 
   return (
     <>
-      <S.ContentBox onClick={() => navigator(`${board._id}`)}>
-        <S.Subject>{board.title}</S.Subject>
+      <S.ContentBox onClick={() => navigator(`/study-board/${board._id}`)}>
+        <S.Subject>
+          {board.title.length > 13
+            ? `${board.title.slice(0, 13)}...`
+            : board.title}
+        </S.Subject>
         <S.Content>
-          {board.content.length > 235 ? (
-            <Viewer initialValue={`${board.content.slice(0, 235)}...`} />
+          {board.content.length > 50 ? (
+            <Viewer initialValue={`${board.content.slice(0, 50)}...`} />
           ) : (
             <Viewer initialValue={board.content} />
           )}
@@ -54,7 +57,7 @@ const BoardContentBox = ({ board, comment }: IBoard) => {
             </S.FavoritBox>
             <S.FavoritBox style={{ marginLeft: '2rem' }}>
               <AiOutlineComment />
-              <h4>{comment.length ?? 0}</h4>
+              <h4>{comment ?? 0}</h4>
             </S.FavoritBox>
           </div>
         </S.UserLogo>
