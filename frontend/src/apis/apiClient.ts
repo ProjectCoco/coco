@@ -92,6 +92,17 @@ export async function getBoardPage(page: number) {
   }
 }
 
+// @HTTP: GET
+// @Route: /content/${id}
+export async function getBoardDetail(id: string) {
+  try {
+    const response = await apiClient.get(`/api/content/${id}`);
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+}
+
 // @HTTP: PUT
 // @Route: /content/${id}
 export async function putBoard(id: string, data: T.BoardForm) {
