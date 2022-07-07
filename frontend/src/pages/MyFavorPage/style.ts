@@ -17,3 +17,10 @@ export const Blank = styled.div`
   width: 100%;
   height: 0.1rem;
 `;
+export const RemoveBtn = styled.button`
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 3rem;
+  height: 2rem;
+`;
