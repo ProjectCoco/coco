@@ -42,11 +42,16 @@ export default function Comment({ comment, user }: Prop) {
       {edit ? (
         <S.EditComment>
           <textarea
-            value={comment.comment}
+            value={comment.comment || editString}
             onChange={(e) => setEditString(e.target.value)}
           />
           <S.Button
-            onClick={async () => await putComment(comment._id, editString)}
+            onClick={async () =>
+              await putComment(comment._id, {
+                ...comment,
+                comment: editString,
+              })
+            }
           >
             수정완료
           </S.Button>
