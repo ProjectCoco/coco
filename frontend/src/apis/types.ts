@@ -1,6 +1,8 @@
 export interface commentForm {
   author: string;
   comment: string;
+  contentId?: string;
+  createdDate?: string;
 }
 export interface LoginForm {
   email: string;

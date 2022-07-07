@@ -126,9 +126,9 @@ export async function getCommentAll(id: string) {
 
 // @HTTP: PUT
 // @Route: /comment/${id}
-export async function putComment(id: string, data: string) {
+export async function putComment(id: string, commentForm: T.commentForm) {
   try {
-    return await apiClient.put(`/api/comment/${id}`, data, {
+    return await apiClient.put(`/api/comment/${id}`, commentForm, {
       headers,
     });
   } catch (err) {
