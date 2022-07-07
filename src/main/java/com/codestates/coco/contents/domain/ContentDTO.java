@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor
@@ -33,12 +34,13 @@ public class ContentDTO {
 
     // 생성자 -> 빌더패턴으로 객체 생성 전략 변경
     public Content toEntity() {
-        return Content.builder()
+        Content build = Content.builder()
                 ._id(_id)
                 .title(title)
                 .content(content)
                 .username(username)
-                .favor(favor)
+                .userFavor(new ArrayList<>())
                 .build();
+        return build;
     }
 }

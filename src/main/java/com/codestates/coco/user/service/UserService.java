@@ -1,10 +1,7 @@
 package com.codestates.coco.user.service;
 
-import com.codestates.coco.comment.domain.Comment;
-import com.codestates.coco.comment.domain.CommentDTO;
 import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
-import com.codestates.coco.contents.domain.Content;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.domain.UserDTO;
 import com.codestates.coco.user.domain.UserProfileDTO;
@@ -61,5 +58,17 @@ public class UserService {
         } else {
             throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
         }
+    }
+    
+    public void addContentFavor(String userId, String contentId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_USER));
+        user.addContentFavor(contentId);
+        userRepository.save(user);
+    }
+
+    public void removeContentFavor(String userId, String contentId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_USER));
+        user.removeContentFavor(contentId);
+        userRepository.save(user);
     }
 }

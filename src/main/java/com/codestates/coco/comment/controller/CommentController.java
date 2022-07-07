@@ -1,6 +1,5 @@
 package com.codestates.coco.comment.controller;
 
-import com.auth0.jwt.JWT;
 import com.codestates.coco.comment.domain.CommentDTO;
 import com.codestates.coco.comment.domain.CommentUserDTO;
 import com.codestates.coco.comment.service.CommentService;
@@ -39,7 +38,6 @@ public class CommentController {
         return new ResponseEntity<>(commentService.getAllUserComment(username), HttpStatus.OK);
     }
 
-    @Secured("ROLE_USER")
     @PutMapping("/{id}")
     public ResponseEntity<CommentDTO> updateComment(
             @PathVariable String id,
@@ -48,7 +46,6 @@ public class CommentController {
         return new ResponseEntity<>(commentService.putComment(id, commentDTO, principalDetails.getUser().getUsername()), HttpStatus.CREATED);
     }
 
-    @Secured("ROLE_USER")
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteComment(
             @PathVariable String id,

@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.filter.CorsFilter;
 
-@EnableWebSecurity(debug = true) // 스프링 시큐리티 필터가 스프링 필터체인에 등록
+@EnableWebSecurity // 스프링 시큐리티 필터가 스프링 필터체인에 등록
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // @Secured annotation 활성화 (즉 controller에서 권한설정을 할 수 있다.) <= 요즘사용
                                                                           // @preAuthorize annotation 활성화 (함수 전에 권한 설정) <= 예전사용
 @RequiredArgsConstructor
@@ -48,10 +48,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 권한설정
                 .authorizeRequests()
                 // 로그인 및 회원가입 로직에 포함된 권한 설정
-                .antMatchers("/api/login").permitAll()
-                .antMatchers("/api/signup").permitAll()
-                .antMatchers("/api/email/**").permitAll()
-                .antMatchers("/api/username/**").permitAll()
+                .antMatchers("/api/content/**").authenticated()
+                .antMatchers("/api/comment/**").authenticated()
+                .antMatchers("/api/email/**").authenticated()
+                .antMatchers("/api/username/**").authenticated()
+                .antMatchers("/api/userprofile/**").authenticated()
                 .anyRequest().permitAll();
     }
 }
