@@ -7,7 +7,7 @@ import { IDuBoardList } from '../../lib/types';
 import Loading from '../../components/Loading';
 import NotFound from '../NotFound/NotFound';
 import { useInView } from 'react-intersection-observer';
-import { getBoardPage, getCommentAll } from '../../apis/apiClient';
+import { getBoardPage } from '../../apis/apiClient';
 
 const StudyBoard = () => {
   const [num, SetNum] = useState(1);
@@ -20,10 +20,7 @@ const StudyBoard = () => {
     );
 
   useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage();
-      SetNum(num + 1);
-    }
+    if (inView && hasNextPage) fetchNextPage().then(() => SetNum(num + 1));
   }, [inView]);
 
   if (isLoading) return <Loading />;
@@ -37,14 +34,7 @@ const StudyBoard = () => {
               {data?.pages.map((group, index) => (
                 <React.Fragment key={index}>
                   {group.map((data: IDuBoardList) => {
-                    const get = async () => await getCommentAll(data._id);
-                    return (
-                      <BoardContentBox
-                        key={data._id}
-                        board={data}
-                        comment={get.length}
-                      />
-                    );
+                    return <BoardContentBox key={data._id} board={data} />;
                   })}
                 </React.Fragment>
               ))}
