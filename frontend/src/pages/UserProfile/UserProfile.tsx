@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { UserState } from '../../lib/atom';
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
@@ -20,12 +19,12 @@ function UserProfile() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const revise_form = {
-      ...userState,
+      profileImg: userState.profileImg,
       username,
     };
-    console.log('Revise', revise_form);
+    console.log('Revise_Form', revise_form);
     const response = axios.put(
-      `http://localhost:8080/api/userprofile/${username}`,
+      `http://localhost:8080/api/userprofile/${userState.username}`,
       revise_form,
       { headers }
     );
