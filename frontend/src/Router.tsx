@@ -11,6 +11,7 @@ import PrivateRouter from './PrivateRouter';
 import FreeBoard from './pages/FreeBoard';
 import UserProfile from './pages/UserProfile';
 import MyFavorPage from './pages/MyFavorPage';
+import BoardEdit from './pages/BoardEdit';
 
 const Router = () => {
   return (
@@ -25,6 +26,7 @@ const Router = () => {
             <Route path="" element={<StudyBoard />} />
             <Route path=":id" element={<StudyBoardDetail />} />
             <Route path="write" element={<BoardWrite />} />
+            <Route path="edit/:id" element={<BoardEdit />} />
           </Route>
           <Route path="/free-board">
             <Route path="" element={<FreeBoard />} />
