@@ -93,3 +93,24 @@ export const Tag = styled.a`
     opacity: 2;
   }
 `;
+
+export const SearchBox = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  span {
+    position: absolute;
+    font-size: 2.5rem;
+    right: 0;
+    padding-right: 0.5rem;
+  }
+`;
+
+export const SearchInput = styled.input`
+  width: 20rem;
+  height: 4rem;
+  font-size: 1rem;
+  padding-left: 1rem;
+  background-color: #ececec;
+  border: none;
+`;
