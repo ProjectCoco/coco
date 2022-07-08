@@ -26,14 +26,14 @@ public class CommentUserDTO {
         private LocalDateTime createdDate;
 
         @NotBlank(message = "게시자는 공백일 수 없습니다.")
-        private String author;
+        private String username;
 
         public Comment toEntity(com.codestates.coco.comment.domain.CommentDTO commentDTO) {
             return Comment.builder()
                     ._id(commentDTO.get_id())
                     .contentId(commentDTO.getContentId())
                     .comment(commentDTO.getComment())
-                    .author(commentDTO.getAuthor())
+                    .username(commentDTO.getUsername())
                     .build();
         }
     }

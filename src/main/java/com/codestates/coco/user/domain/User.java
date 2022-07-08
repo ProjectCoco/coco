@@ -34,6 +34,8 @@ public class User {
 
     private String role;
 
+    private List<String> contentFavor;
+
     public User(String email, String password) {
         this.email = email;
         this.password = password;
@@ -46,7 +48,16 @@ public class User {
         this.groupInfo = groupInfo;
         this.profileImg = profileImg;
         this.role = "ROLE_USER";
+        this.contentFavor = new ArrayList<>();
     }
+
+    public User(String email, String username, String groupInfo, String profileImg) {
+        this.email = email;
+        this.username = username;
+        this.groupInfo = groupInfo;
+        this.profileImg = profileImg;
+    }
+
 
     public List<String> roleList() {
         if (this.role.length() > 0) {
@@ -54,4 +65,13 @@ public class User {
         }
         return new ArrayList<>();
     }
+
+    public void update(String groupInfo, String profileImg) {
+        this.groupInfo = groupInfo;
+        this.profileImg = profileImg;
+    }
+
+    public void addContentFavor(String contentId) { this.contentFavor.add(contentId); }
+
+    public void removeContentFavor(String contentId) { this.contentFavor.remove(contentId); }
 }

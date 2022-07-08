@@ -6,6 +6,8 @@ import com.codestates.coco.common.ErrorCode;
 import com.codestates.coco.contents.domain.Content;
 import com.codestates.coco.contents.domain.ContentDTO;
 import com.codestates.coco.contents.repository.ContentRepository;
+import com.codestates.coco.user.domain.User;
+import com.codestates.coco.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContentService {
     private final ContentRepository contentRepository;
+    private final UserRepository userRepository;
 
 
     public List<ContentDTO> getTitleContents(int page) {
@@ -35,9 +38,8 @@ public class ContentService {
                     ._id(content.get_id())
                     .title(content.getTitle())
                     .content(content.getContent())
-                    .author(content.getAuthor())
+                    .username(content.getUsername())
                     .createdDate(content.getCreatedDate())
-                    .favor(content.getFavor())
                     .build();
         } catch (Exception e) {
             throw new CustomException(ErrorCode.CANNOT_FOUND_CONTENT);
@@ -49,7 +51,7 @@ public class ContentService {
     public boolean deleteContents(String id, String username) {
         Content content = contentRepository.findById(id).orElse(null);
         if (content!=null) {
-            if (!content.getAuthor().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
+            if (!content.getUsername().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
             contentRepository.deleteById(id);
             return true;
         } else {
@@ -62,7 +64,7 @@ public class ContentService {
 
         Content content = contentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
 
-        if(!content.getAuthor().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
+        if(!content.getUsername().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
 
         content.update(contentDTO.getTitle(), contentDTO.getContent());
         contentRepository.save(content);
@@ -84,9 +86,30 @@ public class ContentService {
                 ._id(content.get_id())
                 .title(content.getTitle())
                 .content(content.getContent())
-                .author(content.getAuthor())
+                .username(content.getUsername())
                 .createdDate(content.getCreatedDate())
-                .favor(content.getFavor())
                 .build();
+    }
+
+    public Boolean favor(String contentId, String username){
+        Content content = contentRepository.findById(contentId).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
+        User user = userRepository.findByUsername(username);
+        content.addUserFavor(user.getId());
+        user.addContentFavor(contentId);
+        contentRepository.save(content);
+        userRepository.save(user);
+
+        return true;
+    }
+
+    public Boolean unfavor(String contentId, String username){
+        Content content = contentRepository.findById(contentId).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
+        User user = userRepository.findByUsername(username);
+        content.removeUserFavor(user.getId());
+        user.removeContentFavor(contentId);
+        contentRepository.save(content);
+        userRepository.save(user);
+
+        return true;
     }
 }

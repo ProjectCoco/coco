@@ -6,7 +6,6 @@ import com.codestates.coco.user.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,13 +32,11 @@ public class ContentController {
 
 
     //todo auth
-    @Secured("ROLE_USER")
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteContents(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return new ResponseEntity<>(contentService.deleteContents(id, principalDetails.getUser().getUsername()), HttpStatus.NO_CONTENT);
     }
 
-    @Secured("ROLE_USER")
     @PutMapping("/{id}")
     public ResponseEntity<Boolean> putContents(
             @PathVariable("id") String id,
@@ -49,9 +46,13 @@ public class ContentController {
         return new ResponseEntity<>(contentService.putContents(id, contentDTO, principalDetails.getUser().getUsername()), HttpStatus.CREATED);
     }
 
-    @Secured("ROLE_USER")
     @PostMapping("")
     public ResponseEntity<ContentDTO> createContent(@Valid @RequestBody ContentDTO contentDTO) {
             return new ResponseEntity<>(contentService.createcontent(contentDTO), HttpStatus.CREATED);
-        }
     }
+
+    @PostMapping("/{id}/favor")
+    public ResponseEntity<Boolean> favorContent(@PathVariable String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return new ResponseEntity<>(contentService.favor(id, principalDetails.getUser().getUsername()), HttpStatus.NO_CONTENT);
+    }
+}
