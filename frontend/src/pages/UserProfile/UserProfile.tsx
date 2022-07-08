@@ -1,10 +1,16 @@
-/* eslint-disable */
 import { UserState } from '../../lib/atom';
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Resizer from 'react-image-file-resizer';
 import CustomButton from '../../components/CustomButton';
+// 나중에 API Clinent로 통합해야하는 부분 (삭제될 코드)
+import axios, { AxiosRequestHeaders } from 'axios';
+import { getCookie } from '../../lib/cookie/cookie';
+const headers: AxiosRequestHeaders = {
+  Authorization: `Bearer ${getCookie('accessToken')}`,
+};
+
 function UserProfile() {
   const [userState, setUserState] = useRecoilState(UserState);
   const [imgText, setImgText] = useState('');
@@ -12,11 +18,17 @@ function UserProfile() {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const new_form = {
-      ...userState,
+    const revise_form = {
+      profileImg: userState.profileImg,
       username,
     };
-    console.log(new_form);
+    console.log('Revise_Form', revise_form);
+    const response = axios.put(
+      `http://localhost:8080/api/userprofile/${userState.username}`,
+      revise_form,
+      { headers }
+    );
+    console.log('Response', response);
   }
 
   function fileChangedHandler(e: React.ChangeEvent<HTMLInputElement>) {

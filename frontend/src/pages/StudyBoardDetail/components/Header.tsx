@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import * as S from '../style';
 import { IDuBoardList } from '../../../lib/types/index';
 import { MdOutlineFavoriteBorder, MdFavorite } from 'react-icons/md';
-// 더미데이터
 import profileImg2 from '../../../images/download.jpg';
-import axios from 'axios';
-import { useRecoilValue } from 'recoil';
-import { UserState } from '../../../lib/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { FavorBoardList, UserState } from '../../../lib/atom';
+import { putBoard } from '../../../apis/apiClient';
 
 interface DataProps {
   board: IDuBoardList;
 }
 
-// 헤더 고쳐진거 보고 넣자
-const favorPut = async (id: string, data: number) => {
-  return await axios.put(
-    `http://localhost:8080/api/content/${id}`,
-    JSON.stringify(data)
-  );
-};
-
 const Header = ({ board }: DataProps) => {
   const parseDate = new Date(board?.createdDate);
   const [like, setLike] = useState(false);
   const user = useRecoilValue(UserState);
+  const [list, setList] = useRecoilState(FavorBoardList);
 
-  useEffect(() => {
+  const handleFavor = useCallback(async () => {
     if (user.email !== null) {
-      if (like) favorPut(board._id, board.favor + 1);
-      else favorPut(board._id, board.favor - 1);
+      if (!like)
+        await putBoard(board._id, { ...board, favor: (board.favor += 1) })
+          .then(() => setLike(true))
+          .then(() => setList([...list, board]));
+      if (like)
+        await putBoard(board._id, { ...board, favor: (board.favor -= 1) })
+          .then(() => setLike(false))
+          .then(() =>
+            setList(() => list.filter((item) => item._id !== board._id))
+          );
     }
-  }, [like]);
+  }, [board, like, list, setList, user.email]);
 
   return (
     <S.Header>
@@ -40,7 +40,7 @@ const Header = ({ board }: DataProps) => {
           <S.UserImg src={profileImg2} alt="noImg" />
           {/* 더미 더미 더미 */}
           <div>
-            <S.Author>{board?.author}</S.Author>
+            <S.Author>{board.author}</S.Author>
             <S.Date>
               {parseDate.toLocaleDateString()}
               {parseDate.toLocaleTimeString()}
@@ -49,14 +49,14 @@ const Header = ({ board }: DataProps) => {
         </S.UserBox>
         <S.FavoritBox>
           {like ? (
-            <MdFavorite onClick={() => setLike(false)} />
+            <MdFavorite onClick={handleFavor} />
           ) : (
-            <MdOutlineFavoriteBorder onClick={() => setLike(true)} />
+            <MdOutlineFavoriteBorder onClick={handleFavor} />
           )}
-          <h4>{board?.favor ?? '0'}</h4>
+          <h4>{board.favor ?? '0'}</h4>
         </S.FavoritBox>
       </S.UserLogo>
-      <S.Subject>{board?.title}</S.Subject>
+      <S.Subject>{board.title}</S.Subject>
     </S.Header>
   );
 };

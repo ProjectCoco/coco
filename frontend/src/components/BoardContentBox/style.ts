@@ -8,7 +8,7 @@ export const ContentBox = styled.div`
     transform: translateX(-3rem);
   }
 `;
-export const Content = styled.p`
+export const Content = styled.div`
   margin-top: 1rem;
   font-size: 1.5rem;
   color: #444;
