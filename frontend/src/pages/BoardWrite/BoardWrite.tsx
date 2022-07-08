@@ -16,6 +16,7 @@ type BoardPost = {
   title: string;
   content: string;
   author: string;
+  favor: number;
   tag: string[];
 };
 
@@ -26,6 +27,7 @@ const BoardWrite = () => {
     title: '',
     content: '',
     author: user.username, // username or email
+    favor: 0,
     tag: [],
   });
   const editorRef = useRef<Editor>(null);
