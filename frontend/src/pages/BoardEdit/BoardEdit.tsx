@@ -18,10 +18,12 @@ type BoardPost = {
   // tag: string[];
 };
 
+// 삭제 필요
 const headers: AxiosRequestHeaders = {
   Authorization: `Bearer ${getCookie('accessToken')}`,
 };
 
+// 삭제 필요
 async function putBoardEditApi(BoardPost: BoardPost, contentId?: string) {
   try {
     const response = await apiClient.put(
@@ -52,7 +54,7 @@ const BoardEdit = () => {
     // tag: data.tag,
   });
   const editorRef = useRef<Editor>(null);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -93,10 +95,9 @@ const BoardEdit = () => {
     if (!isValid(post)) {
       alert('제목과 내용은 최소 1자 이상 입력되어야 합니다.');
     } else {
-      // TODO: response 주석 해제
       const response = await putBoardEditApi(post, id);
       console.log(post, response, id);
-      // navigate(-1);
+      navigate(-1);
     }
   };
 
