@@ -26,7 +26,7 @@ const BoardWrite = () => {
   const [newPost, setNewPost] = useState<BoardPost>({
     title: '',
     content: '',
-    username: user.email, // username or email
+    username: user.username, // username or email
     favor: 0,
     tag: [],
   });
@@ -80,15 +80,14 @@ const BoardWrite = () => {
     return false;
   };
 
-  const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     if (!isValid(newPost)) {
       alert('제목과 내용은 최소 1자 이상 입력되어야 합니다.');
     } else {
       const response = await postBoardWriteApi(newPost); //
       console.log(response, newPost);
       // TODO: response 성공, 실패
-      navigate(-1);
+      navigate('/study-board');
     }
   };
 
