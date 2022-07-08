@@ -19,6 +19,8 @@ function UserProfile() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const revise_form = {
+      email: userState.email,
+      groupInfo: '39th',
       profileImg: userState.profileImg,
       username,
     };
