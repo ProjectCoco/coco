@@ -24,7 +24,7 @@ export default function Comment({ comment, user }: Prop) {
           <h1>{comment.username}</h1>
           <h3>{comment.createdDate}</h3>
         </div>
-        {user.email === comment.username ? (
+        {user.username === comment.username ? (
           <S.IconAlign>
             <AiFillEdit
               style={{ cursor: 'pointer' }}

@@ -20,7 +20,7 @@ const Body = ({ board, comment }: DataProps) => {
   const handleSubmit = async () => {
     const commentForm = {
       contentId: board._id,
-      username: user.email,
+      username: user.username,
       comment: string,
       createdDate: new Date(Date.now()).toISOString(),
     };
