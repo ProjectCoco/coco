@@ -8,13 +8,15 @@ import Loading from '../../components/Loading';
 import NotFound from '../NotFound/NotFound';
 import { useInView } from 'react-intersection-observer';
 import { getBoardPage } from '../../apis/apiClient';
+import { useParams } from 'react-router-dom';
 
 const StudyBoard = () => {
+  const { id } = useParams();
   const [num, SetNum] = useState(1);
   const { ref, inView } = useInView({ threshold: 0.3 });
   const { isLoading, isError, data, fetchNextPage, hasNextPage } =
     useInfiniteQuery(
-      ['page'],
+      ['page', id],
       async ({ pageParam = 0 }) => await getBoardPage(pageParam),
       { getNextPageParam: () => num }
     );
