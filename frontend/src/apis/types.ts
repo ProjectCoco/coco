@@ -1,5 +1,5 @@
 export interface commentForm {
-  author: string;
+  username: string;
   comment: string;
   contentId?: string;
   createdDate?: string;
@@ -18,11 +18,11 @@ export interface SignupForm {
 export interface WriteForm {
   title: string;
   content: string;
-  author: string;
+  username: string;
 }
 export interface BoardForm {
   _id: string;
-  author: string;
+  username: string;
   title: string;
   content: string;
   createdDate: string;

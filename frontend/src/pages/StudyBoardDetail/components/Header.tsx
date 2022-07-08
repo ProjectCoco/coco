@@ -40,7 +40,7 @@ const Header = ({ board }: DataProps) => {
           <S.UserImg src={profileImg2} alt="noImg" />
           {/* 더미 더미 더미 */}
           <div>
-            <S.Author>{board.author}</S.Author>
+            <S.Author>{board.username}</S.Author>
             <S.Date>
               {parseDate.toLocaleDateString()}
               {parseDate.toLocaleTimeString()}

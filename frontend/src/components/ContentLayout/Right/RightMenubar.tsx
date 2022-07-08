@@ -11,7 +11,7 @@ interface postType {
   _id: string;
   title: string;
   content: string;
-  author: string;
+  username: string;
   createDate: string;
   favor: string | null;
 }
@@ -56,7 +56,7 @@ const RightMenubar = () => {
           <S.MorePost key={post._id}>
             <S.MorePostsProfile>
               <S.MorePostsImg src={commentImg} />
-              <h4>{post.author}</h4>
+              <h4>{post.username}</h4>
             </S.MorePostsProfile>
             <S.MorePostTitle>
               <div onClick={() => navigator(`/study-board/${post._id}`)}>

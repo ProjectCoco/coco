@@ -15,7 +15,7 @@ import { TbEraser } from 'react-icons/tb';
 type BoardPost = {
   title: string;
   content: string;
-  author: string;
+  username: string;
   favor: number;
   tag: string[];
 };
@@ -26,7 +26,7 @@ const BoardWrite = () => {
   const [newPost, setNewPost] = useState<BoardPost>({
     title: '',
     content: '',
-    author: user.email, // username or email
+    username: user.email, // username or email
     favor: 0,
     tag: [],
   });

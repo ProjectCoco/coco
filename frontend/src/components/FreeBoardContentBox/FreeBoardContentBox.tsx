@@ -11,7 +11,7 @@ import { useQuery } from 'react-query';
 interface IBoard {
   board: {
     _id: string;
-    author: string;
+    username: string;
     title: string;
     content: string;
     createdDate: string;
@@ -46,7 +46,7 @@ const FreeBoardContentBox = ({ board }: IBoard) => {
           <S.UserBox>
             <S.UserImg src={profileImg2} />
             <div>
-              <S.Author>{board.author}</S.Author>
+              <S.Author>{board.username}</S.Author>
               <S.Date>{parseDate}</S.Date>
             </div>
           </S.UserBox>

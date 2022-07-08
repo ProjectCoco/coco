@@ -11,7 +11,7 @@ import { Viewer } from '@toast-ui/react-editor';
 interface IBoard {
   board: {
     _id: string;
-    author: string;
+    username: string;
     title: string;
     content: string;
     createdDate: string;
@@ -43,7 +43,7 @@ const BoardContentBox = ({ board, comment }: IBoard) => {
           <S.UserBox>
             <S.UserImg src={profileImg2} />
             <div>
-              <S.Author>{board.author}</S.Author>
+              <S.Author>{board.username}</S.Author>
               <S.Date>
                 {`${parseDate.toLocaleDateString()} `}
                 {parseDate.toLocaleTimeString()}

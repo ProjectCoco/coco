@@ -21,10 +21,10 @@ export default function Comment({ comment, user }: Prop) {
           <S.CommentImg src={commentImg} />
         </div>
         <div>
-          <h1>{comment.author}</h1>
+          <h1>{comment.username}</h1>
           <h3>{comment.createdDate}</h3>
         </div>
-        {user.email === comment.author ? (
+        {user.email === comment.username ? (
           <S.IconAlign>
             <AiFillEdit
               style={{ cursor: 'pointer' }}

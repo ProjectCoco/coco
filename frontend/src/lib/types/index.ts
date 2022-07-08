@@ -1,6 +1,6 @@
 export interface IDuBoardList {
   _id: string;
-  author: string;
+  username: string;
   title: string;
   content: string;
   createdDate: string;
@@ -11,7 +11,7 @@ export interface IDuComment {
   _id: string;
   comment: string;
   createdDate: string;
-  author: string;
+  username: string;
 }
 
 export interface UserStateType {

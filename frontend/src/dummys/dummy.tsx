@@ -5,7 +5,7 @@ export interface IDuBoardList {
   datetime: string;
   favor: number;
   comment: IDuComment[];
-  author: string;
+  username: string;
 }
 export interface IDuComment {
   id: number;
@@ -103,7 +103,7 @@ export const DuBoardList = [
     datetime: '2022-05-05',
     favor: 30,
     comment: DuComment,
-    author: 'Andrew Hwan',
+    username: 'Andrew Hwan',
   },
   {
     id: 2,
@@ -112,7 +112,7 @@ export const DuBoardList = [
     datetime: '2022-05-04',
     favor: 30,
     comment: DuComment,
-    author: '이순신',
+    username: '이순신',
   },
   {
     id: 3,
@@ -121,7 +121,7 @@ export const DuBoardList = [
     datetime: '2022-05-02',
     favor: 30,
     comment: DuComment,
-    author: '세종대왕',
+    username: '세종대왕',
   },
   {
     id: 4,
@@ -130,6 +130,6 @@ export const DuBoardList = [
     datetime: '2022-05-01',
     favor: 30,
     comment: DuComment,
-    author: '최무선',
+    username: '최무선',
   },
 ];
