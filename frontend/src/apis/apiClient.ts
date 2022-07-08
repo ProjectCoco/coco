@@ -85,7 +85,9 @@ export async function postBoardWriteApi(WriteForm: T.WriteForm) {
 // @Route: /content/${id}
 export async function getBoardPage(page: number) {
   try {
-    const response = await apiClient.get(`/api/content?page=${page}`);
+    const response = await apiClient.get(`/api/content?page=${page}`, {
+      headers,
+    });
     return response.data;
   } catch (err) {
     return err;
@@ -96,7 +98,7 @@ export async function getBoardPage(page: number) {
 // @Route: /content/${id}
 export async function getBoardDetail(id: string) {
   try {
-    const response = await apiClient.get(`/api/content/${id}`);
+    const response = await apiClient.get(`/api/content/${id}`, { headers });
     return response.data;
   } catch (err) {
     return err;
@@ -117,7 +119,7 @@ export async function putBoard(id: string, data: T.BoardForm) {
 // @Route: /comment/${id}
 export async function getCommentAll(id: string) {
   try {
-    const response = await apiClient.get(`/api/comment/${id}`);
+    const response = await apiClient.get(`/api/comment/${id}`, { headers });
     return response.data;
   } catch (err) {
     return err;
