@@ -17,12 +17,12 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     // session 안의 Authentication 내부에 UserDetails를 반환한다.
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         User userEntity = userRepository.findByEmail(username);
         if (userEntity != null) {
             return new PrincipalDetails(userEntity);
         }
-        
-        return null;
+
+        throw new UsernameNotFoundException(username);
     }
 }

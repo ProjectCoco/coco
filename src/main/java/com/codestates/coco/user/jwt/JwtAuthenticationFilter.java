@@ -2,9 +2,12 @@ package com.codestates.coco.user.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.codestates.coco.common.AuthErrorResponse;
+import com.codestates.coco.common.ErrorCode;
 import com.codestates.coco.user.config.auth.PrincipalDetails;
 import com.codestates.coco.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +25,7 @@ import java.util.Date;
 // UsernamePasswordAuthenticationFilter가 동작함.
 // 로그인을 진행하는 AuthenticationManager를 추가해주어야 한다.
 // 즉, 해당 클래스는 로그인 인증 전반에 관한 내용이다.
+@Log4j2
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtProperties jwtProperties;
@@ -33,19 +37,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.jwtProperties = jwtProperties;
     }
 
-    /*    @Value("${jwt.header}")
-    private String header;
-    @Value("${jwt.secret}")
-    private String secret;
-    @Value("${jwt.token-validity-in-milliseconds}")
-    private long expire;*/
-
-
-
     // login 요청 시 로그인 시도를 하는 함수
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
         // 1. username 및 password를 받는다.
         try {
             ObjectMapper om = new ObjectMapper();
@@ -54,18 +48,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
 
             // 2. AuthenticaionManager로 로그인을 시도하면 PrincipalDetailsService의 loadUserByUsername() 실행
-            Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-
-            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+            Authentication authentication = null;
 
             // 3. PrincipalDetails를 세션에 담는다. (권한 관리를 위한 용도)
             // 권한관리를 Security에서 진행하기 때문에 편리를 위해 세션을 이용해서 권한처리를 하는 것이다.
+            authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+
+
             return authentication;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
 
 
     // attemptAuthentication 이후 인증이 완료되면 해당 함수 실행
@@ -82,7 +76,25 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("username", principalDetails.getUser().getUsername())// jwt username 추가
                 .sign(Algorithm.HMAC512(jwtProperties.getSecret())); // Secret-key 설정
 
-        response.addHeader(jwtProperties.getHeader(), "Bearer "+jwtToken);
-        
+        response.addHeader(jwtProperties.getHeader(), "Bearer " + jwtToken);
+
     }
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        AuthErrorResponse.toResponse(response, ErrorCode.UNAUTHENTICATED_MEMBER);
+    }
+
+/*    private void toResponse(HttpServletResponse response) throws IOException {
+        ObjectMapper om = new ObjectMapper();
+
+        response.setContentType("application/json;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", 401);
+        map.put("code", "UNAUTHENTICATED_MEMBER");
+        map.put("message", "이메일 또는 비밀번호가 올바르지 않습니다.");
+        response.getWriter().write(om.writeValueAsString(map));
+    }*/
+
 }

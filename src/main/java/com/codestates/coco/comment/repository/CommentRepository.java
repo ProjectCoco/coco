@@ -13,6 +13,6 @@ public interface CommentRepository extends MongoRepository<Comment, String>{
 
     List<CommentDTO> findAllByContentId(String contentId);
 
-    List<CommentUserDTO> findAllByAuthor(String author);
+    List<CommentUserDTO> findAllByUsername(String username);
 
 }

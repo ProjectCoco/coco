@@ -6,7 +6,7 @@ import com.codestates.coco.comment.domain.CommentUserDTO;
 import com.codestates.coco.comment.repository.CommentRepository;
 import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
-import com.codestates.coco.contents.domain.Content;
+
 import com.codestates.coco.contents.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class CommentService {
         return CommentDTO.builder()
                 ._id(comment.get_id())
                 .comment(comment.getComment())
-                .author(comment.getAuthor())
+                .username(comment.getUsername())
                 .contentId(comment.getContentId())
                 .createdDate(comment.getCreatedDate())
                 .build();
@@ -41,7 +41,7 @@ public class CommentService {
     public List<CommentUserDTO> getAllUserComment(String username){
 
         //refactoring 필요
-        List<CommentUserDTO> comments = commentRepository.findAllByAuthor(username);
+        List<CommentUserDTO> comments = commentRepository.findAllByUsername(username);
         for (CommentUserDTO comment : comments) {
             comment.setTitle(contentRepository.findById(comment.getContentId()).orElse(null).getTitle());
         }
@@ -51,7 +51,7 @@ public class CommentService {
     @Transactional
     public CommentDTO putComment(String id, CommentDTO commentDTO, String username){
 
-        if(!username.equals(commentDTO.getAuthor())){
+        if(!username.equals(commentDTO.getUsername())){
             throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
         }
 
@@ -64,7 +64,7 @@ public class CommentService {
         return CommentDTO.builder()
                 ._id(comment.get_id())
                 .comment(comment.getComment())
-                .author(comment.getAuthor())
+                .username(comment.getUsername())
                 .contentId(comment.getContentId())
                 .createdDate(comment.getCreatedDate())
                 .build();
@@ -75,7 +75,7 @@ public class CommentService {
 
         Comment comment = commentRepository.findById(id).orElse(null);
         if (comment!=null) {
-            if (!comment.getAuthor().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
+            if (!comment.getUsername().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
             commentRepository.deleteById(id);
             return true;
         } else {
