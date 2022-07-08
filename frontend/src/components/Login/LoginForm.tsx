@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { UserState } from '../../lib/atom';
 import { UserStateType } from '../../lib/types/';
+import axios from 'axios';
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -36,6 +37,10 @@ function LoginForm() {
         path: '/',
       });
       const decoded: UserStateType = jwt_decode(String(token)); // 3. token payload값만 decode
+      // profileImg 받아오기 위해서 get요청하는 로직
+      // const response = axios.get(
+      //   `http//localhost:8080/api/userprofile/${decoded.username}`
+      // );
       SetUserInfo(decoded); // 4. decode 된 값을 atom 저장 (localStorage)
       getCookie('accessToken') && navigate('/'); // 5. 토큰 값이 잘 저장되었으면 홈으로 리다이렉트
       location.reload(); // 6. 토큰이 제대로 들어가기 위해서 새로고침

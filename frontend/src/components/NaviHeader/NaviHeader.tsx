@@ -31,7 +31,7 @@ const NaviHeader = () => {
             >
               스터디구인
             </S.MenuListContent>
-            {user.email.length > 0 ? (
+            {user.email ? (
               <DropDwonMenu />
             ) : (
               <S.MenuListContent

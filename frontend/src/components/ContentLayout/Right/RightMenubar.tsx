@@ -1,40 +1,66 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import * as S from './style';
-
+import { useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
 // dummies
-import { DuBoardList, IDuBoardList } from '../../../dummys/dummy';
 import commentImg from '../../../images/userProfile.jpg';
+import { useRecoilValue } from 'recoil';
+import { UserState } from '../../../lib/atom';
+import { AiOutlineSearch } from 'react-icons/ai';
+interface postType {
+  _id: string;
+  title: string;
+  content: string;
+  author: string;
+  createDate: string;
+  favor: string | null;
+}
 
 const RightMenubar = () => {
   const navigator = useNavigate();
-  const [posts, setPosts] = useState<IDuBoardList[]>();
+  const user = useRecoilValue(UserState);
+  const { data } = useQuery('RecentData', () =>
+    fetch(`http://localhost:8080/api/content?page=${0}`).then((res) =>
+      res.json()
+    )
+  );
 
   useEffect(() => {
-    setPosts(() => DuBoardList);
+    // setPosts(() => DuBoardList);
   }, []);
 
   return (
     <>
       <S.LoginBox>
-        <S.LoginButton onClick={() => navigator('/login')}>
-          Sign In
-        </S.LoginButton>
-        <S.SignUpButton onClick={() => navigator('/signup')}>
-          Sign Up
-        </S.SignUpButton>
+        {user.email ? (
+          <S.SearchBox>
+            <S.SearchInput type="text" />
+            <span>
+              <AiOutlineSearch />
+            </span>
+          </S.SearchBox>
+        ) : (
+          <>
+            <S.LoginButton onClick={() => navigator('/login')}>
+              Sign In
+            </S.LoginButton>
+            <S.SignUpButton onClick={() => navigator('/signup')}>
+              Sign Up
+            </S.SignUpButton>
+          </>
+        )}
       </S.LoginBox>
       <S.MorePosts>
-        <h1>More Posts</h1>
-        {posts?.slice(1, 5).map((post, idx) => (
-          <S.MorePost key={idx}>
+        <h1>Recent Posts</h1>
+        {data?.slice(0, 3).map((post: postType) => (
+          <S.MorePost key={post._id}>
             <S.MorePostsProfile>
               <S.MorePostsImg src={commentImg} />
-              <h4>ghks042{post.id}</h4>
+              <h4>{post.author}</h4>
             </S.MorePostsProfile>
             <S.MorePostTitle>
-              <div onClick={() => navigator(`/study-board/${post.id}`)}>
-                {post.subject}
+              <div onClick={() => navigator(`/study-board/${post._id}`)}>
+                {post.title}
               </div>
             </S.MorePostTitle>
           </S.MorePost>
