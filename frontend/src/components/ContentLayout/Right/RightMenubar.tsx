@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './style';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from 'react-query';
 // dummies
 import commentImg from '../../../images/userProfile.jpg';
 import { useRecoilValue } from 'recoil';
 import { UserState } from '../../../lib/atom';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { getBoardPage } from '../../../apis/apiClient';
+
 interface postType {
   _id: string;
   title: string;
@@ -19,14 +20,12 @@ interface postType {
 const RightMenubar = () => {
   const navigator = useNavigate();
   const user = useRecoilValue(UserState);
-  const { data } = useQuery('RecentData', () =>
-    fetch(`http://localhost:8080/api/content?page=${0}`).then((res) =>
-      res.json()
-    )
-  );
-
+  const [data, setData] = useState<postType[]>();
   useEffect(() => {
-    // setPosts(() => DuBoardList);
+    (async () => {
+      const response = await getBoardPage(0);
+      setData(response);
+    })();
   }, []);
 
   return (
