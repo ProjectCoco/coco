@@ -1,5 +1,5 @@
 import { UserState } from '../../lib/atom';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Resizer from 'react-image-file-resizer';
@@ -7,6 +7,9 @@ import CustomButton from '../../components/CustomButton';
 // 나중에 API Clinent로 통합해야하는 부분 (삭제될 코드)
 import axios, { AxiosRequestHeaders } from 'axios';
 import { getCookie } from '../../lib/cookie/cookie';
+import { checkUsernameApi } from '../../apis/apiClient';
+import useDebounce from '../../hooks/useDebounce';
+
 const headers: AxiosRequestHeaders = {
   Authorization: `Bearer ${getCookie('accessToken')}`,
 };
@@ -15,7 +18,9 @@ function UserProfile() {
   const [userState, setUserState] = useRecoilState(UserState);
   const [imgText, setImgText] = useState('');
   const [username, setUserName] = useState(userState.username);
-
+  const debounceUsername = useDebounce(username, 500);
+  const [exist, setExist] = useState('');
+  const [inputCheck, setInputCheck] = useState(false);
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const revise_form = {
@@ -30,8 +35,21 @@ function UserProfile() {
       revise_form,
       { headers }
     );
-    console.log('Response', response);
+    console.log('put response', response);
   }
+
+  useEffect(() => {
+    if (inputCheck) {
+      (async () => {
+        const response = await checkUsernameApi(username);
+        if (response === false) {
+          setExist('존재하는 아이디 입니다.');
+        } else {
+          setExist('');
+        }
+      })();
+    }
+  }, [debounceUsername]);
 
   function fileChangedHandler(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.currentTarget.files !== null) {
@@ -53,6 +71,7 @@ function UserProfile() {
       );
     }
   }
+
   return (
     <ProfileContainer>
       <RevisionForm onSubmit={handleSubmit}>
@@ -83,8 +102,12 @@ function UserProfile() {
           <Input
             type={'text'}
             value={username}
-            onChange={(e) => setUserName(e.target.value)}
+            onChange={(e) => {
+              setUserName(e.target.value);
+              setInputCheck(true);
+            }}
           />
+          <ErrorText>{exist}</ErrorText>
         </InputBox>
         <CustomButton
           height="4rem"
@@ -199,4 +222,9 @@ const InputBox = styled.div`
     font-size: 1.4rem;
     color: #555;
   }
+`;
+
+const ErrorText = styled.p`
+  font-size: 1rem;
+  color: red;
 `;
