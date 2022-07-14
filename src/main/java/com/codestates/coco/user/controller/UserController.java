@@ -1,15 +1,11 @@
 package com.codestates.coco.user.controller;
 
-import com.codestates.coco.user.config.auth.PrincipalDetails;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.domain.UserDTO;
-import com.codestates.coco.user.domain.UserProfileDTO;
 import com.codestates.coco.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -54,4 +50,16 @@ public class UserController {
     }
 
 
+
+    @PostMapping("/api/token")
+    public ResponseEntity<String> reissueToken(HttpServletRequest request, HttpServletResponse response) {
+        userService.reissueToken(request, response);
+        return new ResponseEntity<>("재발급 성공", HttpStatus.OK);
+    }
+
+    @PostMapping("/api/logout")
+    public ResponseEntity<Object> logout(HttpServletRequest request, HttpServletResponse response) {
+        userService.logout(request, response);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
