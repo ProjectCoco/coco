@@ -40,7 +40,7 @@ public class CommentService {
 
     public List<CommentUserDTO> getAllUserComment(String username){
 
-        //refactoring 필요
+        //todo: refactoring 필요
         List<CommentUserDTO> comments = commentRepository.findAllByUsername(username);
         for (CommentUserDTO comment : comments) {
             comment.setTitle(contentRepository.findById(comment.getContentId()).orElse(null).getTitle());

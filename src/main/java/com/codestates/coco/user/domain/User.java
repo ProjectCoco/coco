@@ -66,9 +66,10 @@ public class User {
         return new ArrayList<>();
     }
 
-    public void update(String groupInfo, String profileImg) {
+    public void update(String groupInfo, String profileImg, String username) {
         this.groupInfo = groupInfo;
         this.profileImg = profileImg;
+        this.username = username;
     }
 
     public void addContentFavor(String contentId) { this.contentFavor.add(contentId); }

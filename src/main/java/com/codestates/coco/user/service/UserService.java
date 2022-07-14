@@ -1,7 +1,12 @@
 package com.codestates.coco.user.service;
 
+import com.codestates.coco.comment.domain.Comment;
+import com.codestates.coco.comment.domain.CommentUserDTO;
+import com.codestates.coco.comment.repository.CommentRepository;
 import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
+import com.codestates.coco.contents.domain.Content;
+import com.codestates.coco.contents.repository.ContentRepository;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.domain.UserDTO;
 import com.codestates.coco.user.domain.UserProfileDTO;
@@ -11,12 +16,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final ContentRepository contentRepository;
+    private final CommentRepository commentRepository;
 
     @Value("${user.profileImg}")
     private String basicProfileImg;
@@ -50,10 +59,22 @@ public class UserService {
     }
 
     public UserProfileDTO putProfile(UserProfileDTO userProfileDTO, String username, String loginUsername){
+        //todo: content, comment가 user 객체를 참조
         if (username.equals(loginUsername)) {
             User user = userRepository.findByUsername(username);
-            user.update(userProfileDTO.getGroupInfo(), userProfileDTO.getProfileImg());
+            if(!usernameCheck(userProfileDTO.getUsername())) throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+            user.update(userProfileDTO.getGroupInfo(), userProfileDTO.getProfileImg(), userProfileDTO.getUsername());
             userRepository.save(user);
+            //contents
+            List<Content> contents = contentRepository.findAllByUsername(username);
+            contents.stream().forEach(content -> content.setUsername(userProfileDTO.getUsername()));
+            contentRepository.saveAll(contents);
+
+            //comments
+            List<Comment> comments = commentRepository.findAllByUser(username);
+            comments.stream().forEach(comment -> comment.setUsername(userProfileDTO.getUsername()));
+            commentRepository.saveAll(comments);
+
             return userProfileDTO;
         } else {
             throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);

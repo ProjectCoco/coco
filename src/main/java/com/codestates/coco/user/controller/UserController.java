@@ -38,14 +38,14 @@ public class UserController {
     }
 
     //TODO 프로필조회
-    @GetMapping("/userProfile/{username}")
+    @GetMapping("/userprofile/{username}")
     public ResponseEntity<UserProfileDTO> getProfile(@PathVariable String username, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return new ResponseEntity<>(userService.getProfile(username, principalDetails.getUser().getUsername()), HttpStatus.OK);
     }
 
 
     //TODO 프로필수정
-    @PutMapping("/userProfile/{username}")
+    @PutMapping("/userprofile/{username}")
     public ResponseEntity<UserProfileDTO> putProfile(
             @PathVariable String username,
             @Valid @RequestBody UserProfileDTO userProfileDTO,
