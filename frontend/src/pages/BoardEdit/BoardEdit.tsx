@@ -6,64 +6,38 @@ import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import React from 'react';
-import { apiClient } from '../../apis/apiClient';
+import { getBoardDetail, putBoard } from '../../apis/apiClient';
 import * as S from './style';
-import { AxiosRequestHeaders } from 'axios'; // 삭제 필요
-import { getCookie } from '../../lib/cookie/cookie'; // 삭제 필요
+import * as T from '../../apis/types';
 
-type BoardPost = {
-  title: string;
-  content: string;
-  username: string;
-  // tag: string[];
-};
-
-// 삭제 필요
-const headers: AxiosRequestHeaders = {
-  Authorization: `Bearer ${getCookie('accessToken')}`,
-};
-
-// 삭제 필요
-async function putBoardEditApi(BoardPost: BoardPost, contentId?: string) {
-  try {
-    const response = await apiClient.put(
-      `/api/content/${contentId}`,
-      BoardPost,
-      { headers }
-    );
-    return response.data;
-  } catch (err) {
-    return err;
-  }
-}
+// type BoardPost = {
+//   title: string;
+//   content: string;
+//   username: string;
+//   tag: string[];
+// };
 
 const BoardEdit = () => {
   const { id } = useParams();
 
-  function fetchPost(postParam?: string) {
-    const response = apiClient
-      .get(`/api/content/${postParam}`)
-      .then((res) => res.data);
-    return response;
-  }
-
-  const [post, setPost] = useState<BoardPost>({
+  const [post, setPost] = useState<T.BoardForm>({
     title: '',
     content: '',
     username: '', // username or email
-    // tag: data.tag,
+    // tag: [],
   });
   const editorRef = useRef<Editor>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
-      const data = await fetchPost(id);
+      const data = await getBoardDetail(id);
       editorRef.current?.getInstance().setHTML(data.content);
       setPost({
         title: data.title,
         content: data.content,
         username: data.username,
+        // tag: data.tag,
       });
     })();
   }, []);
@@ -79,7 +53,7 @@ const BoardEdit = () => {
     });
   };
 
-  const isValid = (post: BoardPost): boolean => {
+  const isValid = (post: T.BoardForm): boolean => {
     const removeContentBlank = post.content.replace(/\n|\r|\s*/g, '');
     if (
       post.title.trim().length >= 1 &&
@@ -95,9 +69,9 @@ const BoardEdit = () => {
     if (!isValid(post)) {
       alert('제목과 내용은 최소 1자 이상 입력되어야 합니다.');
     } else {
-      const response = await putBoardEditApi(post, id);
-      console.log(post, response, id);
-      navigate(-1);
+      const response = await putBoard(id, post);
+      console.log(response);
+      navigate('/study-board');
     }
   };
 
