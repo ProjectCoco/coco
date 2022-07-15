@@ -9,7 +9,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Builder
 @Getter
@@ -26,18 +25,24 @@ public class Content {
     @CreatedDate
     private LocalDateTime createdDate;
     private String username;
-    private List<String> userFavor;
+    private Long favorCount;
 
-    public Boolean getFavorState(String userId) {
-        return userFavor.contains(userId);
-    }
+    /*@DocumentReference(lazy = true)
+    private List<User> userFavor;*/
 
-    public void addUserFavor(String userId) { this.userFavor.add(userId); }
-
-    public void removeUserFavor(String userId) { this.userFavor.remove(userId); }
+    /*public void addUserFavor(User user) { this.userFavor.add(user); }
+    public void removeUserFavor(User user) { this.userFavor.remove(user); }*/
 
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void addCount() {
+        this.favorCount++;
+    }
+
+    public void subCount() {
+        this.favorCount--;
     }
 }
