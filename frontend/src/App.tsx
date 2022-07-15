@@ -12,7 +12,7 @@ import { QueryClientProvider, QueryClient } from 'react-query';
 const queryClient = new QueryClient();
 
 const App = () => {
-  const isLoading = useRecoilValue(__isLoading);
+  const isLoading  = useRecoilValue(__isLoading);
   return (
     <QueryClientProvider client={queryClient}>
       <CookiesProvider>

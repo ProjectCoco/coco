@@ -33,7 +33,10 @@ const Main = () => {
         <S.BannerImg src={Banner1}></S.BannerImg>
       </S.ImgBox>
       {userstate.email ? (
-        <Toast msg="Andrew Hwan님 환영합니다." status="success" />
+        <Toast
+          msg={userstate.email ? userstate.username + '님 환영합니다.' : ''}
+          status="success"
+        />
       ) : null}
     </S.Banner>
   );
