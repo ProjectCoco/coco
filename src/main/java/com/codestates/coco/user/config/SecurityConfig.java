@@ -43,15 +43,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 예외처리
                 .exceptionHandling()
                 .accessDeniedHandler(new CustomDeniedHandler())
-//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
             .and()
                 // 권한설정
                 .authorizeRequests()
                 // 로그인 및 회원가입 로직에 포함된 권한 설정
                 .antMatchers("/api/content/**").authenticated()
                 .antMatchers("/api/comment/**").authenticated()
-                .antMatchers("/api/email/**").authenticated()
-                .antMatchers("/api/username/**").authenticated()
                 .antMatchers("/api/userprofile/**").authenticated()
                 .anyRequest().permitAll();
     }

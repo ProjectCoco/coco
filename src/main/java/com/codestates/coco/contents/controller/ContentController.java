@@ -51,8 +51,13 @@ public class ContentController {
             return new ResponseEntity<>(contentService.createcontent(contentDTO), HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}/favor")
-    public ResponseEntity<Boolean> favorContent(@PathVariable String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @PostMapping("/{id}/favor/{username}")
+    public ResponseEntity<Boolean> favorContent(@PathVariable String id, @PathVariable String username, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return new ResponseEntity<>(contentService.favor(id, principalDetails.getUser().getUsername()), HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{id}/favor/{username}")
+    public ResponseEntity<Boolean> unFavorContent(@PathVariable String id, @PathVariable String username, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return new ResponseEntity<>(contentService.unfavor(id, principalDetails.getUser().getUsername()), HttpStatus.NO_CONTENT);
     }
 }

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor
@@ -29,8 +28,7 @@ public class ContentDTO {
 
     private LocalDateTime createdDate;
 
-    private Long favor;
-
+    private Long favorCount;
 
     // 생성자 -> 빌더패턴으로 객체 생성 전략 변경
     public Content toEntity() {
@@ -39,7 +37,7 @@ public class ContentDTO {
                 .title(title)
                 .content(content)
                 .username(username)
-                .userFavor(new ArrayList<>())
+                .favorCount(favorCount)
                 .build();
         return build;
     }

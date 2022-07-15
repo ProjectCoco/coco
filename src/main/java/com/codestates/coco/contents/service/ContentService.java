@@ -40,6 +40,7 @@ public class ContentService {
                     .content(content.getContent())
                     .username(content.getUsername())
                     .createdDate(content.getCreatedDate())
+                    .favorCount(content.getFavorCount())
                     .build();
         } catch (Exception e) {
             throw new CustomException(ErrorCode.CANNOT_FOUND_CONTENT);
@@ -81,6 +82,7 @@ public class ContentService {
 
 
     public ContentDTO createcontent(ContentDTO contentDTO) {
+        contentDTO.setFavorCount(0L);
         Content content = contentRepository.save(contentDTO.toEntity());
         return ContentDTO.builder()
                 ._id(content.get_id())
@@ -88,25 +90,27 @@ public class ContentService {
                 .content(content.getContent())
                 .username(content.getUsername())
                 .createdDate(content.getCreatedDate())
+                .favorCount(content.getFavorCount())
                 .build();
     }
 
     public Boolean favor(String contentId, String username){
         Content content = contentRepository.findById(contentId).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
         User user = userRepository.findByUsername(username);
-        content.addUserFavor(user.getId());
-        user.addContentFavor(contentId);
+        user.addContentFavor(content);
+        content.addCount();
+
         contentRepository.save(content);
         userRepository.save(user);
-
         return true;
     }
 
     public Boolean unfavor(String contentId, String username){
         Content content = contentRepository.findById(contentId).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
         User user = userRepository.findByUsername(username);
-        content.removeUserFavor(user.getId());
-        user.removeContentFavor(contentId);
+        user.removeContentFavor(content);
+        content.subCount();
+
         contentRepository.save(content);
         userRepository.save(user);
 

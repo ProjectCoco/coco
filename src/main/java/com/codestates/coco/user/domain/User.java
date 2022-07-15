@@ -1,15 +1,18 @@
 package com.codestates.coco.user.domain;
 
+import com.codestates.coco.contents.domain.Content;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Document
 @Data
@@ -34,7 +37,8 @@ public class User {
 
     private String role;
 
-    private List<String> contentFavor;
+    @DocumentReference(lazy = true)
+    private List<Content> contentFavor;
 
     public User(String email, String password) {
         this.email = email;
@@ -66,12 +70,16 @@ public class User {
         return new ArrayList<>();
     }
 
-    public void update(String groupInfo, String profileImg) {
+    public void update(String groupInfo, String profileImg, String username) {
         this.groupInfo = groupInfo;
         this.profileImg = profileImg;
+        this.username = username;
     }
 
-    public void addContentFavor(String contentId) { this.contentFavor.add(contentId); }
+    public void addContentFavor(Content content) { this.contentFavor.add(content); }
 
-    public void removeContentFavor(String contentId) { this.contentFavor.remove(contentId); }
+    public void removeContentFavor(Content content) {
+        List<Content> collect = this.contentFavor.stream().filter(c -> c.get_id().equals(content.get_id())).collect(Collectors.toList());
+        this.contentFavor.remove(collect.get(0));
+    }
 }

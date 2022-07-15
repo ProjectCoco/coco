@@ -15,6 +15,8 @@ public interface ContentRepository extends MongoRepository<Content, String> {
     @Query(sort = "{_id:-1}")
     List<ContentDTO> findBy(Pageable pageable);
 
-//    List<ContentDTO> findAllBy();
+    List<Content> findAllByUsername(String username);
+
+    List<ContentDTO> findAllBy();
 
 }
