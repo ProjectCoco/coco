@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 예외처리
                 .exceptionHandling()
                 .accessDeniedHandler(new CustomDeniedHandler())
-//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
             .and()
                 // 권한설정
                 .authorizeRequests()
