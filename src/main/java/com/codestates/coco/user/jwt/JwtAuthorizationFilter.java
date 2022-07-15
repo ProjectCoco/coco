@@ -2,7 +2,6 @@ package com.codestates.coco.user.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.codestates.coco.user.config.auth.PrincipalDetails;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.repository.UserRepository;
@@ -49,7 +48,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String email = null;
         try {
             email = JWT.require(Algorithm.HMAC512(jwtProperties.getSecret())).build().verify(jwtToken).getClaim("email").asString();
-        } catch (JWTDecodeException e) {
+        } catch (Exception e) {
             chain.doFilter(request, response);
             return;
         }
