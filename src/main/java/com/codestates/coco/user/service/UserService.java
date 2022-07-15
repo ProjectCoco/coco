@@ -63,7 +63,7 @@ public class UserService {
         //todo: content, comment가 user 객체를 참조
         if (username.equals(loginUsername)) {
             User user = userRepository.findByUsername(username);
-            if (!usernameCheck(userProfileDTO.getUsername())) throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+            if (!userProfileDTO.getUsername().equals(username) && !usernameCheck(userProfileDTO.getUsername())) throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
             user.update(userProfileDTO.getGroupInfo(), userProfileDTO.getProfileImg(), userProfileDTO.getUsername());
             userRepository.save(user);
             //contents
