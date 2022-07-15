@@ -21,10 +21,11 @@ export interface WriteForm {
   username: string;
 }
 export interface BoardForm {
-  _id: string;
+  _id?: string;
   username: string;
   title: string;
   content: string;
-  createdDate: string;
-  favor: number;
+  createdDate?: string;
+  favor?: number;
+  // tag?: string[];
 }
