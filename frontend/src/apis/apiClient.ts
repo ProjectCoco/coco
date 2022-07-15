@@ -61,25 +61,25 @@ export async function postBoardWriteApi(WriteForm: T.WriteForm) {
 
 // @HTTP: POST
 // @Route: /username/${username}/check
-// export async function checkUsernameApi(username: string) {
-//   try {
-//     const response = await apiClient.get(`/api/username/${username}/check`);
-//     return response;
-//   } catch (err) {
-//     return err;
-//   }
-// }
+export async function checkUsernameApi(username: string) {
+  try {
+    const response = await apiClient.get(`/api/username/${username}/check`);
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+}
 
 // @HTTP: POST
 // @Route: /username/${email}/check
-// export async function checkEmailApi(email: string) {
-//   try {
-//     const response = await apiClient.get(`/api/email/${email}/check`);
-//     return response;
-//   } catch (err) {
-//     return err;
-//   }
-// }
+export async function checkEmailApi(email: string) {
+  try {
+    const response = await apiClient.get(`/api/email/${email}/check`);
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+}
 
 // @HTTP: GET
 // @Route: /content/${id}
@@ -96,7 +96,7 @@ export async function getBoardPage(page: number) {
 
 // @HTTP: GET
 // @Route: /content/${id}
-export async function getBoardDetail(id: string) {
+export async function getBoardDetail(id?: string) {
   try {
     const response = await apiClient.get(`/api/content/${id}`, { headers });
     return response.data;
@@ -107,9 +107,9 @@ export async function getBoardDetail(id: string) {
 
 // @HTTP: PUT
 // @Route: /content/${id}
-export async function putBoard(id: string, data: T.BoardForm) {
+export async function putBoard(id: string | undefined, data: T.BoardForm) {
   try {
-    return await apiClient.put(`/api/content/${id}`), data, { headers };
+    return await apiClient.put(`/api/content/${id}`, data, { headers });
   } catch (err) {
     return err;
   }

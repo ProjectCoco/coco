@@ -1,4 +1,8 @@
-import { postSignupApi } from '../../apis/apiClient';
+import {
+  checkEmailApi,
+  checkUsernameApi,
+  postSignupApi,
+} from '../../apis/apiClient';
 import React, { useEffect, useState } from 'react';
 import * as S from './style';
 import {
@@ -11,7 +15,6 @@ import {
 import useInput from '../../hooks/useInput';
 import useSelect from '../../hooks/useSelect';
 import useDebounce from '../../hooks/useDebounce';
-import { apiClient } from '../../apis/apiClient';
 
 const Signup = () => {
   const email = useInput('', isValidEmail);
@@ -29,38 +32,44 @@ const Signup = () => {
   });
 
   const checkEmail = async (email: string) => {
-    try {
-      const response = await apiClient.get(`/api/email/${email}/check`);
-      if (response)
-        setDuplicateMessage({
-          ...duplicateMessage,
-          email: '사용 가능한 이메일 주소입니다.',
-        });
-      else
-        setDuplicateMessage({
-          ...duplicateMessage,
-          email: '이미 등록된 이메일입니다. 이메일을 다시 확인해주세요.',
-        });
-    } catch (error) {
-      console.log('error', error);
+    const response = await checkEmailApi(email);
+    if (response === true) {
+      setDuplicateMessage({
+        ...duplicateMessage,
+        email: '사용 가능한 이메일 주소입니다.',
+      });
+    } else if (response === false) {
+      setDuplicateMessage({
+        ...duplicateMessage,
+        email: '이미 등록된 이메일입니다. 이메일을 다시 확인해주세요.',
+      });
+    } else {
+      console.log(response);
+      setDuplicateMessage({
+        ...duplicateMessage,
+        email: '',
+      });
     }
   };
 
   const checkUsername = async (username: string) => {
-    try {
-      const response = await apiClient.get(`/api/username/${username}/check`);
-      if (response) {
-        setDuplicateMessage({
-          ...duplicateMessage,
-          username: '사용 가능한 유저 이름입니다.',
-        });
-      } else
-        setDuplicateMessage({
-          ...duplicateMessage,
-          username: '이미 등록된 유저이름입니다. 다른 유저이름을 입력해주세요.',
-        });
-    } catch (error) {
-      console.log('error', error);
+    const response = await checkUsernameApi(username);
+    if (response === true) {
+      setDuplicateMessage({
+        ...duplicateMessage,
+        username: '사용 가능한 유저 이름입니다.',
+      });
+    } else if (response === false) {
+      setDuplicateMessage({
+        ...duplicateMessage,
+        username: '이미 등록된 유저이름입니다. 다른 유저이름을 입력해주세요.',
+      });
+    } else {
+      console.log(response);
+      setDuplicateMessage({
+        ...duplicateMessage,
+        username: '',
+      });
     }
   };
 
