@@ -19,8 +19,8 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CorsFilter corsFilter;
-    private final UserRepository userRepository;
-    private final JwtProperties jwtProperties;
+    private final JwtProvider jwtProvider;
+    private final RedisUtil redisUtil;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -35,11 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .addFilter(corsFilter) // 적용한 필터설정 추가
                 .formLogin().disable()
-                .httpBasic().disable()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtProperties)) // loginProcessingUrl을 사용하지 못하므로 대신 처리할 핕터 추가
-                                                                                 // 로그인 시도 url은 /login
-                                                                                 // AuthenticationManager를 WebSecurityConfigurerAdapter가 가지고 있다.
-                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), userRepository, jwtProperties), JwtAuthenticationFilter.class)
+                .httpBasic().disable()// 로그인 시도 url은 /login// AuthenticationManager를 WebSecurityConfigurerAdapter가 가지고 있다.
+                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), userRepository, jwtProvider), JwtAuthenticationFilter.class)
                 // 예외처리
                 .exceptionHandling()
                 .accessDeniedHandler(new CustomDeniedHandler())
