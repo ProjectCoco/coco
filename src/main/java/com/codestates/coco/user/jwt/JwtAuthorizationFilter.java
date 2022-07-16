@@ -1,13 +1,6 @@
 package com.codestates.coco.user.jwt;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.codestates.coco.user.config.auth.PrincipalDetails;
-import com.codestates.coco.user.domain.User;
-import com.codestates.coco.user.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -22,7 +15,7 @@ import java.io.IOException;
 // 권한이나 인증이 필요한 특정 주소를 요청했을 때 해당 필터를 사용한다.
 // 권한이나 인증이 필요하지 않다면 사용하지 않는다.
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
-    private JwtProvider jwtProvider;
+    private final JwtProvider jwtProvider;
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
         super(authenticationManager);

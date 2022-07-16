@@ -1,14 +1,19 @@
 package com.codestates.coco.user.controller;
 
+import com.codestates.coco.user.config.auth.PrincipalDetails;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.domain.UserContentFavorDTO;
 import com.codestates.coco.user.domain.UserDTO;
+import com.codestates.coco.user.domain.UserProfileDTO;
 import com.codestates.coco.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 

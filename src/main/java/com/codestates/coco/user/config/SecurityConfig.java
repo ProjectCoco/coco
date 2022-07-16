@@ -2,8 +2,7 @@ package com.codestates.coco.user.config;
 
 import com.codestates.coco.user.jwt.JwtAuthenticationFilter;
 import com.codestates.coco.user.jwt.JwtAuthorizationFilter;
-import com.codestates.coco.user.jwt.JwtProperties;
-import com.codestates.coco.user.repository.UserRepository;
+import com.codestates.coco.user.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(corsFilter) // 적용한 필터설정 추가
                 .formLogin().disable()
                 .httpBasic().disable()// 로그인 시도 url은 /login// AuthenticationManager를 WebSecurityConfigurerAdapter가 가지고 있다.
-                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), userRepository, jwtProvider), JwtAuthenticationFilter.class)
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtProvider))
+                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), jwtProvider), JwtAuthenticationFilter.class)
                 // 예외처리
                 .exceptionHandling()
                 .accessDeniedHandler(new CustomDeniedHandler())

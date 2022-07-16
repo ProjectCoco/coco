@@ -1,15 +1,30 @@
 package com.codestates.coco.user.service;
 
+import com.codestates.coco.comment.domain.Comment;
+import com.codestates.coco.comment.repository.CommentRepository;
 import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
+import com.codestates.coco.contents.domain.Content;
+import com.codestates.coco.contents.repository.ContentRepository;
+import com.codestates.coco.user.config.RedisUtil;
+import com.codestates.coco.user.config.auth.PrincipalDetails;
 import com.codestates.coco.user.domain.User;
+import com.codestates.coco.user.domain.UserContentFavorDTO;
 import com.codestates.coco.user.domain.UserDTO;
 import com.codestates.coco.user.domain.UserProfileDTO;
+import com.codestates.coco.user.jwt.JwtProvider;
 import com.codestates.coco.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
