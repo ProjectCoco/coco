@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -60,4 +62,16 @@ public class UserController {
     }
 
 
+
+    @PostMapping("/token")
+    public ResponseEntity<String> reissueToken(HttpServletRequest request, HttpServletResponse response) {
+        userService.reissueToken(request, response);
+        return new ResponseEntity<>("재발급 성공", HttpStatus.OK);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Object> logout(HttpServletRequest request, HttpServletResponse response) {
+        userService.logout(request, response);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

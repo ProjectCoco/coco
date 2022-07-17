@@ -2,12 +2,14 @@ package com.codestates.coco.user.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserProfileDTO {
     @Email(message = "Email 형식을 갖춰야합니다.")
     private String email;

@@ -1,6 +1,6 @@
 import axios, { AxiosRequestHeaders } from 'axios';
 import { SERVER_URL } from './apiEnv';
-import { getCookie } from '../lib/cookie/cookie';
+import { getCookie, setCookie } from '../lib/cookie/cookie';
 import * as T from './types';
 
 export const apiClient = axios.create({
@@ -28,10 +28,13 @@ export async function postCommentApi(commentForm: T.commentForm) {
 export async function postLoginApi(LoginForm: T.LoginForm) {
   try {
     const response = await apiClient.post('/api/login', LoginForm);
-    console.log(response);
-    return response.headers.authorization.split(' ')[1];
+    console.log('리스폰스', response);
+    const AccessToken = response.headers.authorization.split(' ')[1];
+    const RefreshToken = response.headers['refresh-token'].split(' ')[1];
+    console.log(AccessToken, RefreshToken);
+    return [AccessToken, RefreshToken];
   } catch (err) {
-    return err;
+    throw new Error('인증 실패');
   }
 }
 
@@ -147,5 +150,47 @@ export async function removeComment(id: string) {
     });
   } catch (err) {
     return err;
+  }
+}
+
+export const JWT_EXPIRY_TIME = 1500000;
+
+const cookieOptions = {
+  path: '/',
+};
+
+export async function onRefreshToken() {
+  try {
+    const response = await apiClient.post('/api/token', null, {
+      headers: {
+        'Refresh-token': `Bearer ${getCookie('RefreshToken')}`,
+      },
+    });
+    console.log('리프레쉬 토큰 응답', response);
+    const AccessToken = response.headers.authorization.split(' ')[1];
+    const RefreshToken = response.headers['Refresh-token'].split(' ')[1];
+    setCookie('accessToken', AccessToken, cookieOptions);
+    setCookie('RefreshToken', RefreshToken, cookieOptions);
+    setTimeout(async () => {
+      await onRefreshToken();
+    }, JWT_EXPIRY_TIME);
+  } catch (err) {
+    throw new Error('리프레쉬 토큰 발급 실패');
+  }
+}
+
+export async function onRemoveToken() {
+  try {
+    console.log('로그아웃 !!');
+    const response = await apiClient.post('/api/logout', null, {
+      headers: {
+        'Refresh-token': `Bearer ${getCookie('RefreshToken')}`,
+        'Authorization': `Bearer ${getCookie('accessToken')}`,
+      },
+    });
+    console.log('LogOut', response);
+    return response;
+  } catch (err) {
+    throw new Error('로그아웃');
   }
 }

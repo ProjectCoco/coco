@@ -32,6 +32,9 @@ dependencies {
     // https://mvnrepository.com/artifact/com.auth0/java-jwt
     implementation 'com.auth0:java-jwt:3.19.2'
 
+    // redis 설정
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 
 
 }
