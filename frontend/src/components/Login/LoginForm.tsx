@@ -1,4 +1,9 @@
-import { apiClient, postLoginApi } from '../../apis/apiClient';
+import {
+  apiClient,
+  JWT_EXPIRY_TIME,
+  onRefreshToken,
+  postLoginApi,
+} from '../../apis/apiClient';
 import React, { useState } from 'react';
 import {
   handleValidation,
@@ -12,11 +17,11 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { UserState } from '../../lib/atom';
 import { UserStateType } from '../../lib/types/';
-import axios, { AxiosRequestHeaders } from 'axios';
 
-const headers: AxiosRequestHeaders = {
-  Authorization: `Bearer ${getCookie('accessToken')}`,
+const cookieOptions = {
+  path: '/',
 };
+
 function LoginForm() {
   const navigate = useNavigate();
   const [errorText, setErrorText] = useState<string>('');
@@ -34,23 +39,28 @@ function LoginForm() {
         'email 혹은 비밀번호를 잘못 입력하셨거나 등록되지 않은 email 입니다.'
       );
     } else if (result) {
+      console.log('sdsd');
       const token = await postLoginApi(formdata); // 1. 로그인 정보를 서버로 보내서 성공하면 token 받음
+      const [AccessToken, RefreshToken] = token;
+
       // 2. token을 쿠키에 저장
-      setCookie('accessToken', String(token), {
-        path: '/',
-      });
+      setCookie('accessToken', AccessToken, cookieOptions);
+      setCookie('RefreshToken', RefreshToken, cookieOptions);
       const decoded: UserStateType = jwt_decode(String(token)); // 3. token payload값만 decode
-      // profileImg 받아오기 위해서 get요청하는 로직
+      // // profileImg 받아오기 위해서 get요청하는 로직
       const response = await apiClient.get(
         `/api/userprofile/${decoded.username}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${AccessToken}`,
           },
         }
       );
-
-      console.log(response.data);
+      if (getCookie('RefreshToken')) {
+        setTimeout(async () => {
+          await onRefreshToken();
+        }, JWT_EXPIRY_TIME);
+      }
       SetUserInfo(response.data); // 4. decode 된 값을 atom 저장 (localStorage)
       getCookie('accessToken') && navigate('/'); // 5. 토큰 값이 잘 저장되었으면 홈으로 리다이렉트
       location.reload(); // 6. 토큰이 제대로 들어가기 위해서 새로고침
