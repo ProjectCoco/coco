@@ -83,7 +83,6 @@ public class JwtProvider {
         UserDetails userDetails = principalDetailsService.loadUserByUsername(getEmailFromClaim(jwtToken));
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
-
     public String reissueRefreshToken(String refreshToken, PrincipalDetails principalDetails) {
         long remainExpiry = getExpiryMilliSecond(refreshToken);
         redisUtil.deleteData(refreshToken);

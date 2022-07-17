@@ -63,13 +63,13 @@ public class UserController {
 
 
 
-    @PostMapping("/api/token")
+    @PostMapping("/token")
     public ResponseEntity<String> reissueToken(HttpServletRequest request, HttpServletResponse response) {
         userService.reissueToken(request, response);
         return new ResponseEntity<>("재발급 성공", HttpStatus.OK);
     }
 
-    @PostMapping("/api/logout")
+    @PostMapping("/logout")
     public ResponseEntity<Object> logout(HttpServletRequest request, HttpServletResponse response) {
         userService.logout(request, response);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

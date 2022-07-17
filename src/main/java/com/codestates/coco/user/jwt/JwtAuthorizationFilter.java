@@ -45,8 +45,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     System.out.println("검증 실패 또는 blacklist 예외 추가 처리");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Authorization 예외발생");
+
             }
         }
         chain.doFilter(request, response);

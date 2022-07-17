@@ -72,7 +72,8 @@ public class UserService {
         //todo: content, comment가 user 객체를 참조
         if (username.equals(loginUsername)) {
             User user = userRepository.findByUsername(username);
-            if (!userProfileDTO.getUsername().equals(username) && !usernameCheck(userProfileDTO.getUsername())) throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+            if (!userProfileDTO.getUsername().equals(username) && !usernameCheck(userProfileDTO.getUsername()))
+                throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
             user.update(userProfileDTO.getGroupInfo(), userProfileDTO.getProfileImg(), userProfileDTO.getUsername());
             userRepository.save(user);
             //contents
@@ -133,8 +134,8 @@ public class UserService {
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
-        response.addHeader(jwtProvider.getAccessHeader(), jwtProvider.reissueRefreshToken(refreshToken, principalDetails));
-        response.addHeader(jwtProvider.getRefreshHeader(), jwtProvider.createRefreshToken(principalDetails));
+        response.addHeader(jwtProvider.getAccessHeader(), "Bearer " + jwtProvider.createToken(principalDetails));
+        response.addHeader(jwtProvider.getRefreshHeader(), "Bearer " + jwtProvider.reissueRefreshToken(refreshToken, principalDetails));
     }
 
     public void logout(HttpServletRequest request, HttpServletResponse response) {
