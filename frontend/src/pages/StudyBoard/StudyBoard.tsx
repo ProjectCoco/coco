@@ -35,9 +35,9 @@ const StudyBoard = () => {
             <S.BoardListContainer>
               {data?.pages.map((group, index) => (
                 <React.Fragment key={index}>
-                  {group.map((data: IDuBoardList) => {
-                    return <BoardContentBox key={data._id} board={data} />;
-                  })}
+                  {group.map((data: IDuBoardList) => (
+                    <BoardContentBox key={data._id} board={data} />
+                  ))}
                 </React.Fragment>
               ))}
             </S.BoardListContainer>
