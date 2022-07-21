@@ -24,8 +24,12 @@ const StudyBoardDetail = () => {
   if (loading) return <Loading />;
   return (
     <ContentLayout>
-      <Header board={allQuery[0].data} />
-      <Body board={allQuery[0].data} comment={allQuery[1].data} />
+      <Header board={allQuery[0].data} comment={allQuery[1].data} />
+      <Body
+        board={allQuery[0].data}
+        comment={allQuery[1].data}
+        refetch={allQuery[1].refetch}
+      />
     </ContentLayout>
   );
 };
