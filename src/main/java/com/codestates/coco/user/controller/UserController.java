@@ -52,8 +52,10 @@ public class UserController {
     public ResponseEntity<UserProfileDTO> putProfile(
             @PathVariable String username,
             @Valid @RequestBody UserProfileDTO userProfileDTO,
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return new ResponseEntity<>(userService.putProfile(userProfileDTO, username, principalDetails.getUser().getUsername()), HttpStatus.CREATED);
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        return new ResponseEntity<>(userService.putProfile(userProfileDTO, username, principalDetails.getUser().getUsername(), request, response), HttpStatus.CREATED);
     }
 
     @GetMapping("/userfavor/{username}")

@@ -68,12 +68,20 @@ public class UserService {
         }
     }
 
-    public UserProfileDTO putProfile(UserProfileDTO userProfileDTO, String username, String loginUsername) {
+    public UserProfileDTO putProfile(UserProfileDTO userProfileDTO, String username, String loginUsername, HttpServletRequest request, HttpServletResponse response) {
         //todo: content, comment가 user 객체를 참조
         if (username.equals(loginUsername)) {
             User user = userRepository.findByUsername(username);
             if (!userProfileDTO.getUsername().equals(username) && !usernameCheck(userProfileDTO.getUsername()))
                 throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+
+            // username 변경 시 토큰 재발행
+            if (!userProfileDTO.getUsername().equals(username)) {
+                String token = request.getHeader(jwtProvider.getAccessHeader());
+                String newToken = jwtProvider.correctUsernameToken(jwtProvider.resovleToken(token), userProfileDTO.getUsername());
+                response.addHeader(jwtProvider.getAccessHeader(), jwtProvider.getPrefix() + newToken);
+            }
+
             user.update(userProfileDTO.getGroupInfo(), userProfileDTO.getProfileImg(), userProfileDTO.getUsername());
             userRepository.save(user);
             //contents
@@ -134,8 +142,8 @@ public class UserService {
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
-        response.addHeader(jwtProvider.getAccessHeader(), "Bearer " + jwtProvider.createToken(principalDetails));
-        response.addHeader(jwtProvider.getRefreshHeader(), "Bearer " + jwtProvider.reissueRefreshToken(refreshToken, principalDetails));
+        response.addHeader(jwtProvider.getAccessHeader(), jwtProvider.getPrefix() + jwtProvider.createToken(principalDetails));
+        response.addHeader(jwtProvider.getRefreshHeader(), jwtProvider.getPrefix() + jwtProvider.reissueRefreshToken(refreshToken, principalDetails));
     }
 
     public void logout(HttpServletRequest request, HttpServletResponse response) {

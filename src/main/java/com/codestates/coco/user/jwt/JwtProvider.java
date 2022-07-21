@@ -25,6 +25,9 @@ public class JwtProvider {
     @Value("${jwt.refresh-header}")
     private String refreshHeader;
 
+    @Value("${jwt.prefix}")
+    private String prefix;
+
     @Value("${jwt.secret}")
     private String secret;
 
@@ -46,6 +49,15 @@ public class JwtProvider {
                 .sign(Algorithm.HMAC512(secret)); // Secret-key 설정
     }
 
+    public String createToken(String email, String username) {
+        return JWT.create()
+                .withSubject(username)
+                .withExpiresAt(new Date(System.currentTimeMillis() + accessExpire)) // 만료시간 설정
+                .withClaim("email", email) // private claim
+                .withClaim("username", username)
+                .sign(Algorithm.HMAC512(secret)); // Secret-key 설정
+    }
+
     public String createRefreshToken(PrincipalDetails principalDetails) {
 
         String refreshToken = JWT.create()
@@ -64,7 +76,7 @@ public class JwtProvider {
     }
 
     public String resovleToken(String token) {
-        return token.replace("Bearer ", "");
+        return token.replace(prefix, "");
     }
 
     public String getEmailFromClaim(String jwtToken) {
@@ -82,6 +94,14 @@ public class JwtProvider {
     public Authentication getAuthentication(String jwtToken) {
         UserDetails userDetails = principalDetailsService.loadUserByUsername(getEmailFromClaim(jwtToken));
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    }
+
+    public String correctUsernameToken(String token, String username) {
+        long remainExpiry = getExpiryMilliSecond(token);
+        String email = JWT.decode(token).getClaim("email").asString();
+        redisUtil.setBlackList(token, email, remainExpiry);
+
+        return createToken(email, username);
     }
     public String reissueRefreshToken(String refreshToken, PrincipalDetails principalDetails) {
         long remainExpiry = getExpiryMilliSecond(refreshToken);

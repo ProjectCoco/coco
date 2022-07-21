@@ -28,7 +28,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String accessHeader = request.getHeader(jwtProvider.getAccessHeader());
 
         // Token이 존재하는 지 확인
-        if (accessHeader != null && accessHeader.startsWith("Bearer")) {
+        if (accessHeader != null && accessHeader.startsWith(jwtProvider.getPrefix())) {
             // JWT 검증
             try {
                 String jwtToken = jwtProvider.resovleToken(request.getHeader(jwtProvider.getAccessHeader()));
