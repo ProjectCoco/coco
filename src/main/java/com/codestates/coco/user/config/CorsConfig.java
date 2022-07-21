@@ -18,6 +18,7 @@ public class CorsConfig {
         config.addAllowedHeader("*"); // 모든 헤더의 응답을 허용
         config.addAllowedMethod("*"); // 모든 get post put delete patch 요청 허용
         config.addExposedHeader("Authorization"); // CORS로 인해 프론트단에서 인식하지 못하는 Authrization 헤더를 노출
+        config.addExposedHeader("Refresh-token");
 
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
