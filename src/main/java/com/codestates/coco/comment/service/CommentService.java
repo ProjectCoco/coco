@@ -7,12 +7,14 @@ import com.codestates.coco.comment.repository.CommentRepository;
 import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
 
+import com.codestates.coco.contents.domain.Content;
 import com.codestates.coco.contents.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,9 @@ public class CommentService {
     @Transactional
     public CommentDTO createComment(CommentDTO commentDTO){
         Comment comment = commentRepository.save(commentDTO.toEntity(commentDTO));
+        Content content = contentRepository.findById(comment.getContentId()).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
+        content.addCommentCount();
+
         return CommentDTO.builder()
                 ._id(comment.get_id())
                 .comment(comment.getComment())
@@ -77,6 +82,8 @@ public class CommentService {
         if (comment!=null) {
             if (!comment.getUsername().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
             commentRepository.deleteById(id);
+            Content content = contentRepository.findById(comment.getContentId()).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
+            content.subCommentCount();
             return true;
         } else {
             throw new CustomException(ErrorCode.CANNOT_FOUND_COMMENT);

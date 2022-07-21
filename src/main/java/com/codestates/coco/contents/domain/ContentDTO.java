@@ -30,6 +30,8 @@ public class ContentDTO {
 
     private Long favorCount;
 
+    private Long commentCount;
+
     // 생성자 -> 빌더패턴으로 객체 생성 전략 변경
     public Content toEntity() {
         Content build = Content.builder()
@@ -38,6 +40,7 @@ public class ContentDTO {
                 .content(content)
                 .username(username)
                 .favorCount(favorCount)
+                .commentCount(commentCount)
                 .build();
         return build;
     }

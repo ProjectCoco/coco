@@ -41,6 +41,7 @@ public class ContentService {
                     .username(content.getUsername())
                     .createdDate(content.getCreatedDate())
                     .favorCount(content.getFavorCount())
+                    .commentCount(content.getCommentCount())
                     .build();
         } catch (Exception e) {
             throw new CustomException(ErrorCode.CANNOT_FOUND_CONTENT);
@@ -83,6 +84,7 @@ public class ContentService {
 
     public ContentDTO createcontent(ContentDTO contentDTO) {
         contentDTO.setFavorCount(0L);
+        contentDTO.setCommentCount(0L);
         Content content = contentRepository.save(contentDTO.toEntity());
         return ContentDTO.builder()
                 ._id(content.get_id())
@@ -91,6 +93,7 @@ public class ContentService {
                 .username(content.getUsername())
                 .createdDate(content.getCreatedDate())
                 .favorCount(content.getFavorCount())
+                .commentCount(content.getCommentCount())
                 .build();
     }
 

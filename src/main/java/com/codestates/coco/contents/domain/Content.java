@@ -26,6 +26,7 @@ public class Content {
     private LocalDateTime createdDate;
     private String username;
     private Long favorCount;
+    private Long commentCount;
 
     /*@DocumentReference(lazy = true)
     private List<User> userFavor;*/
@@ -45,4 +46,13 @@ public class Content {
     public void subCount() {
         this.favorCount--;
     }
+
+    public void addCommentCount(){
+        this.commentCount++;
+    }
+
+    public void subCommentCount(){
+        this.commentCount--;
+    }
+
 }
