@@ -6,12 +6,16 @@ import Resizer from 'react-image-file-resizer';
 import CustomButton from '../../components/CustomButton';
 // 나중에 API Clinent로 통합해야하는 부분 (삭제될 코드)
 import axios, { AxiosRequestHeaders } from 'axios';
-import { getCookie } from '../../lib/cookie/cookie';
+import { getCookie, setCookie } from '../../lib/cookie/cookie';
 import { checkUsernameApi } from '../../apis/apiClient';
 import useDebounce from '../../hooks/useDebounce';
 
 const headers: AxiosRequestHeaders = {
   Authorization: `Bearer ${getCookie('accessToken')}`,
+};
+
+const cookieOptions = {
+  path: '/',
 };
 
 function UserProfile() {
@@ -21,7 +25,7 @@ function UserProfile() {
   const debounceUsername = useDebounce(username, 500);
   const [exist, setExist] = useState('');
   const [inputCheck, setInputCheck] = useState(false);
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const revise_form = {
       email: userState.email,
@@ -35,7 +39,11 @@ function UserProfile() {
       revise_form,
       { headers }
     );
-    console.log('put response', response);
+
+    setUserState({ ...userState, username });
+    const AccessToken = (await response).headers.authorization.split(' ')[1];
+    setCookie('accessToken', AccessToken, cookieOptions);
+    location.reload(); // 6. 토큰이 제대로 들어가기 위해서 새로고침
   }
 
   useEffect(() => {
