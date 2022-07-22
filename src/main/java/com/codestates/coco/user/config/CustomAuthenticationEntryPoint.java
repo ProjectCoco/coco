@@ -14,6 +14,6 @@ import java.io.IOException;
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        AuthErrorResponse.toResponse(response, ErrorCode.INVALID_AUTH_TOKEN);
+        if(response.getStatus()!=ErrorCode.EXPIRED_AUTH_TOKEN.getHttpStatus().value()) AuthErrorResponse.toResponse(response, ErrorCode.UNAUTHENTICATED);
     }
 }

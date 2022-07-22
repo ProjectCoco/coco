@@ -61,7 +61,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
 
-
     // attemptAuthentication 이후 인증이 완료되면 해당 함수 실행
     // 4. JWT토큰 생성 및 응답
     @Override
@@ -69,10 +68,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // attemptAuthentication() 결과가 authResult로 담겨온다.
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
-        response.addHeader(jwtProvider.getRefreshHeader(), "Bearer "+jwtProvider.createRefreshToken(principalDetails));
-        response.addHeader(jwtProvider.getAccessHeader(), "Bearer "+jwtProvider.createToken(principalDetails));
-        
+        response.addHeader(jwtProvider.getRefreshHeader(), jwtProvider.getPrefix() + jwtProvider.createRefreshToken(principalDetails));
+        response.addHeader(jwtProvider.getAccessHeader(), jwtProvider.getPrefix() + jwtProvider.createToken(principalDetails));
+
     }
+
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         AuthErrorResponse.toResponse(response, ErrorCode.UNAUTHENTICATED_MEMBER);

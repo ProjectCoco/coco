@@ -1,5 +1,7 @@
 package com.codestates.coco.user.jwt;
 
+import com.codestates.coco.common.AuthErrorResponse;
+import com.codestates.coco.common.CustomException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +30,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String accessHeader = request.getHeader(jwtProvider.getAccessHeader());
 
         // Token이 존재하는 지 확인
-        if (accessHeader != null && accessHeader.startsWith("Bearer")) {
+        if (accessHeader != null && accessHeader.startsWith(jwtProvider.getPrefix())) {
             // JWT 검증
             try {
                 String jwtToken = jwtProvider.resovleToken(request.getHeader(jwtProvider.getAccessHeader()));
@@ -44,8 +46,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 }else{
                     System.out.println("검증 실패 또는 blacklist 예외 추가 처리");
                 }
-            } catch (Exception e) {
-
+            } catch (CustomException e) {
+                AuthErrorResponse.toResponse(response, e.getErrorCode());
             }
         }
         chain.doFilter(request, response);

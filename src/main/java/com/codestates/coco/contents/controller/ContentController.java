@@ -20,14 +20,14 @@ public class ContentController {
     private final ContentService contentService;
 
     @GetMapping("")
-    public ResponseEntity<List<ContentDTO>> getTitle(@RequestParam("page") int page) {
-        return new ResponseEntity<>(contentService.getTitleContents(page), HttpStatus.OK);
+    public ResponseEntity<List<ContentDTO>> getTitle(@RequestParam("page") int page, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return new ResponseEntity<>(contentService.getTitleContents(page, principalDetails.getUser().getUsername()), HttpStatus.OK);
     }
 
     //todo e
     @GetMapping("/{id}")
-    public ResponseEntity<ContentDTO> detailContents(@PathVariable("id") String id) {
-        return new ResponseEntity<>(contentService.getContents(id), HttpStatus.OK);
+    public ResponseEntity<ContentDTO> detailContents(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return new ResponseEntity<>(contentService.getContents(id, principalDetails.getUser().getUsername()), HttpStatus.OK);
     }
 
 
