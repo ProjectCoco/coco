@@ -32,6 +32,8 @@ public class ContentDTO {
 
     private Long commentCount;
 
+    private Boolean favorState;
+
     // 생성자 -> 빌더패턴으로 객체 생성 전략 변경
     public Content toEntity() {
         Content build = Content.builder()

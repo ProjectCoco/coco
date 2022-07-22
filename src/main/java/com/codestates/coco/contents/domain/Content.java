@@ -6,11 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-@Builder
 @Getter
 @Setter
 @Document()
@@ -27,6 +27,19 @@ public class Content {
     private String username;
     private Long favorCount;
     private Long commentCount;
+
+    @Transient
+    private Boolean favorState;
+
+    @Builder
+    public Content(String _id, String title, String content, String username, Long favorCount, Long commentCount) {
+        this._id = _id;
+        this.title = title;
+        this.content = content;
+        this.username = username;
+        this.favorCount = favorCount;
+        this.commentCount = commentCount;
+    }
 
     /*@DocumentReference(lazy = true)
     private List<User> userFavor;*/

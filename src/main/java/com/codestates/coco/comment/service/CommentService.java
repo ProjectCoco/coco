@@ -27,7 +27,10 @@ public class CommentService {
     public CommentDTO createComment(CommentDTO commentDTO){
         Comment comment = commentRepository.save(commentDTO.toEntity(commentDTO));
         Content content = contentRepository.findById(comment.getContentId()).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
+
+        // 게시글의 댓글 갯수
         content.addCommentCount();
+        contentRepository.save(content);
 
         return CommentDTO.builder()
                 ._id(comment.get_id())
@@ -83,7 +86,11 @@ public class CommentService {
             if (!comment.getUsername().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
             commentRepository.deleteById(id);
             Content content = contentRepository.findById(comment.getContentId()).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
+
+            // 게시글에서 댓글 삭제
             content.subCommentCount();
+            contentRepository.save(content);
+
             return true;
         } else {
             throw new CustomException(ErrorCode.CANNOT_FOUND_COMMENT);

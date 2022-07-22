@@ -37,7 +37,7 @@ public class User {
 
     private String role;
 
-    @DocumentReference(lazy = true)
+    @DocumentReference
     private List<Content> contentFavor;
 
     public User(String email, String password) {

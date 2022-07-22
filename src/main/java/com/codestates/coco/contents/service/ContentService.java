@@ -9,6 +9,7 @@ import com.codestates.coco.contents.repository.ContentRepository;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,11 @@ public class ContentService {
     private final UserRepository userRepository;
 
 
-    public List<ContentDTO> getTitleContents(int page) {
-        return contentRepository.findBy(PageRequest.of(page, 10));
+    public List<ContentDTO> getTitleContents(int page, String username) {
+        List<ContentDTO> contents = contentRepository.findBy(PageRequest.of(page, 10));
+//        contents.forEach(content -> content.setFavorState(userRepository.existsByContentFavor(username, new ObjectId(content.get_id()))));
+        contents.forEach(content -> content.setFavorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id()))));
+        return contents;
     }
 
     /* 더이상 사용하지 않는 전체 조회코드
@@ -31,7 +35,7 @@ public class ContentService {
     }
     */
 
-    public ContentDTO getContents(String id){
+    public ContentDTO getContents(String id, String username){
         try {
             Content content = contentRepository.findById(id).orElse(null);
             return ContentDTO.builder()
@@ -42,6 +46,8 @@ public class ContentService {
                     .createdDate(content.getCreatedDate())
                     .favorCount(content.getFavorCount())
                     .commentCount(content.getCommentCount())
+//                    .favorState(userRepository.existsByContentFavor(username, new ObjectId(content.get_id())))
+                    .favorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id())))
                     .build();
         } catch (Exception e) {
             throw new CustomException(ErrorCode.CANNOT_FOUND_CONTENT);
