@@ -9,6 +9,10 @@ import React from 'react';
 import { getBoardDetail, putBoard } from '../../apis/apiClient';
 import * as S from './style';
 import * as T from '../../apis/types';
+import { useRecoilValue } from 'recoil';
+import { UserState } from '../../lib/atom';
+import Loading from '../../components/Loading';
+import NotFound from '../NotFound/NotFound';
 
 // type BoardPost = {
 //   title: string;
@@ -19,6 +23,7 @@ import * as T from '../../apis/types';
 
 const BoardEdit = () => {
   const { id } = useParams();
+  const user = useRecoilValue(UserState);
 
   const [post, setPost] = useState<T.BoardForm>({
     title: '',
@@ -32,13 +37,14 @@ const BoardEdit = () => {
   useEffect(() => {
     (async () => {
       const data = await getBoardDetail(id);
-      editorRef.current?.getInstance().setHTML(data.content);
+
       setPost({
         title: data.title,
         content: data.content,
         username: data.username,
         // tag: data.tag,
       });
+      editorRef.current?.getInstance().setHTML(data.content);
     })();
   }, []);
 
@@ -75,32 +81,40 @@ const BoardEdit = () => {
     }
   };
 
-  return (
-    <div>
-      <S.BoardWirteContainer>
-        <S.EditorContainer>
-          <S.TitleInput
-            placeholder="제목을 입력해주세요."
-            value={post.title}
-            onChange={handleTitleChange}
-            autoFocus
-          />
-          <Editor
-            initialValue=" "
-            previewStyle="vertical"
-            height="600px"
-            initialEditType="wysiwyg"
-            plugins={[colorSyntax]}
-            useCommandShortcut={true}
-            ref={editorRef}
-            autofocus={false}
-            onChange={handleContentChange}
-          />
-          <S.WriteButton onClick={handleSubmit}>수정 완료</S.WriteButton>
-        </S.EditorContainer>
-      </S.BoardWirteContainer>
-    </div>
-  );
+  if (!post.content) {
+    return <Loading />;
+  } else {
+    if (user.username === post.username) {
+      return (
+        <div>
+          <S.BoardWirteContainer>
+            <S.EditorContainer>
+              <S.TitleInput
+                placeholder="제목을 입력해주세요."
+                value={post.title}
+                onChange={handleTitleChange}
+                autoFocus
+              />
+              <Editor
+                initialValue=" "
+                previewStyle="vertical"
+                height="600px"
+                initialEditType="wysiwyg"
+                plugins={[colorSyntax]}
+                useCommandShortcut={true}
+                ref={editorRef}
+                autofocus={false}
+                onChange={handleContentChange}
+              />
+              <S.WriteButton onClick={handleSubmit}>수정 완료</S.WriteButton>
+            </S.EditorContainer>
+          </S.BoardWirteContainer>
+        </div>
+      );
+    } else {
+      return <NotFound />;
+    }
+  }
 };
 
 export default BoardEdit;

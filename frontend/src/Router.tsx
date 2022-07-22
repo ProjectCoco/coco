@@ -12,6 +12,7 @@ import FreeBoard from './pages/FreeBoard';
 import UserProfile from './pages/UserProfile';
 import MyFavorPage from './pages/MyFavorPage';
 import BoardEdit from './pages/BoardEdit';
+import NotFound from './pages/NotFound/NotFound';
 
 const Router = () => {
   return (
@@ -19,6 +20,7 @@ const Router = () => {
       <NaviHeader />
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="/*" element={<NotFound />} />
         {/* login 되어 있어야만 접근 가능 */}
         <Route element={<PrivateRouter authentication={true} />}>
           <Route path="/my-favor" element={<MyFavorPage />} />
