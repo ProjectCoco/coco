@@ -197,7 +197,7 @@ export async function onRemoveToken() {
 
 export async function upFavor(id: string, username: string) {
   try {
-    return await apiClient.post(`/api/content/${id}/favor/${username}`, {
+    return await apiClient.post(`/api/content/${id}/favor/${username}`, null, {
       headers,
     });
   } catch (err) {
