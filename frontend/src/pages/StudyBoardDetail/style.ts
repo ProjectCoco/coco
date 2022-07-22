@@ -16,6 +16,12 @@ export const UserBox = styled.div`
   & > div {
     margin-bottom: 1.8rem;
   }
+  & > svg {
+    width: 2rem;
+    height: 2rem;
+    margin-left: 1rem;
+    margin-top: 4rem;
+  }
 `;
 export const UserImg = styled.img`
   margin-top: 2rem;

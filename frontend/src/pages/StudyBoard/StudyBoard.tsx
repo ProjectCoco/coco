@@ -8,15 +8,15 @@ import Loading from '../../components/Loading';
 import NotFound from '../NotFound/NotFound';
 import { useInView } from 'react-intersection-observer';
 import { getBoardPage } from '../../apis/apiClient';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const StudyBoard = () => {
-  const { id } = useParams();
+  const pathname = useLocation();
   const [num, SetNum] = useState(1);
   const { ref, inView } = useInView({ threshold: 0.3 });
-  const { isLoading, isError, data, fetchNextPage, hasNextPage } =
+  const { isLoading, isError, data, fetchNextPage, hasNextPage, refetch } =
     useInfiniteQuery(
-      ['page', id],
+      ['page', pathname],
       async ({ pageParam = 0 }) => await getBoardPage(pageParam),
       { getNextPageParam: () => num }
     );
@@ -24,6 +24,10 @@ const StudyBoard = () => {
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage().then(() => SetNum(num + 1));
   }, [inView]);
+
+  useEffect(() => {
+    refetch();
+  }, [pathname.key]);
 
   if (isLoading) return <Loading />;
   if (isError) return <NotFound />;
@@ -35,9 +39,9 @@ const StudyBoard = () => {
             <S.BoardListContainer>
               {data?.pages.map((group, index) => (
                 <React.Fragment key={index}>
-                  {group.map((data: IDuBoardList) => {
-                    return <BoardContentBox key={data._id} board={data} />;
-                  })}
+                  {group.map((data: IDuBoardList) => (
+                    <BoardContentBox key={data._id} board={data} />
+                  ))}
                 </React.Fragment>
               ))}
             </S.BoardListContainer>

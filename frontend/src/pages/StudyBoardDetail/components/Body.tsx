@@ -11,9 +11,10 @@ import Comment from '../../../components/Comment';
 interface DataProps {
   board: IDuBoardList;
   comment: IDuComment[];
+  refetch: () => void;
 }
 
-const Body = ({ board, comment }: DataProps) => {
+const Body = ({ board, comment, refetch }: DataProps) => {
   const [string, setString] = useState<string>('');
   const user = useRecoilValue(UserState);
 
@@ -53,7 +54,7 @@ const Body = ({ board, comment }: DataProps) => {
         </S.CommentForm>
         {comment.map((comment) => (
           <S.ShowComment key={comment._id}>
-            <Comment comment={comment} user={user} />
+            <Comment comment={comment} user={user} refetch={refetch} />
           </S.ShowComment>
         ))}
       </S.CommentBox>

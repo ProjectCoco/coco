@@ -15,7 +15,8 @@ export const EditorContainer = styled.div`
 `;
 
 export const TitleInput = styled.input`
-  width: 814px;
+  width: 100%;
+  box-sizing: border-box;
   padding: 1.3rem 2.5rem;
   margin-bottom: 2rem;
   border: 1px solid #dcdfe7;
@@ -23,7 +24,8 @@ export const TitleInput = styled.input`
 `;
 
 export const TagContainer = styled.div`
-  width: 838px;
+  width: 100%;
+  box-sizing: border-box;
   padding: 1.3rem 1.3rem 0.3rem 1.3rem;
   margin-top: 1.5rem;
   margin-bottom: 2rem;
