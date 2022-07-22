@@ -194,3 +194,31 @@ export async function onRemoveToken() {
     throw new Error('로그아웃');
   }
 }
+
+export async function upFavor(id: string, username: string) {
+  try {
+    return await apiClient.post(`/api/content/${id}/favor/${username}`, {
+      headers,
+    });
+  } catch (err) {
+    return err;
+  }
+}
+export async function delFavor(id: string, username: string) {
+  try {
+    return await apiClient.delete(`/api/content/${id}/favor/${username}`, {
+      headers,
+    });
+  } catch (err) {
+    return err;
+  }
+}
+export async function delBoard(id: string) {
+  try {
+    return await apiClient.delete(`/api/content/${id}`, {
+      headers,
+    });
+  } catch (err) {
+    return err;
+  }
+}

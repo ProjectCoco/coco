@@ -7,37 +7,16 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { FavorBoardList, UserState } from '../../../lib/atom';
 import { AiFillEdit, AiOutlineDelete } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
-import { removeComment } from '../../../apis/apiClient';
-
-import axios, { AxiosRequestHeaders } from 'axios';
-import { getCookie } from '../../../lib/cookie/cookie';
-
+import {
+  delBoard,
+  delFavor,
+  removeComment,
+  upFavor,
+} from '../../../apis/apiClient';
 interface DataProps {
   board: IDuBoardList;
   comment: IDuComment[];
 }
-
-const headers: AxiosRequestHeaders = {
-  Authorization: `Bearer ${getCookie('accessToken')}`,
-};
-
-const upFavor = async (id: string, username: string) => {
-  return await axios.post(
-    `http://localhost:8080/api/content/${id}/favor/${username}`,
-    { headers }
-  );
-};
-const delFavor = async (id: string, username: string) => {
-  return await axios.delete(
-    `http://localhost:8080/api/content/${id}/favor/${username}`,
-    { headers }
-  );
-};
-const delBoard = async (id: string) => {
-  return await axios.delete(`http://localhost:8080/api/content/${id}`, {
-    headers,
-  });
-};
 
 const Header = ({ board, comment }: DataProps) => {
   const parseDate = new Date(board?.createdDate);
