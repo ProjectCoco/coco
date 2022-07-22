@@ -2,6 +2,10 @@ package com.codestates.coco.user.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.codestates.coco.common.CustomException;
+import com.codestates.coco.common.ErrorCode;
 import com.codestates.coco.user.config.RedisUtil;
 import com.codestates.coco.user.config.auth.PrincipalDetails;
 import com.codestates.coco.user.config.auth.PrincipalDetailsService;
@@ -71,7 +75,13 @@ public class JwtProvider {
     }
 
     public boolean validateToken(String jwtToken) {
-        JWT.require(Algorithm.HMAC512(secret)).build().verify(jwtToken);
+        try {
+            JWT.require(Algorithm.HMAC512(secret)).build().verify(jwtToken);
+        } catch (TokenExpiredException e) {
+            throw new CustomException(ErrorCode.EXPIRED_AUTH_TOKEN);
+        } catch (JWTDecodeException e) {
+            throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
+        }
         return true;
     }
 
