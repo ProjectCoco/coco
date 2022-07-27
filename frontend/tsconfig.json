@@ -10,9 +10,15 @@
     "strict": true,
     "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types"],
-    "baseUrl": "./src",
+    "baseUrl": "src",
     "paths": {
-      "@/*": ["./*"]
+      "@apis/*": ["apis/*"],
+      "@components/*": ["components/*"],
+      "@hooks/*": ["hooks/*"],
+      "@images/*": ["images/*"],
+      "@lib/*": ["lib/*"],
+      "@pages/*": ["pages/*"],
+      "@styles/*": ["styles/*"]
     }
   },
   "include": ["./src/**/*"],
