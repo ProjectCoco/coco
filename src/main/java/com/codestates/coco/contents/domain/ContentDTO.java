@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -34,6 +35,8 @@ public class ContentDTO {
 
     private Boolean favorState;
 
+    private List<String> tag;
+
     // 생성자 -> 빌더패턴으로 객체 생성 전략 변경
     public Content toEntity() {
         Content build = Content.builder()
@@ -43,6 +46,7 @@ public class ContentDTO {
                 .username(username)
                 .favorCount(favorCount)
                 .commentCount(commentCount)
+                .tag(tag)
                 .build();
         return build;
     }

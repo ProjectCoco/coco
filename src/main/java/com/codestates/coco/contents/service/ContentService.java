@@ -35,7 +35,7 @@ public class ContentService {
     }
     */
 
-    public ContentDTO getContents(String id, String username){
+    public ContentDTO getContents(String id, String username) {
         try {
             Content content = contentRepository.findById(id).orElse(null);
             return ContentDTO.builder()
@@ -46,8 +46,8 @@ public class ContentService {
                     .createdDate(content.getCreatedDate())
                     .favorCount(content.getFavorCount())
                     .commentCount(content.getCommentCount())
-//                    .favorState(userRepository.existsByContentFavor(username, new ObjectId(content.get_id())))
                     .favorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id())))
+                    .tag(content.getTag())
                     .build();
         } catch (Exception e) {
             throw new CustomException(ErrorCode.CANNOT_FOUND_CONTENT);
@@ -58,7 +58,7 @@ public class ContentService {
     //todo auth
     public boolean deleteContents(String id, String username) {
         Content content = contentRepository.findById(id).orElse(null);
-        if (content!=null) {
+        if (content != null) {
             if (!content.getUsername().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
             contentRepository.deleteById(id);
             return true;
@@ -72,7 +72,7 @@ public class ContentService {
 
         Content content = contentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
 
-        if(!content.getUsername().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
+        if (!content.getUsername().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
 
         content.update(contentDTO.getTitle(), contentDTO.getContent());
         contentRepository.save(content);
@@ -100,10 +100,11 @@ public class ContentService {
                 .createdDate(content.getCreatedDate())
                 .favorCount(content.getFavorCount())
                 .commentCount(content.getCommentCount())
+                .tag(content.getTag())
                 .build();
     }
 
-    public Boolean favor(String contentId, String username){
+    public Boolean favor(String contentId, String username) {
         Content content = contentRepository.findById(contentId).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
         User user = userRepository.findByUsername(username);
         user.addContentFavor(content);
@@ -114,7 +115,7 @@ public class ContentService {
         return true;
     }
 
-    public Boolean unfavor(String contentId, String username){
+    public Boolean unfavor(String contentId, String username) {
         Content content = contentRepository.findById(contentId).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
         User user = userRepository.findByUsername(username);
         user.removeContentFavor(content);
@@ -125,4 +126,14 @@ public class ContentService {
 
         return true;
     }
+
+
+    //todo taglogic
+    public List<ContentDTO> getContentsWithTag(String tag, int page, String username) {
+
+        List<ContentDTO> contents = contentRepository.findByTag(tag, PageRequest.of(page, 10));
+        contents.forEach(content -> content.setFavorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id()))));
+        return contents;
+    }
+
 }
