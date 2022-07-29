@@ -27,5 +27,5 @@ export interface BoardForm {
   content: string;
   createdDate?: string;
   favor?: number;
-  // tag?: string[];
+  tag?: string[];
 }

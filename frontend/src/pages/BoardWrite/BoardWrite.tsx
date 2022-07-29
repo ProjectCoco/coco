@@ -26,7 +26,7 @@ const BoardWrite = () => {
   const [newPost, setNewPost] = useState<BoardPost>({
     title: '',
     content: '',
-    username: user.username, // username or email
+    username: user.username,
     favor: 0,
     tag: [],
   });
@@ -45,16 +45,16 @@ const BoardWrite = () => {
   };
 
   const handleAddTags = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.currentTarget.value.trim().length < 1) {
-      alert('빈 태그는 입력하실 수 없습니다.');
-      return;
-    }
-
     if (newPost.tag.includes(event.currentTarget.value)) {
       alert('이미 입력된 태그입니다. 동일한 태그는 입력하실 수 없습니다.');
     }
 
     if (event.key === 'Enter') {
+      if (event.currentTarget.value.trim().length < 1) {
+        alert('빈 태그는 입력하실 수 없습니다.');
+        return;
+      }
+
       setNewPost({
         ...newPost,
         tag: [...newPost.tag, event.currentTarget.value],
