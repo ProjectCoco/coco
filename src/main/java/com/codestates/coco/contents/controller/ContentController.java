@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 
@@ -48,7 +49,7 @@ public class ContentController {
 
     @PostMapping("")
     public ResponseEntity<ContentDTO> createContent(@Valid @RequestBody ContentDTO contentDTO) {
-            return new ResponseEntity<>(contentService.createcontent(contentDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(contentService.createcontent(contentDTO), HttpStatus.CREATED);
     }
 
     @PostMapping("/{id}/favor/{username}")
@@ -60,4 +61,14 @@ public class ContentController {
     public ResponseEntity<Boolean> unFavorContent(@PathVariable String id, @PathVariable String username, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return new ResponseEntity<>(contentService.unfavor(id, principalDetails.getUser().getUsername()), HttpStatus.NO_CONTENT);
     }
+
+    //todo tagLogic
+    @GetMapping("/tag")
+    public ResponseEntity<List<ContentDTO>> getContentsWithTag(@RequestParam("tag") String tag,
+                                                               @RequestParam("page") int page,
+                                                               @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return new ResponseEntity<>(contentService.getContentsWithTag(tag, page, principalDetails.getUser().getUsername()), HttpStatus.OK);
+
+    }
+
 }

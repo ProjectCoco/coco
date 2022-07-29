@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,7 +21,7 @@ public class Content {
     private String _id;
     private String title;
     private String content; //contentBody
-    
+
     // Auditing 추가
     @CreatedDate
     private LocalDateTime createdDate;
@@ -31,14 +32,18 @@ public class Content {
     @Transient
     private Boolean favorState;
 
+    //todo tagLogic
+    private List<String> tag;
+
     @Builder
-    public Content(String _id, String title, String content, String username, Long favorCount, Long commentCount) {
+    public Content(String _id, String title, String content, String username, Long favorCount, Long commentCount, List<String> tag) {
         this._id = _id;
         this.title = title;
         this.content = content;
         this.username = username;
         this.favorCount = favorCount;
         this.commentCount = commentCount;
+        this.tag = tag;
     }
 
     /*@DocumentReference(lazy = true)
