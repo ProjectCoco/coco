@@ -19,7 +19,7 @@ export async function postCommentApi(commentForm: T.commentForm) {
       headers,
     });
   } catch (err) {
-    return err;
+    throw new Error('/comment Error');
   }
 }
 
@@ -45,7 +45,7 @@ export async function postSignupApi(SignupForm: T.SignupForm) {
     const response = await apiClient.post('/api/signup', SignupForm);
     return response.data;
   } catch (err) {
-    return err;
+    throw new Error('postSignupApi Error');
   }
 }
 
@@ -58,7 +58,7 @@ export async function postBoardWriteApi(WriteForm: T.WriteForm) {
     });
     return response.data;
   } catch (err) {
-    return err;
+    throw new Error('study-board-write Error');
   }
 }
 
@@ -69,7 +69,7 @@ export async function checkUsernameApi(username: string) {
     const response = await apiClient.get(`/api/username/${username}/check`);
     return response.data;
   } catch (err) {
-    return err;
+    throw new Error('username is not match');
   }
 }
 
@@ -80,7 +80,7 @@ export async function checkEmailApi(email: string) {
     const response = await apiClient.get(`/api/email/${email}/check`);
     return response.data;
   } catch (err) {
-    return err;
+    throw new Error('/username/${email}/check Error');
   }
 }
 
@@ -93,7 +93,7 @@ export async function getBoardPage(page: number) {
     });
     return response.data;
   } catch (err) {
-    return err;
+    throw new Error('content/${id} Error');
   }
 }
 
@@ -104,7 +104,7 @@ export async function getBoardDetail(id?: string) {
     const response = await apiClient.get(`/api/content/${id}`, { headers });
     return response.data;
   } catch (err) {
-    return err;
+    throw new Error('GET /api/content/${id} Error');
   }
 }
 
@@ -114,7 +114,7 @@ export async function putBoard(id: string | undefined, data: T.BoardForm) {
   try {
     return await apiClient.put(`/api/content/${id}`, data, { headers });
   } catch (err) {
-    return err;
+    throw new Error('PUT /content/${id} Error');
   }
 }
 
@@ -125,7 +125,7 @@ export async function getCommentAll(id: string) {
     const response = await apiClient.get(`/api/comment/${id}`, { headers });
     return response.data;
   } catch (err) {
-    return err;
+    throw new Error('GET /comment/${id} Error');
   }
 }
 
@@ -137,7 +137,7 @@ export async function putComment(id: string, commentForm: T.commentForm) {
       headers,
     });
   } catch (err) {
-    return err;
+    throw new Error('PUT /comment/${id} Error');
   }
 }
 
@@ -149,7 +149,7 @@ export async function removeComment(id: string) {
       headers,
     });
   } catch (err) {
-    return err;
+    throw new Error('DELETE /comment/${id} Error');
   }
 }
 
@@ -159,6 +159,8 @@ const cookieOptions = {
   path: '/',
 };
 
+// @HTTP: POST
+// @Route: /token
 export async function onRefreshToken() {
   try {
     const response = await apiClient.post('/api/token', null, {
@@ -166,7 +168,6 @@ export async function onRefreshToken() {
         'Refresh-token': `Bearer ${getCookie('RefreshToken')}`,
       },
     });
-    console.log('리프레쉬 토큰 응답', response);
     const AccessToken = response.headers.authorization.split(' ')[1];
     const RefreshToken = response.headers['Refresh-token'].split(' ')[1];
     setCookie('accessToken', AccessToken, cookieOptions);
@@ -179,9 +180,10 @@ export async function onRefreshToken() {
   }
 }
 
+// @HTTP: POST
+// @Route: /logout
 export async function onRemoveToken() {
   try {
-    console.log('로그아웃 !!');
     const response = await apiClient.post('/api/logout', null, {
       headers: {
         'Refresh-token': `Bearer ${getCookie('RefreshToken')}`,
@@ -191,7 +193,7 @@ export async function onRemoveToken() {
     console.log('LogOut', response);
     return response;
   } catch (err) {
-    throw new Error('로그아웃');
+    throw new Error('LogOut Error');
   }
 }
 

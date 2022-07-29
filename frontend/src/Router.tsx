@@ -1,8 +1,8 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Main from './pages/Main';
 import Login from './pages/Login';
 import NaviHeader from './components/NaviHeader';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Signup from './pages/Signup/Signup';
 import BoardWrite from './pages/BoardWrite';
 import StudyBoardDetail from './pages/StudyBoardDetail';
@@ -15,6 +15,11 @@ import BoardEdit from './pages/BoardEdit';
 import NotFound from './pages/NotFound/NotFound';
 
 const Router = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   return (
     <>
       <NaviHeader />
