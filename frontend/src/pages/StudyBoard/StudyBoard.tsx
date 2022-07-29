@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './style';
-import ContentLayout from '../../components/ContentLayout';
-import BoardContentBox from '../../components/BoardContentBox';
+import ContentLayout from '@components/ContentLayout';
+import BoardContentBox from '@components/BoardContentBox';
 import { useInfiniteQuery } from 'react-query';
-import { IDuBoardList } from '../../lib/types';
-import Loading from '../../components/Loading';
+import { IDuBoardList } from '@lib/types';
+import Loading from '@components/Loading';
 import NotFound from '../NotFound/NotFound';
 import { useInView } from 'react-intersection-observer';
-import { getBoardPage } from '../../apis/apiClient';
+import { getBoardPage } from '@apis/apiClient';
 import { useLocation } from 'react-router-dom';
 
 const StudyBoard = () => {
@@ -23,11 +23,11 @@ const StudyBoard = () => {
 
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage().then(() => SetNum(num + 1));
-  }, [inView]);
+  }, [fetchNextPage, hasNextPage, inView, num]);
 
   useEffect(() => {
     refetch();
-  }, [pathname.key]);
+  }, [pathname.key, refetch]);
 
   if (isLoading) return <Loading />;
   if (isError) return <NotFound />;

@@ -13,6 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { UserState } from '../../lib/atom';
 import Loading from '../../components/Loading';
 import NotFound from '../NotFound/NotFound';
+import { TbEraser } from 'react-icons/tb';
 
 // type BoardPost = {
 //   title: string;
@@ -28,8 +29,8 @@ const BoardEdit = () => {
   const [post, setPost] = useState<T.BoardForm>({
     title: '',
     content: '',
-    username: '', // username or email
-    // tag: [],
+    username: user.username,
+    tag: [],
   });
   const editorRef = useRef<Editor>(null);
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const BoardEdit = () => {
         title: data.title,
         content: data.content,
         username: data.username,
-        // tag: data.tag,
+        tag: data.tag,
       });
       editorRef.current?.getInstance().setHTML(data.content);
     })();
@@ -57,6 +58,30 @@ const BoardEdit = () => {
       ...post,
       content: editorRef.current?.getInstance().getHTML() || '',
     });
+  };
+
+  const handleAddTags = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (post.tag?.includes(event.currentTarget.value)) {
+      alert('이미 입력된 태그입니다. 동일한 태그는 입력하실 수 없습니다.');
+    }
+
+    if (event.key === 'Enter') {
+      if (event.currentTarget.value.trim().length < 1) {
+        alert('빈 태그는 입력하실 수 없습니다.');
+        return;
+      }
+
+      setPost({
+        ...post,
+        tag: post.tag ? [...post.tag, event.currentTarget.value] : [],
+      });
+      event.currentTarget.value = '';
+    }
+  };
+
+  const handleRemoveTags = (tagIdx: number) => {
+    post.tag?.splice(tagIdx, 1);
+    setPost({ ...post, tag: post.tag ? [...post.tag] : [] });
   };
 
   const isValid = (post: T.BoardForm): boolean => {
@@ -106,6 +131,22 @@ const BoardEdit = () => {
                 autofocus={false}
                 onChange={handleContentChange}
               />
+              <S.TagContainer>
+                <ul>
+                  {post.tag?.map((tag, idx) => (
+                    <li key={idx}>
+                      <span># {tag}</span>
+                      <button onClick={() => handleRemoveTags(idx)}>
+                        <TbEraser />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <input
+                  placeholder="태그를 입력하시려면 ENTER키를 눌러주세요."
+                  onKeyUp={handleAddTags}
+                />
+              </S.TagContainer>
               <S.WriteButton onClick={handleSubmit}>수정 완료</S.WriteButton>
             </S.EditorContainer>
           </S.BoardWirteContainer>
