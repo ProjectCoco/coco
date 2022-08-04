@@ -21,7 +21,6 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final UserRepository userRepository;
 
-
     public List<ContentDTO> getTitleContents(int page, String username) {
         List<ContentDTO> contents = contentRepository.findBy(PageRequest.of(page, 10));
 //        contents.forEach(content -> content.setFavorState(userRepository.existsByContentFavor(username, new ObjectId(content.get_id()))));
@@ -35,9 +34,22 @@ public class ContentService {
     }
     */
 
-    public ContentDTO getContents(String id, String username) {
+    public ContentDTO getContents(String id, String username, String userIp){
+
+        //todo  ip 암호화
+        String userIpSecu = userIp;
+
         try {
             Content content = contentRepository.findById(id).orElse(null);
+
+            if(!content.getUserIpList().contains(userIpSecu)) {
+                content.addViewCount();
+                content.addUserIpList(userIpSecu);
+                contentRepository.save(content);
+            }
+            System.out.println(userIpSecu);
+            System.out.println(content.getUserIpList());
+
             return ContentDTO.builder()
                     ._id(content.get_id())
                     .title(content.getTitle())
@@ -48,6 +60,7 @@ public class ContentService {
                     .commentCount(content.getCommentCount())
                     .favorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id())))
                     .tag(content.getTag())
+                    .viewCount(content.getViewCount())
                     .build();
         } catch (Exception e) {
             throw new CustomException(ErrorCode.CANNOT_FOUND_CONTENT);
@@ -91,6 +104,7 @@ public class ContentService {
     public ContentDTO createcontent(ContentDTO contentDTO) {
         contentDTO.setFavorCount(0L);
         contentDTO.setCommentCount(0L);
+        contentDTO.setViewCount(0L);
         Content content = contentRepository.save(contentDTO.toEntity());
         return ContentDTO.builder()
                 ._id(content.get_id())
