@@ -11,6 +11,7 @@ export const CommentProfile = styled.div`
   width: 100%;
   & > div:first-child {
     width: 10%;
+    position: relative;
   }
   & > div:nth-child(2) {
     width: 80%;
@@ -24,7 +25,6 @@ export const CommentProfile = styled.div`
     color: #555;
   }
   & > div:last-child {
-    padding-left: 1rem;
   }
 `;
 export const Blank = styled.div`

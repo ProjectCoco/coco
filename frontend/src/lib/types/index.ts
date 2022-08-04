@@ -1,10 +1,12 @@
 export interface IDuBoardList {
   _id: string;
-  username: string;
   title: string;
   content: string;
+  username: string;
   createdDate: string;
-  favor: number;
+  favorCount: number | null;
+  commentCount: number | null;
+  favorState: boolean;
 }
 
 export interface IDuComment {
