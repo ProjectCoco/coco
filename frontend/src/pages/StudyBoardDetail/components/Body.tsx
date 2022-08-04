@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import * as S from '../style';
-import { IDuBoardList, IDuComment } from '../../../lib/types';
+import { IDuBoardList, IDuComment } from '@lib/types';
 import { AiOutlineComment } from 'react-icons/ai';
-import { postCommentApi } from '../../../apis/apiClient';
+import { postCommentApi } from '@apis/apiClient';
 import { useRecoilValue } from 'recoil';
-import { UserState } from '../../../lib/atom';
+import { UserState } from '@lib/atom';
 import { Viewer } from '@toast-ui/react-editor';
-import Comment from '../../../components/Comment';
+import Comment from '@components/Comment';
 
-interface DataProps {
+interface Prop {
   board: IDuBoardList;
   comment: IDuComment[];
   refetch: () => void;
 }
 
-const Body = ({ board, comment, refetch }: DataProps) => {
+export default function Body({ board, comment, refetch }: Prop) {
   const [string, setString] = useState<string>('');
   const user = useRecoilValue(UserState);
 
@@ -61,6 +61,4 @@ const Body = ({ board, comment, refetch }: DataProps) => {
       <S.Blank />
     </S.Body>
   );
-};
-
-export default Body;
+}

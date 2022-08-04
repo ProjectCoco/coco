@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { IDuComment, UserStateType } from '../../lib/types';
-import commentImg from '../../images/userProfile.jpg';
-import { AiFillEdit, AiOutlineDelete } from 'react-icons/ai';
-import { putComment, removeComment } from '../../apis/apiClient';
+import React, { useCallback, useState } from 'react';
 import * as S from './style';
+import { imgs } from '@images/index';
+import { IDuComment, UserStateType } from '@lib/types';
+import { AiFillEdit, AiOutlineDelete } from 'react-icons/ai';
+import { putComment, removeComment } from '@apis/apiClient';
 
 interface Prop {
   comment: IDuComment;
@@ -25,7 +25,7 @@ export default function Comment({ comment, user, refetch }: Prop) {
     <>
       <S.CommentProfile>
         <div>
-          <S.CommentImg src={commentImg} />
+          <S.CommentImg src={imgs.userProfile} />
         </div>
         <div>
           <h1>{comment.username}</h1>
@@ -42,9 +42,7 @@ export default function Comment({ comment, user, refetch }: Prop) {
               onClick={() => removeComment(comment._id).then(() => refetch())}
             />
           </S.IconAlign>
-        ) : (
-          <></>
-        )}
+        ) : null}
       </S.CommentProfile>
       {edit ? (
         <S.EditComment>
