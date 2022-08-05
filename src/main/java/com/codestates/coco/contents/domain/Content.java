@@ -35,8 +35,12 @@ public class Content {
     //todo tagLogic
     private List<String> tag;
 
+    //todo viewCount
+    private Long viewCount;
+    private List<String> userIpList;
+
     @Builder
-    public Content(String _id, String title, String content, String username, Long favorCount, Long commentCount, List<String> tag) {
+    public Content(String _id, String title, String content, String username, Long favorCount, Long commentCount, List<String> tag, Long viewCount, List<String> userIpList) {
         this._id = _id;
         this.title = title;
         this.content = content;
@@ -44,6 +48,8 @@ public class Content {
         this.favorCount = favorCount;
         this.commentCount = commentCount;
         this.tag = tag;
+        this.viewCount = viewCount;
+        this.userIpList = userIpList;
     }
 
     /*@DocumentReference(lazy = true)
@@ -73,4 +79,11 @@ public class Content {
         this.commentCount--;
     }
 
+    public void addViewCount() {
+        this.viewCount++;
+    }
+
+    public void addUserIpList(String userIp) {
+        this.userIpList.add(userIp);
+    }
 }

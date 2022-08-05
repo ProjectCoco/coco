@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 
@@ -27,8 +27,32 @@ public class ContentController {
 
     //todo e
     @GetMapping("/{id}")
-    public ResponseEntity<ContentDTO> detailContents(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return new ResponseEntity<>(contentService.getContents(id, principalDetails.getUser().getUsername()), HttpStatus.OK);
+    public ResponseEntity<ContentDTO> detailContents(
+            @PathVariable("id") String id,
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            HttpServletRequest request) {
+
+        String ip = request.getHeader("X-Forwarded-For");
+//        System.out.println("X-FORWARDED-FOR : " + ip);
+//
+//        if (ip == null) {
+//            ip = request.getHeader("Proxy-Client-IP");
+//        }
+//        if (ip == null) {
+//            ip = request.getHeader("WL-Proxy-Client-IP");
+//        }
+//        if (ip == null) {
+//            ip = request.getHeader("HTTP_CLIENT_IP");
+//        }
+//        if (ip == null) {
+//            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+//        }
+        if (ip == null) {
+            ip = request.getRemoteAddr();
+        }
+        System.out.println("Result : IP Address : "+ip);
+
+        return new ResponseEntity<>(contentService.getContents(id, principalDetails.getUser().getUsername(), ip), HttpStatus.OK);
     }
 
 
