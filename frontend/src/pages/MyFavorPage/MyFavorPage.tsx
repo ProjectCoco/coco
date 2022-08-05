@@ -11,6 +11,7 @@ export default function MyfavorPage() {
 
   useEffect(() => {
     if (inView && hasNext) nextPage().then(() => setPage(page + 1));
+    const a = 's';
   }, [inView]);
 
   if (loading) return <Loading />;
