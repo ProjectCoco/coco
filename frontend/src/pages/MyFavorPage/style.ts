@@ -7,6 +7,10 @@ export const Body = styled.div`
   width: 90%;
   margin: auto;
   margin-top: 3rem;
+  & > button {
+    border: none;
+    background-color: inherit;
+  }
 `;
 export const Content = styled.div`
   margin-top: 1rem;
