@@ -5,12 +5,30 @@ import React from 'react';
 import { UserState } from '../../lib/atom';
 import { useRecoilValue } from 'recoil';
 import DropDwonMenu from '../DropDownMenu';
+import { useEffect } from 'react';
+import useGetWheter from '../../hooks/useGetWheter';
+import axios from 'axios';
+import styled from 'styled-components';
 
 const NaviHeader = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const user = useRecoilValue(UserState); // 유저 정보를 가져와서 유저 정보가 있으면 Header 상태를 바꿈
+  const { weather, iconUrl } = useGetWheter();
+  console.log('weather', weather);
+  console.log('iconUrl', iconUrl);
 
+  useEffect(() => {
+    // const API_KEY = process.env.REACT_APP_WHETHER_API_KEY;
+    // (async () => {
+    //   if (lat !== 0 && lng !== 0) {
+    //     const res = await axios.get(
+    //       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}`
+    //     );
+    //     console.log(res);
+    //   }
+    // })();
+  }, []);
   return (
     <>
       <S.Container>
@@ -20,6 +38,7 @@ const NaviHeader = () => {
         </S.Logo>
         <div>
           <S.MenuList>
+            {iconUrl ? <Img src={iconUrl} /> : null}
             <S.MenuListContent
               isPathMatch={pathname === '/free-board' ? true : false}
             >
@@ -50,3 +69,11 @@ const NaviHeader = () => {
 };
 
 export default NaviHeader;
+
+const Img = styled.img`
+  position: absolute;
+  top: -10%;
+  right: 160px;
+  width: 80px;
+  height: 80px;
+`;
