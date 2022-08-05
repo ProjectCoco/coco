@@ -35,3 +35,9 @@ export const FavorBoardList = atom<IDuBoardList[]>({
   default: [],
   effects_UNSTABLE: [persistAtom],
 });
+
+export const LoginTimer = atom({
+  key: 'loginTimer',
+  default: 1500,
+  effects_UNSTABLE: [persistAtom],
+});

@@ -1,43 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import * as S from './style';
-import ContentLayout from '@components/ContentLayout';
-import BoardContentBox from '@components/BoardContentBox';
-import { useInfiniteQuery } from 'react-query';
-import { IDuBoardList } from '@lib/types';
-import Loading from '@components/Loading';
-import NotFound from '../NotFound/NotFound';
+import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { getBoardPage } from '@apis/apiClient';
+import * as S from './style';
+import { IDuBoardList } from '@lib/types';
 import { useLocation } from 'react-router-dom';
+import { useInfiQry } from '@hooks/useInfiQry';
+import { ContentLayout, BoardContentBox, Loading } from '@components/index';
 
-const StudyBoard = () => {
+export default function StudyBoard() {
   const pathname = useLocation();
-  const [num, SetNum] = useState(1);
-  const { ref, inView } = useInView({ threshold: 0.3 });
-  const { isLoading, isError, data, fetchNextPage, hasNextPage, refetch } =
-    useInfiniteQuery(
-      ['page', pathname],
-      async ({ pageParam = 0 }) => await getBoardPage(pageParam),
-      { getNextPageParam: () => num }
-    );
+  const { ref, inView } = useInView({ threshold: 0.1 });
+  const { getBoard, nextPage, hasNext, setPage, page, refetch, loading } =
+    useInfiQry();
 
   useEffect(() => {
-    if (inView && hasNextPage) fetchNextPage().then(() => SetNum(num + 1));
-  }, [fetchNextPage, hasNextPage, inView, num]);
+    if (inView && hasNext) nextPage().then(() => setPage(page + 1));
+  }, [inView]);
 
   useEffect(() => {
     refetch();
-  }, [pathname.key, refetch]);
+  }, [pathname.key]);
 
-  if (isLoading) return <Loading />;
-  if (isError) return <NotFound />;
+  if (loading) return <Loading />;
   return (
     <>
       <ContentLayout>
         <S.Body>
           <S.Content>
             <S.BoardListContainer>
-              {data?.pages.map((group, index) => (
+              {getBoard?.pages.map((group, index) => (
                 <React.Fragment key={index}>
                   {group.map((data: IDuBoardList) => (
                     <BoardContentBox key={data._id} board={data} />
@@ -47,11 +37,9 @@ const StudyBoard = () => {
             </S.BoardListContainer>
           </S.Content>
           <S.Blank />
-          <button ref={ref} onClick={() => fetchNextPage()} />
+          <button ref={ref} />
         </S.Body>
       </ContentLayout>
     </>
   );
-};
-
-export default StudyBoard;
+}

@@ -7,20 +7,13 @@ import { AiOutlineComment } from 'react-icons/ai';
 import profileImg2 from '../../images/download.jpg';
 import { useNavigate } from 'react-router-dom';
 import { Viewer } from '@toast-ui/react-editor';
+import { IDuBoardList } from '@lib/types';
 
-interface IBoard {
-  board: {
-    _id: string;
-    username: string;
-    title: string;
-    content: string;
-    createdDate: string;
-    favor: number | null;
-  };
-  comment?: number;
+interface Prop {
+  board: IDuBoardList;
 }
 
-const BoardContentBox = ({ board, comment }: IBoard) => {
+const BoardContentBox = ({ board }: Prop) => {
   const navigator = useNavigate();
   const parseDate = new Date(board.createdDate);
 
@@ -53,11 +46,11 @@ const BoardContentBox = ({ board, comment }: IBoard) => {
           <div style={{ display: 'flex' }}>
             <S.FavoritBox>
               <MdFavorite />
-              <h4>{board.favor ?? 0}</h4>
+              <h4>{board.favorCount ?? 0}</h4>
             </S.FavoritBox>
             <S.FavoritBox style={{ marginLeft: '2rem' }}>
               <AiOutlineComment />
-              <h4>{comment ?? 0}</h4>
+              <h4>{board.commentCount ?? 0}</h4>
             </S.FavoritBox>
           </div>
         </S.UserLogo>

@@ -1,34 +1,37 @@
-import BoardContentBox from '../../components/BoardContentBox';
-import ContentLayout from '../../components/ContentLayout';
-import { FavorBoardList } from '../../lib/atom';
-import React from 'react';
-import { useRecoilState } from 'recoil';
+import React, { useEffect } from 'react';
 import * as S from './style';
+import { useInView } from 'react-intersection-observer';
+import { useInfiQry } from '@hooks/useInfiQry';
+import { IDuBoardList } from '@lib/types';
+import { Loading, BoardContentBox, ContentLayout } from '@components/index';
 
 export default function MyfavorPage() {
-  const [list, setList] = useRecoilState(FavorBoardList);
+  const { getBoard, nextPage, hasNext, setPage, page, loading } = useInfiQry();
+  const { ref, inView } = useInView({ threshold: 0.1 });
 
+  useEffect(() => {
+    if (inView && hasNext) nextPage().then(() => setPage(page + 1));
+    const a = 's';
+  }, [inView]);
+
+  if (loading) return <Loading />;
   return (
     <ContentLayout>
       <S.Body>
         <S.Content>
           <S.BoardListContainer>
-            {list === []
-              ? '좋아요를 눌러주세요'
-              : list.map((item) => (
-                  <div key={item._id} style={{ position: 'relative' }}>
-                    <BoardContentBox board={item} />
-                    <S.RemoveBtn
-                      onClick={() =>
-                        setList(list.filter((x) => item._id !== x._id))
-                      }
-                    >
-                      X
-                    </S.RemoveBtn>
-                  </div>
-                ))}
+            {getBoard?.pages.map((group, index) => (
+              <React.Fragment key={index}>
+                {group.map((data: IDuBoardList) =>
+                  data.favorState ? (
+                    <BoardContentBox key={data._id} board={data} />
+                  ) : null
+                )}
+              </React.Fragment>
+            ))}
           </S.BoardListContainer>
         </S.Content>
+        <button ref={ref} />
       </S.Body>
     </ContentLayout>
   );

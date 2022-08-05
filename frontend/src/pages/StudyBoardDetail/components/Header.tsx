@@ -1,44 +1,32 @@
-import React, { useCallback, useState } from 'react';
-import * as S from '../style';
-import { IDuBoardList, IDuComment } from '../../../lib/types/index';
-import { MdOutlineFavoriteBorder, MdFavorite } from 'react-icons/md';
-import profileImg2 from '../../../images/download.jpg';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { FavorBoardList, UserState } from '../../../lib/atom';
-import { AiFillEdit, AiOutlineDelete } from 'react-icons/ai';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  delBoard,
-  delFavor,
-  removeComment,
-  upFavor,
-} from '../../../apis/apiClient';
-interface DataProps {
+import * as S from '../style';
+import { MdOutlineFavoriteBorder, MdFavorite } from 'react-icons/md';
+import { useRecoilValue } from 'recoil';
+import { UserState } from '@lib/atom';
+import { AiFillEdit, AiOutlineDelete } from 'react-icons/ai';
+import { IDuBoardList, IDuComment } from '@lib/types/index';
+import { delBoard, delFavor, removeComment, upFavor } from '@apis/apiClient';
+import { imgs } from '@images/index';
+interface Props {
   board: IDuBoardList;
   comment: IDuComment[];
+  refetch: () => void;
 }
 
-const Header = ({ board, comment }: DataProps) => {
+export default function Header({ board, comment, refetch }: Props) {
   const parseDate = new Date(board?.createdDate);
-  const [like, setLike] = useState(false);
   const user = useRecoilValue(UserState);
-  const [list, setList] = useRecoilState(FavorBoardList);
   const navigate = useNavigate();
 
   const handleFavor = useCallback(async () => {
     if (user.email !== null) {
-      if (!like)
-        await upFavor(board._id, user.username)
-          .then(() => setLike(true))
-          .then(() => setList([...list, board]));
-      if (like)
-        await delFavor(board._id, user.username)
-          .then(() => setLike(false))
-          .then(() =>
-            setList(() => list.filter((item) => item._id !== board._id))
-          );
+      if (!board.favorState)
+        await upFavor(board._id, user.username).then(() => refetch());
+      if (board.favorState)
+        await delFavor(board._id, user.username).then(() => refetch());
     }
-  }, [like]);
+  }, [board._id, board.favorState, refetch, user.email, user.username]);
 
   const removeFunc = async () => {
     return await delBoard(board._id)
@@ -50,7 +38,7 @@ const Header = ({ board, comment }: DataProps) => {
     <S.Header>
       <S.UserLogo>
         <S.UserBox>
-          <S.UserImg src={profileImg2} alt="noImg" />
+          <S.UserImg src={imgs.userProfile2} alt="noImg" />
           <div>
             <S.Author>{board.username}</S.Author>
             <S.Date>
@@ -72,17 +60,15 @@ const Header = ({ board, comment }: DataProps) => {
           ) : null}
         </S.UserBox>
         <S.FavoritBox>
-          {like ? (
+          {board.favorState ? (
             <MdFavorite onClick={handleFavor} />
           ) : (
             <MdOutlineFavoriteBorder onClick={handleFavor} />
           )}
-          <h4>{board.favor ?? '0'}</h4>
+          <h4>{board.favorCount ?? '0'}</h4>
         </S.FavoritBox>
       </S.UserLogo>
       <S.Subject>{board.title}</S.Subject>
     </S.Header>
   );
-};
-
-export default Header;
+}
