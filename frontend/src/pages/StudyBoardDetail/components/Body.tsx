@@ -34,6 +34,11 @@ export default function Body({ board, comment, refetch }: Prop) {
         <Viewer initialValue={board?.content} />
       </S.Content>
       <S.CommentBox id="CommentBox">
+        <S.Tag>
+          {board.tag.map((el: string, idx: number) => {
+            return <span key={idx}>#{el}</span>;
+          })}
+        </S.Tag>
         <S.CommentLength>
           <AiOutlineComment />
           <p>{comment.length ?? 0}</p>
