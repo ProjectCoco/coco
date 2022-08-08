@@ -83,6 +83,22 @@ export const Content = styled.div`
   font-size: 2.5rem;
   color: #444;
 `;
+export const Tag = styled.p`
+  font-size: 1.2rem;
+  color: #444;
+  display: flex;
+  margin-bottom: 5rem;
+  > span {
+    margin-right: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.3rem;
+    background-color: #ececec;
+    &:hover {
+      opacity: 50%;
+      cursor: pointer;
+    }
+  }
+`;
 export const CommentBox = styled.div`
   margin: 10rem auto;
 `;
