@@ -1,6 +1,7 @@
 package com.codestates.coco.contents.service;
 
 
+import com.codestates.coco.comment.repository.CommentRepository;
 import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
 import com.codestates.coco.contents.domain.Content;
@@ -19,12 +20,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContentService {
     private final ContentRepository contentRepository;
+    private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
+    //todo
     public List<ContentDTO> getTitleContents(int page, String username) {
         List<ContentDTO> contents = contentRepository.findBy(PageRequest.of(page, 10));
 //        contents.forEach(content -> content.setFavorState(userRepository.existsByContentFavor(username, new ObjectId(content.get_id()))));
-        contents.forEach(content -> content.setFavorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id()))));
+        contents.forEach(content -> {
+            content.setFavorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id())));
+            content.setCommentState(commentRepository.existsByUsernameAndContentId(username, new ObjectId(content.get_id())));
+        });
         return contents;
     }
 
@@ -37,7 +43,12 @@ public class ContentService {
     public ContentDTO getContents(String id, String username, String userIp){
 
         //todo  ip 암호화
-        String userIpSecu = userIp;
+        String userIpSecu = null;
+        try {
+            userIpSecu = Encryption.SHA256(userIp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         try {
             Content content = contentRepository.findById(id).orElse(null);
@@ -59,6 +70,7 @@ public class ContentService {
                     .favorCount(content.getFavorCount())
                     .commentCount(content.getCommentCount())
                     .favorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id())))
+                    .commentState(commentRepository.existsByUsernameAndContentId(username, new ObjectId(content.get_id())))
                     .tag(content.getTag())
                     .viewCount(content.getViewCount())
                     .build();
@@ -87,7 +99,7 @@ public class ContentService {
 
         if (!content.getUsername().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
 
-        content.update(contentDTO.getTitle(), contentDTO.getContent());
+        content.update(contentDTO.getTitle(), contentDTO.getContent(), contentDTO.getTag());
         contentRepository.save(content);
 
         return true;

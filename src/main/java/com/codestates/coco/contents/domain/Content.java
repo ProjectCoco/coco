@@ -32,6 +32,9 @@ public class Content {
     @Transient
     private Boolean favorState;
 
+    @Transient
+    private Boolean commentState;
+
     //todo tagLogic
     private List<String> tag;
 
@@ -58,9 +61,10 @@ public class Content {
     /*public void addUserFavor(User user) { this.userFavor.add(user); }
     public void removeUserFavor(User user) { this.userFavor.remove(user); }*/
 
-    public void update(String title, String content) {
+    public void update(String title, String content, List<String> tag) {
         this.title = title;
         this.content = content;
+        this.tag = tag;
     }
 
     public void addCount() {

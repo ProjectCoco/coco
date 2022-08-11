@@ -36,6 +36,8 @@ public class ContentDTO {
 
     private Boolean favorState;
 
+    private Boolean commentState;
+
     private List<String> tag;
 
     private Long viewCount;
