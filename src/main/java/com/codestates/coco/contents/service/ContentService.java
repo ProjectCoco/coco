@@ -29,7 +29,7 @@ public class ContentService {
 //        contents.forEach(content -> content.setFavorState(userRepository.existsByContentFavor(username, new ObjectId(content.get_id()))));
         contents.forEach(content -> {
             content.setFavorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id())));
-            content.setCommentState(commentRepository.existsByUsernameAndContentId(username, new ObjectId(content.get_id())));
+            content.setCommentState(commentRepository.existsByUsernameAndContentId(username, content.get_id()));
         });
         return contents;
     }
@@ -70,7 +70,7 @@ public class ContentService {
                     .favorCount(content.getFavorCount())
                     .commentCount(content.getCommentCount())
                     .favorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id())))
-                    .commentState(commentRepository.existsByUsernameAndContentId(username, new ObjectId(content.get_id())))
+                    .commentState(commentRepository.existsByUsernameAndContentId(username, content.get_id()))
                     .tag(content.getTag())
                     .viewCount(content.getViewCount())
                     .build();
