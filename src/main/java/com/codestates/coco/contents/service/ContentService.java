@@ -12,6 +12,7 @@ import com.codestates.coco.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public class ContentService {
     private final UserRepository userRepository;
 
     //todo
-    public List<ContentDTO> getTitleContents(int page, String username) {
-        List<ContentDTO> contents = contentRepository.findBy(PageRequest.of(page, 10));
+    public Slice<ContentDTO> getTitleContents(int page, String username) {
+        Slice<ContentDTO> contents = contentRepository.findBy(PageRequest.of(page, 10));
 //        contents.forEach(content -> content.setFavorState(userRepository.existsByContentFavor(username, new ObjectId(content.get_id()))));
         contents.forEach(content -> {
             content.setFavorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id())));

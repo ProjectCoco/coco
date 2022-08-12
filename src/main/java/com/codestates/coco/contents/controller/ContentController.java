@@ -4,6 +4,8 @@ import com.codestates.coco.contents.domain.ContentDTO;
 import com.codestates.coco.contents.service.ContentService;
 import com.codestates.coco.user.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,7 +23,7 @@ public class ContentController {
     private final ContentService contentService;
 
     @GetMapping("")
-    public ResponseEntity<List<ContentDTO>> getTitle(@RequestParam("page") int page, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<Slice<ContentDTO>> getTitle(@RequestParam("page") int page, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return new ResponseEntity<>(contentService.getTitleContents(page, principalDetails.getUser().getUsername()), HttpStatus.OK);
     }
 
