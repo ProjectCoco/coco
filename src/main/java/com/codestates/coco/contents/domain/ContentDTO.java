@@ -36,9 +36,13 @@ public class ContentDTO {
 
     private Boolean favorState;
 
+    private Boolean commentState;
+
     private List<String> tag;
 
     private Long viewCount;
+
+    private String profileImg;
 
     // 생성자 -> 빌더패턴으로 객체 생성 전략 변경
     public Content toEntity() {

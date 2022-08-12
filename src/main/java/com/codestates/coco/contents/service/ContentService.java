@@ -1,6 +1,7 @@
 package com.codestates.coco.contents.service;
 
 
+import com.codestates.coco.comment.repository.CommentRepository;
 import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
 import com.codestates.coco.contents.domain.Content;
@@ -11,20 +12,28 @@ import com.codestates.coco.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ContentService {
     private final ContentRepository contentRepository;
+    private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
-    public List<ContentDTO> getTitleContents(int page, String username) {
-        List<ContentDTO> contents = contentRepository.findBy(PageRequest.of(page, 10));
+    //todo
+    public Slice<ContentDTO> getTitleContents(int page, String username) {
+        Slice<ContentDTO> contents = contentRepository.findBy(PageRequest.of(page, 10));
 //        contents.forEach(content -> content.setFavorState(userRepository.existsByContentFavor(username, new ObjectId(content.get_id()))));
-        contents.forEach(content -> content.setFavorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id()))));
+        contents.forEach(content -> {
+            content.setFavorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id())));
+            content.setCommentState(commentRepository.existsByUsernameAndContentId(username, content.get_id()));
+            content.setProfileImg(userRepository.findByUsername(content.getUsername()).getProfileImg()); // content에 등록된 username에 대하여 profileImg 획득
+        });
         return contents;
     }
 
@@ -36,8 +45,14 @@ public class ContentService {
 
     public ContentDTO getContents(String id, String username, String userIp){
 
+        LocalDate now = LocalDate.now();
         //todo  ip 암호화
-        String userIpSecu = userIp;
+        String userIpSecu = null;
+        try {
+            userIpSecu = Encryption.SHA256(userIp+now);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         try {
             Content content = contentRepository.findById(id).orElse(null);
@@ -59,8 +74,10 @@ public class ContentService {
                     .favorCount(content.getFavorCount())
                     .commentCount(content.getCommentCount())
                     .favorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id())))
+                    .commentState(commentRepository.existsByUsernameAndContentId(username, content.get_id()))
                     .tag(content.getTag())
                     .viewCount(content.getViewCount())
+                    .profileImg(userRepository.findByUsername(content.getUsername()).getProfileImg()) // content에 등록된 username에 대하여 profileImg 획득
                     .build();
         } catch (Exception e) {
             throw new CustomException(ErrorCode.CANNOT_FOUND_CONTENT);
@@ -87,7 +104,7 @@ public class ContentService {
 
         if (!content.getUsername().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
 
-        content.update(contentDTO.getTitle(), contentDTO.getContent());
+        content.update(contentDTO.getTitle(), contentDTO.getContent(), contentDTO.getTag());
         contentRepository.save(content);
 
         return true;
