@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -44,10 +45,11 @@ public class ContentService {
 
     public ContentDTO getContents(String id, String username, String userIp){
 
+        LocalDate now = LocalDate.now();
         //todo  ip 암호화
         String userIpSecu = null;
         try {
-            userIpSecu = Encryption.SHA256(userIp);
+            userIpSecu = Encryption.SHA256(userIp+now);
         } catch (Exception e) {
             e.printStackTrace();
         }
