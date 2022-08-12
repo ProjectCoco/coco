@@ -28,6 +28,8 @@ export const LogoImg = styled.img`
 `;
 export const MenuList = styled.ul`
   display: flex;
+  align-items: center;
+  position: relative;
 `;
 export const MenuListContent = styled.li<{ isPathMatch: boolean }>`
   margin-right: 1rem;
@@ -35,4 +37,18 @@ export const MenuListContent = styled.li<{ isPathMatch: boolean }>`
   cursor: pointer;
   caret-color: rgba(0, 0, 0, 0);
   color: ${(prop) => (prop.isPathMatch ? '#56b6e7' : 'black')};
+`;
+
+export const WeatherIconBox = styled.li`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 5rem;
+  height: 5rem;
+
+  img {
+    width: 70%;
+    height: 70%;
+  }
 `;
