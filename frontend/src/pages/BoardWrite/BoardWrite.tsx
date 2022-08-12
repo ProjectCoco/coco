@@ -10,23 +10,25 @@ import { postBoardWriteApi } from '../../apis/apiClient';
 import { useRecoilValue } from 'recoil';
 import { UserState } from '../../lib/atom';
 import * as S from './style';
+import * as T from '../../apis/types';
 import { TbEraser } from 'react-icons/tb';
 
-type BoardPost = {
-  title: string;
-  content: string;
-  username: string;
-  favor: number;
-  tag: string[];
-};
+// type BoardPost = {
+//   title: string;
+//   content: string;
+//   username: string;
+//   favor: number;
+//   tag: string[];
+// };
 
 const BoardWrite = () => {
   const user = useRecoilValue(UserState);
-
-  const [newPost, setNewPost] = useState<BoardPost>({
+  console.log(user);
+  const [newPost, setNewPost] = useState<T.BoardForm>({
     title: '',
     content: '',
     username: user.username,
+    profileImg: user.profileImg,
     favor: 0,
     tag: [],
   });
@@ -45,7 +47,7 @@ const BoardWrite = () => {
   };
 
   const handleAddTags = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (newPost.tag.includes(event.currentTarget.value)) {
+    if (newPost.tag?.includes(event.currentTarget.value)) {
       alert('이미 입력된 태그입니다. 동일한 태그는 입력하실 수 없습니다.');
     }
 
@@ -57,23 +59,20 @@ const BoardWrite = () => {
 
       setNewPost({
         ...newPost,
-        tag: [...newPost.tag, event.currentTarget.value],
+        tag: newPost.tag ? [...newPost.tag, event.currentTarget.value] : [],
       });
       event.currentTarget.value = '';
     }
   };
 
   const handleRemoveTags = (tagIdx: number) => {
-    newPost.tag.splice(tagIdx, 1);
-    setNewPost({ ...newPost, tag: [...newPost.tag] });
+    newPost.tag?.splice(tagIdx, 1);
+    setNewPost({ ...newPost, tag: newPost.tag ? [...newPost.tag] : [] });
   };
 
-  const isValid = (newPost: BoardPost): boolean => {
-    const removeContentBlank = newPost.content.replace(/\n|\r|\s*/g, '');
-    if (
-      newPost.title.trim().length >= 1 &&
-      removeContentBlank.trim().length >= 1
-    ) {
+  const isValid = (content: string): boolean => {
+    const removeContentBlank = content.replace(/\n|\r|\s*/g, '');
+    if (removeContentBlank.trim().length >= 1) {
       console.log('removeContentBlank', removeContentBlank.trim().length);
       return true;
     }
@@ -81,13 +80,13 @@ const BoardWrite = () => {
   };
 
   const handleSubmit = async () => {
-    if (!isValid(newPost)) {
+    if (!isValid(newPost.title) || !isValid(newPost.content)) {
       alert('제목과 내용은 최소 1자 이상 입력되어야 합니다.');
     } else {
       const response = await postBoardWriteApi(newPost); //
       console.log(response, newPost);
       // TODO: response 성공, 실패
-      navigate('/study-board');
+      // navigate('/study-board');
     }
   };
 
