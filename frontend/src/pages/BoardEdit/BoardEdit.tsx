@@ -30,6 +30,7 @@ const BoardEdit = () => {
     title: '',
     content: '',
     username: user.username,
+    profileImg: user.profileImg,
     tag: [],
   });
   const editorRef = useRef<Editor>(null);
@@ -84,12 +85,9 @@ const BoardEdit = () => {
     setPost({ ...post, tag: post.tag ? [...post.tag] : [] });
   };
 
-  const isValid = (post: T.BoardForm): boolean => {
-    const removeContentBlank = post.content.replace(/\n|\r|\s*/g, '');
-    if (
-      post.title.trim().length >= 1 &&
-      removeContentBlank.trim().length >= 1
-    ) {
+  const isValid = (content: string): boolean => {
+    const removeContentBlank = content.replace(/\n|\r|\s*/g, '');
+    if (removeContentBlank.trim().length >= 1) {
       return true;
     }
     return false;
@@ -97,7 +95,7 @@ const BoardEdit = () => {
 
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    if (!isValid(post)) {
+    if (!isValid(post.title) || !isValid(post.content)) {
       alert('제목과 내용은 최소 1자 이상 입력되어야 합니다.');
     } else {
       const response = await putBoard(id, post);
