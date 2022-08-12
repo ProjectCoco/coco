@@ -31,6 +31,7 @@ public class ContentService {
         contents.forEach(content -> {
             content.setFavorState(userRepository.existsByUsernameAndContentFavor(username, new ObjectId(content.get_id())));
             content.setCommentState(commentRepository.existsByUsernameAndContentId(username, content.get_id()));
+            content.setProfileImg(userRepository.findByUsername(content.getUsername()).getProfileImg()); // content에 등록된 username에 대하여 profileImg 획득
         });
         return contents;
     }
@@ -74,6 +75,7 @@ public class ContentService {
                     .commentState(commentRepository.existsByUsernameAndContentId(username, content.get_id()))
                     .tag(content.getTag())
                     .viewCount(content.getViewCount())
+                    .profileImg(userRepository.findByUsername(content.getUsername()).getProfileImg()) // content에 등록된 username에 대하여 profileImg 획득
                     .build();
         } catch (Exception e) {
             throw new CustomException(ErrorCode.CANNOT_FOUND_CONTENT);

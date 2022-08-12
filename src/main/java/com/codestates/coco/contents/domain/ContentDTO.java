@@ -42,6 +42,8 @@ public class ContentDTO {
 
     private Long viewCount;
 
+    private String profileImg;
+
     // 생성자 -> 빌더패턴으로 객체 생성 전략 변경
     public Content toEntity() {
         Content build = Content.builder()
