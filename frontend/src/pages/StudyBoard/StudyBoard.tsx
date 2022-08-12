@@ -29,7 +29,7 @@ export default function StudyBoard() {
             <S.BoardListContainer>
               {getBoard?.pages.map((group, index) => (
                 <React.Fragment key={index}>
-                  {group.map((data: IDuBoardList) => (
+                  {group.content.map((data: IDuBoardList) => (
                     <BoardContentBox key={data._id} board={data} />
                   ))}
                 </React.Fragment>

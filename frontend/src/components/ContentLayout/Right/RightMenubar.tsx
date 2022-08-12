@@ -9,18 +9,20 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { getBoardPage } from '../../../apis/apiClient';
 
 interface postType {
-  _id: string;
-  title: string;
-  content: string;
-  username: string;
-  createDate: string;
-  favor: string | null;
+  content: {
+    _id: string;
+    title: string;
+    content: string;
+    username: string;
+    createDate: string;
+    favor: string | null;
+  }[];
 }
 
 const RightMenubar = () => {
   const navigator = useNavigate();
   const user = useRecoilValue(UserState);
-  const [data, setData] = useState<postType[]>();
+  const [data, setData] = useState<postType>();
   useEffect(() => {
     (async () => {
       const response = await getBoardPage(0);
@@ -51,7 +53,7 @@ const RightMenubar = () => {
       </S.LoginBox>
       <S.MorePosts>
         <h1>Recent Posts</h1>
-        {data?.slice(0, 3).map((post: postType) => (
+        {data?.content.slice(0, 3).map((post) => (
           <S.MorePost key={post._id}>
             <S.MorePostsProfile>
               <S.MorePostsImg src={commentImg} />
