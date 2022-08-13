@@ -28,4 +28,5 @@ export interface BoardForm {
   createdDate?: string;
   favor?: number;
   tag?: string[];
+  profileImg?: string | ProgressEvent<FileReader> | File | Blob;
 }

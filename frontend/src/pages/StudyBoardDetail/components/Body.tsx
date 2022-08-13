@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import * as S from '../style';
 import { IDuBoardList, IDuComment } from '@lib/types';
 import { AiOutlineComment } from 'react-icons/ai';
-import { postCommentApi } from '@apis/apiClient';
+import { getTagList, postCommentApi } from '@apis/apiClient';
 import { useRecoilValue } from 'recoil';
 import { UserState } from '@lib/atom';
 import { Viewer } from '@toast-ui/react-editor';
 import Comment from '@components/Comment';
+import { useNavigate } from 'react-router-dom';
 
 interface Prop {
   board: IDuBoardList;
@@ -17,6 +18,7 @@ interface Prop {
 export default function Body({ board, comment, refetch }: Prop) {
   const [string, setString] = useState<string>('');
   const user = useRecoilValue(UserState);
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     const commentForm = {
@@ -28,6 +30,13 @@ export default function Body({ board, comment, refetch }: Prop) {
     await postCommentApi(commentForm).then(() => setString(''));
   };
 
+  const searchTag = async (tag: string) => {
+    const response = await getTagList(tag);
+    console.log(response);
+
+    return response;
+  };
+
   return (
     <S.Body>
       <S.Content>
@@ -36,7 +45,15 @@ export default function Body({ board, comment, refetch }: Prop) {
       <S.CommentBox id="CommentBox">
         <S.Tag>
           {board.tag.map((el: string, idx: number) => {
-            return <span key={idx}>#{el}</span>;
+            return (
+              <span
+                key={idx}
+                onClick={() => searchTag(el)}
+                // onClick={() => navigate(`/board/search?tag=${el}`)}
+              >
+                #{el}
+              </span>
+            );
           })}
         </S.Tag>
         <S.CommentLength>
