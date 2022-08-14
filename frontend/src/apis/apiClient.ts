@@ -108,6 +108,19 @@ export async function getBoardDetail(id?: string) {
   }
 }
 
+// @HTTP: GET
+// @Route: /content/tag?page=0&tag={tag}
+export async function getTagList(tag: string) {
+  try {
+    const response = await apiClient.get(`/api/content/tag?page=0&tag=${tag}`, {
+      headers,
+    });
+    return response.data;
+  } catch (err) {
+    throw new Error('/content/tag?page=0&tag={tag} Error');
+  }
+}
+
 // @HTTP: PUT
 // @Route: /content/${id}
 export async function putBoard(id: string | undefined, data: T.BoardForm) {

@@ -5,20 +5,24 @@ import { imgs } from '@images/index';
 import { UserState } from '@lib/atom';
 import { useRecoilValue } from 'recoil';
 import DropDwonMenu from '../DropDownMenu';
-import { Timer } from '@components/index';
-import useTimer from '@hooks/useTimer';
-import { onRefreshToken } from '@apis/apiClient';
-import { getCookie } from '@lib/cookie/cookie';
+import useGetWheter from '@hooks/useGetWheter';
+import { weatherCheck } from '@lib/validation/weahterCheck';
+// import { Timer } from '@components/index';
+// import useTimer from '@hooks/useTimer';
+// import { onRefreshToken } from '@apis/apiClient';
+// import { getCookie } from '@lib/cookie/cookie';
 
 export default function NaviHeader() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const user = useRecoilValue(UserState);
-  const { timer, reset } = useTimer();
+  const { weather, iconUrl, iconName } = useGetWheter();
+  console.log(weather, iconUrl, iconName);
+  // const { timer, reset } = useTimer();
 
-  const extensionToken = async () => {
-    getCookie('RefreshToken') && (await onRefreshToken().then(() => reset()));
-  };
+  // const extensionToken = async () => {
+  //   getCookie('RefreshToken') && (await onRefreshToken().then(() => reset()));
+  // };
 
   return (
     <>
@@ -28,12 +32,15 @@ export default function NaviHeader() {
           <S.LogoImg src={imgs.wifi} />
         </S.Logo>
         <S.MenuList>
-          {user.email ? (
+          <S.WeatherIconBox>
+            <img src={weatherCheck(iconUrl, iconName)} />
+          </S.WeatherIconBox>
+          {/* {user.email ? (
             <div>
               <Timer timer={timer} />
               <button onClick={extensionToken}>연장</button>
             </div>
-          ) : null}
+          ) : null} */}
           <S.MenuListContent
             isPathMatch={pathname === '/free-board' ? true : false}
             onClick={() => navigate('/free-board')}
