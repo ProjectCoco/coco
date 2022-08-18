@@ -1,7 +1,7 @@
-package com.codestates.coco.contents.repository;
+package com.codestates.coco.studyBoard.contents.repository;
 
-import com.codestates.coco.contents.domain.Content;
-import com.codestates.coco.contents.domain.ContentDTO;
+import com.codestates.coco.studyBoard.contents.domain.Content;
+import com.codestates.coco.studyBoard.contents.domain.ContentDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.mongodb.repository.MongoRepository;

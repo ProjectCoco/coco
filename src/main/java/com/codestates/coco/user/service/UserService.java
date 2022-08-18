@@ -1,11 +1,11 @@
 package com.codestates.coco.user.service;
 
-import com.codestates.coco.comment.domain.Comment;
-import com.codestates.coco.comment.repository.CommentRepository;
+import com.codestates.coco.studyBoard.comment.domain.Comment;
+import com.codestates.coco.studyBoard.comment.repository.CommentRepository;
 import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
-import com.codestates.coco.contents.domain.Content;
-import com.codestates.coco.contents.repository.ContentRepository;
+import com.codestates.coco.studyBoard.contents.domain.Content;
+import com.codestates.coco.studyBoard.contents.repository.ContentRepository;
 import com.codestates.coco.user.config.RedisUtil;
 import com.codestates.coco.user.config.auth.PrincipalDetails;
 import com.codestates.coco.user.domain.User;

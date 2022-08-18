@@ -1,4 +1,4 @@
-package com.codestates.coco.comment.domain;
+package com.codestates.coco.studyBoard.comment.domain;
 
 import lombok.Builder;
 import lombok.Data;

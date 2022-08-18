@@ -1,4 +1,4 @@
-package com.codestates.coco.comment.domain;
+package com.codestates.coco.studyBoard.comment.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +25,8 @@ public class CommentDTO {
 
     @NotBlank(message = "게시자는 공백일 수 없습니다.")
     private String username;
+
+    private String profileImg;
 
     public Comment toEntity(CommentDTO commentDTO) {
         return Comment.builder()

@@ -1,6 +1,6 @@
 package com.codestates.coco.user.domain;
 
-import com.codestates.coco.contents.domain.Content;
+import com.codestates.coco.studyBoard.contents.domain.Content;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

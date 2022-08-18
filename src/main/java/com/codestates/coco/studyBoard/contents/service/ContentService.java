@@ -1,12 +1,12 @@
-package com.codestates.coco.contents.service;
+package com.codestates.coco.studyBoard.contents.service;
 
 
-import com.codestates.coco.comment.repository.CommentRepository;
+import com.codestates.coco.studyBoard.comment.repository.CommentRepository;
 import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
-import com.codestates.coco.contents.domain.Content;
-import com.codestates.coco.contents.domain.ContentDTO;
-import com.codestates.coco.contents.repository.ContentRepository;
+import com.codestates.coco.studyBoard.contents.domain.Content;
+import com.codestates.coco.studyBoard.contents.domain.ContentDTO;
+import com.codestates.coco.studyBoard.contents.repository.ContentRepository;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

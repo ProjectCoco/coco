@@ -1,4 +1,4 @@
-package com.codestates.coco.contents.service;
+package com.codestates.coco.studyBoard.contents.service;
 
 import java.security.MessageDigest;
 

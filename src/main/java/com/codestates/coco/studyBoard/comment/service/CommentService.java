@@ -1,14 +1,15 @@
-package com.codestates.coco.comment.service;
+package com.codestates.coco.studyBoard.comment.service;
 
-import com.codestates.coco.comment.domain.Comment;
-import com.codestates.coco.comment.domain.CommentDTO;
-import com.codestates.coco.comment.domain.CommentUserDTO;
-import com.codestates.coco.comment.repository.CommentRepository;
+import com.codestates.coco.studyBoard.comment.domain.Comment;
+import com.codestates.coco.studyBoard.comment.domain.CommentDTO;
+import com.codestates.coco.studyBoard.comment.domain.CommentUserDTO;
+import com.codestates.coco.studyBoard.comment.repository.CommentRepository;
 import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
 
-import com.codestates.coco.contents.domain.Content;
-import com.codestates.coco.contents.repository.ContentRepository;
+import com.codestates.coco.studyBoard.contents.domain.Content;
+import com.codestates.coco.studyBoard.contents.repository.ContentRepository;
+import com.codestates.coco.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final ContentRepository contentRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public CommentDTO createComment(CommentDTO commentDTO){
@@ -43,7 +45,14 @@ public class CommentService {
 
     public List<CommentDTO> getAllComment(String contentId){
         contentRepository.findById(contentId).orElseThrow(() ->  new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
-        return commentRepository.findAllByContentId(contentId);
+        //
+        List<CommentDTO> comments = commentRepository.findAllByContentId(contentId);
+
+        comments.forEach(c -> {
+            c.setProfileImg(userRepository.findByUsername(c.getUsername()).getProfileImg());
+        });
+
+        return comments;
     }
 
     public List<CommentUserDTO> getAllUserComment(String username){
@@ -52,7 +61,10 @@ public class CommentService {
         List<CommentUserDTO> comments = commentRepository.findAllByUsername(username);
         for (CommentUserDTO comment : comments) {
             comment.setTitle(contentRepository.findById(comment.getContentId()).orElse(null).getTitle());
+            comment.setProfileImg(userRepository.findByUsername(comment.getUsername()).getProfileImg());
         }
+
+
         return comments;
     }
 

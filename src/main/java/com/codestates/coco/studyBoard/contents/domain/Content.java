@@ -1,4 +1,4 @@
-package com.codestates.coco.contents.domain;
+package com.codestates.coco.studyBoard.contents.domain;
 
 
 import lombok.Builder;

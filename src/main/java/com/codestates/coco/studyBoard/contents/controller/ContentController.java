@@ -1,10 +1,9 @@
-package com.codestates.coco.contents.controller;
+package com.codestates.coco.studyBoard.contents.controller;
 
-import com.codestates.coco.contents.domain.ContentDTO;
-import com.codestates.coco.contents.service.ContentService;
+import com.codestates.coco.studyBoard.contents.domain.ContentDTO;
+import com.codestates.coco.studyBoard.contents.service.ContentService;
 import com.codestates.coco.user.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

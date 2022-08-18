@@ -1,8 +1,8 @@
-package com.codestates.coco.comment.repository;
+package com.codestates.coco.studyBoard.comment.repository;
 
-import com.codestates.coco.comment.domain.Comment;
-import com.codestates.coco.comment.domain.CommentDTO;
-import com.codestates.coco.comment.domain.CommentUserDTO;
+import com.codestates.coco.studyBoard.comment.domain.Comment;
+import com.codestates.coco.studyBoard.comment.domain.CommentDTO;
+import com.codestates.coco.studyBoard.comment.domain.CommentUserDTO;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
