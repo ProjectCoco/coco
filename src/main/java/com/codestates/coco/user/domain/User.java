@@ -1,6 +1,8 @@
 package com.codestates.coco.user.domain;
 
-import com.codestates.coco.contents.domain.Content;
+import com.codestates.coco.studyBoard.contents.domain.Content;
+import com.codestates.coco.user.auth.domain.ProviderType;
+import com.codestates.coco.user.auth.domain.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

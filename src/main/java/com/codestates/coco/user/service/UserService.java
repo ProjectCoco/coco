@@ -1,19 +1,19 @@
 package com.codestates.coco.user.service;
 
-import com.codestates.coco.studyBoard.comment.domain.Comment;
-import com.codestates.coco.studyBoard.comment.repository.CommentRepository;
 import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
-import com.codestates.coco.contents.domain.Content;
-import com.codestates.coco.contents.repository.ContentRepository;
-import com.codestates.coco.user.utils.RedisUtil;
+import com.codestates.coco.studyBoard.comment.domain.Comment;
+import com.codestates.coco.studyBoard.comment.repository.CommentRepository;
+import com.codestates.coco.studyBoard.contents.domain.Content;
+import com.codestates.coco.studyBoard.contents.repository.ContentRepository;
 import com.codestates.coco.user.auth.domain.PrincipalDetails;
+import com.codestates.coco.user.auth.token.JwtProvider;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.domain.UserContentFavorDTO;
 import com.codestates.coco.user.domain.UserDTO;
 import com.codestates.coco.user.domain.UserProfileDTO;
-import com.codestates.coco.user.auth.token.JwtProvider;
 import com.codestates.coco.user.repository.UserRepository;
+import com.codestates.coco.user.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
