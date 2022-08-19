@@ -1,18 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import * as S from './style';
-import { useInView } from 'react-intersection-observer';
 import { useInfiQry } from '@hooks/useInfiQry';
 import { IDuBoardList } from '@lib/types';
 import { Loading, BoardContentBox, ContentLayout } from '@components/index';
 
 export default function MyfavorPage() {
-  const { getBoard, nextPage, hasNext, setPage, page, loading } = useInfiQry();
-  const { ref, inView } = useInView({ threshold: 0.1 });
-
-  useEffect(() => {
-    if (inView && hasNext) nextPage().then(() => setPage(page + 1));
-    const a = 's';
-  }, [inView]);
+  const { getBoard, loading, ref } = useInfiQry();
 
   if (loading) return <Loading />;
   return (
@@ -22,7 +15,7 @@ export default function MyfavorPage() {
           <S.BoardListContainer>
             {getBoard?.pages.map((group, index) => (
               <React.Fragment key={index}>
-                {group.map((data: IDuBoardList) =>
+                {group.content.map((data: IDuBoardList) =>
                   data.favorState ? (
                     <BoardContentBox key={data._id} board={data} />
                   ) : null

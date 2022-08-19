@@ -7,6 +7,7 @@ export interface IDuBoardList {
   favorCount: number | null;
   commentCount: number | null;
   favorState: boolean;
+  commentState: boolean;
   tag: string[];
 }
 
