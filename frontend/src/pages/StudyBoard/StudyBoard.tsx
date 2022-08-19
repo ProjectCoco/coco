@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
 import * as S from './style';
 import { IDuBoardList } from '@lib/types';
 import { useLocation } from 'react-router-dom';
@@ -8,13 +7,7 @@ import { ContentLayout, BoardContentBox, Loading } from '@components/index';
 
 export default function StudyBoard() {
   const pathname = useLocation();
-  const { ref, inView } = useInView({ threshold: 0.1 });
-  const { getBoard, nextPage, hasNext, setPage, page, refetch, loading } =
-    useInfiQry();
-
-  useEffect(() => {
-    if (inView && hasNext) nextPage().then(() => setPage(page + 1));
-  }, [inView]);
+  const { getBoard, refetch, loading, ref } = useInfiQry();
 
   useEffect(() => {
     refetch();

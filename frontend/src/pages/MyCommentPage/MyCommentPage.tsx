@@ -1,10 +1,12 @@
-import React from 'react';
-import * as S from './style';
+import ContentLayout from '@components/ContentLayout';
+import Loading from '@components/Loading';
 import { useInfiQry } from '@hooks/useInfiQry';
 import { IDuBoardList } from '@lib/types';
-import { Loading, BoardContentBox, ContentLayout } from '@components/index';
+import * as S from './style';
+import React from 'react';
+import BoardContentBox from '@components/BoardContentBox';
 
-export default function MyfavorPage() {
+export default function MyCommentPage() {
   const { getBoard, loading, ref } = useInfiQry();
 
   if (loading) return <Loading />;
@@ -16,7 +18,7 @@ export default function MyfavorPage() {
             {getBoard?.pages.map((group, index) => (
               <React.Fragment key={index}>
                 {group.content.map((data: IDuBoardList) =>
-                  data.favorState ? (
+                  data.commentState ? (
                     <BoardContentBox key={data._id} board={data} />
                   ) : null
                 )}

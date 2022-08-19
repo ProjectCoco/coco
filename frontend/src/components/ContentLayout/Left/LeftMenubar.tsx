@@ -24,8 +24,8 @@ const LeftMenubar = () => {
       <S.Favor>
         <MdOutlineFavoriteBorder onClick={() => navigator('/my-favor')} />
       </S.Favor>
-      <S.LinkCommnet href={'#CommentBox'}>
-        <AiOutlineComment />
+      <S.LinkCommnet>
+        <AiOutlineComment onClick={() => navigator('/my-comment')} />
       </S.LinkCommnet>
       <S.GoBack>
         <MdOutlineKeyboardBackspace onClick={() => navigator(-1)} />
