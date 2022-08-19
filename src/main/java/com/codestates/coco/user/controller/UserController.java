@@ -1,6 +1,6 @@
 package com.codestates.coco.user.controller;
 
-import com.codestates.coco.user.config.auth.PrincipalDetails;
+import com.codestates.coco.user.auth.domain.PrincipalDetails;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.domain.UserContentFavorDTO;
 import com.codestates.coco.user.domain.UserDTO;

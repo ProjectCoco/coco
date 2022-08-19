@@ -1,9 +1,10 @@
-package com.codestates.coco.user.jwt;
+package com.codestates.coco.user.auth.filter;
 
 import com.codestates.coco.common.AuthErrorResponse;
 import com.codestates.coco.common.ErrorCode;
-import com.codestates.coco.user.config.auth.PrincipalDetails;
+import com.codestates.coco.user.auth.domain.PrincipalDetails;
 import com.codestates.coco.user.domain.User;
+import com.codestates.coco.user.auth.token.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;

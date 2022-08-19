@@ -1,4 +1,4 @@
-package com.codestates.coco.user.config;
+package com.codestates.coco.user.utils;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;

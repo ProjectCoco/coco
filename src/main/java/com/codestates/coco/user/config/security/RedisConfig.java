@@ -1,4 +1,4 @@
-package com.codestates.coco.user.config;
+package com.codestates.coco.user.config.security;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

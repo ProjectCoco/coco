@@ -1,7 +1,8 @@
-package com.codestates.coco.user.jwt;
+package com.codestates.coco.user.auth.filter;
 
 import com.codestates.coco.common.AuthErrorResponse;
 import com.codestates.coco.common.CustomException;
+import com.codestates.coco.user.auth.token.JwtProvider;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

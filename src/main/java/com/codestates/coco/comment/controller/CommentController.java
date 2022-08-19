@@ -3,7 +3,7 @@ package com.codestates.coco.comment.controller;
 import com.codestates.coco.comment.domain.CommentDTO;
 import com.codestates.coco.comment.domain.CommentUserDTO;
 import com.codestates.coco.comment.service.CommentService;
-import com.codestates.coco.user.config.auth.PrincipalDetails;
+import com.codestates.coco.user.auth.domain.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

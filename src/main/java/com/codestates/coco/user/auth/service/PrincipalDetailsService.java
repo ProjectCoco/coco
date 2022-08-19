@@ -1,5 +1,6 @@
-package com.codestates.coco.user.config.auth;
+package com.codestates.coco.user.auth.service;
 
+import com.codestates.coco.user.auth.domain.PrincipalDetails;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         User userEntity = userRepository.findByEmail(username);
         if (userEntity != null) {
-            return new PrincipalDetails(userEntity);
+            return PrincipalDetails.create(userEntity);
         }
 
         throw new UsernameNotFoundException(username);
