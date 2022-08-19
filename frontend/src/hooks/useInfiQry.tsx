@@ -1,31 +1,34 @@
 import { getBoardPage } from '@apis/apiClient';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useInfiniteQuery } from 'react-query';
+import { useInView } from 'react-intersection-observer';
 
 export const useInfiQry = () => {
-  const [page, setPage] = useState(1);
+  const { ref, inView } = useInView({ threshold: 0.3 });
 
   const {
     data: getBoard,
     fetchNextPage: nextPage,
-    isSuccess: getBoardIsSuccess,
     hasNextPage: hasNext,
     refetch,
     isLoading: loading,
   } = useInfiniteQuery(
     ['page'],
-    async ({ pageParam = 0 }) => await getBoardPage(pageParam),
-    { getNextPageParam: () => page }
+    async ({ pageParam = 0 }) => await getBoardPage(String(pageParam)),
+    {
+      getNextPageParam: (lastPage, pages) =>
+        !lastPage.isLast && lastPage.pageNumber + 1,
+    }
   );
+
+  useEffect(() => {
+    if (inView && hasNext) nextPage();
+  }, [inView]);
 
   return {
     getBoard,
-    nextPage,
-    getBoardIsSuccess,
-    hasNext,
-    setPage,
-    page,
     refetch,
     loading,
+    ref,
   };
 };

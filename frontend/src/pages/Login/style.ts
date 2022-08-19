@@ -112,5 +112,9 @@ export const ForgotBox = styled.div`
 `;
 
 export const ButtonBox = styled.div`
-  margin-left: 7rem;
+  margin-left: 4rem;
+`;
+
+export const SocialLoginButtons = styled.div`
+  margin-left: 5rem;
 `;

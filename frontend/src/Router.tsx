@@ -13,6 +13,7 @@ import UserProfile from './pages/UserProfile';
 import MyFavorPage from './pages/MyFavorPage';
 import BoardEdit from './pages/BoardEdit';
 import NotFound from './pages/NotFound/NotFound';
+import MyCommentPage from '@pages/MyCommentPage';
 
 const Router = () => {
   const { pathname } = useLocation();
@@ -29,6 +30,7 @@ const Router = () => {
         {/* login 되어 있어야만 접근 가능 */}
         <Route element={<PrivateRouter authentication={true} />}>
           <Route path="/my-favor" element={<MyFavorPage />} />
+          <Route path="/my-comment" element={<MyCommentPage />} />
           <Route path="/study-board">
             <Route path="" element={<StudyBoard />} />
             <Route path=":id" element={<StudyBoardDetail />} />
