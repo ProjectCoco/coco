@@ -86,12 +86,18 @@ export async function checkEmailApi(email: string) {
 
 // @HTTP: GET
 // @Route: /content/${id}
-export async function getBoardPage(page: number) {
+export async function getBoardPage(pageParam: string) {
   try {
-    const response = await apiClient.get(`/api/content?page=${page}`, {
+    const response = await apiClient.get(`/api/content`, {
       headers,
+      params: { page: pageParam },
     });
-    return response.data;
+    const result = response.data;
+    return {
+      content: result.content,
+      isLast: result.last,
+      pageNumber: result.number,
+    };
   } catch (err) {
     throw new Error('content/${id} Error');
   }
