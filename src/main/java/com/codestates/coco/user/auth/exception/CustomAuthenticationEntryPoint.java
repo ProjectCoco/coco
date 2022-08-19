@@ -1,4 +1,4 @@
-package com.codestates.coco.user.config;
+package com.codestates.coco.user.auth.exception;
 
 import com.codestates.coco.common.AuthErrorResponse;
 import com.codestates.coco.common.ErrorCode;

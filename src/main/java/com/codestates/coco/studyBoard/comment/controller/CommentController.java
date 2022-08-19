@@ -1,4 +1,4 @@
-package com.codestates.coco.studyBoard.comment.controller;
+package com.codestates.coco.comment.controller;
 
 import com.codestates.coco.studyBoard.comment.domain.CommentDTO;
 import com.codestates.coco.studyBoard.comment.domain.CommentUserDTO;

@@ -1,4 +1,4 @@
-package com.codestates.coco.user.jwt;
+package com.codestates.coco.user.auth.token;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -6,9 +6,9 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
-import com.codestates.coco.user.config.RedisUtil;
-import com.codestates.coco.user.config.auth.PrincipalDetails;
-import com.codestates.coco.user.config.auth.PrincipalDetailsService;
+import com.codestates.coco.user.utils.RedisUtil;
+import com.codestates.coco.user.auth.domain.PrincipalDetails;
+import com.codestates.coco.user.auth.service.PrincipalDetailsService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +46,7 @@ public class JwtProvider {
 
     public String createToken(PrincipalDetails principalDetails) {
         return JWT.create()
-                .withSubject(principalDetails.getUsername())
+                .withSubject(principalDetails.getUser().getId())
                 .withExpiresAt(new Date(System.currentTimeMillis() + accessExpire)) // 만료시간 설정
                 .withClaim("email", principalDetails.getUser().getEmail()) // private claim
                 .withClaim("username", principalDetails.getUser().getUsername())

@@ -1,6 +1,6 @@
 package com.codestates.coco.user.domain;
 
-import com.codestates.coco.studyBoard.contents.domain.Content;
+import com.codestates.coco.contents.domain.Content;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,7 +35,10 @@ public class User {
 
     private String profileImg;
 
-    private String role;
+    private String providerId;
+    private ProviderType providerType;
+    // mongodb enum
+    private RoleType roleType;
 
     @DocumentReference
     private List<Content> contentFavor;
@@ -45,15 +48,28 @@ public class User {
         this.password = password;
     }
 
+    public User(String email, String password, String username, String groupInfo, String profileImg, RoleType roleType, ProviderType providerType, String providerId) {
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.groupInfo = groupInfo;
+        this.profileImg = profileImg;
+        this.roleType = roleType;
+        this.providerType = providerType;
+        this.providerId = providerId;
+        this.contentFavor = new ArrayList<>();
+    }
+
     public User(String email, String password, String username, String groupInfo, String profileImg) {
         this.email = email;
         this.password = password;
         this.username = username;
         this.groupInfo = groupInfo;
         this.profileImg = profileImg;
-        this.role = "ROLE_USER";
+        this.roleType = RoleType.USER;
         this.contentFavor = new ArrayList<>();
     }
+
 
     public User(String email, String username, String groupInfo, String profileImg) {
         this.email = email;
@@ -63,12 +79,12 @@ public class User {
     }
 
 
-    public List<String> roleList() {
+/*    public List<String> roleList() {
         if (this.role.length() > 0) {
             return Arrays.asList(this.role.split(","));
         }
         return new ArrayList<>();
-    }
+    }*/
 
     public void update(String groupInfo, String profileImg, String username) {
         this.groupInfo = groupInfo;

@@ -1,9 +1,18 @@
-package com.codestates.coco.user.config;
+package com.codestates.coco.user.config.security;
 
-import com.codestates.coco.user.jwt.JwtAuthenticationFilter;
-import com.codestates.coco.user.jwt.JwtAuthorizationFilter;
-import com.codestates.coco.user.jwt.JwtProvider;
+import com.codestates.coco.user.auth.exception.CustomAuthenticationEntryPoint;
+import com.codestates.coco.user.auth.exception.CustomDeniedHandler;
+import com.codestates.coco.user.auth.filter.JwtAuthenticationFilter;
+import com.codestates.coco.user.auth.filter.JwtAuthorizationFilter;
+import com.codestates.coco.user.auth.oauth.handler.OAuth2AuthenticationFailureHandler;
+import com.codestates.coco.user.auth.oauth.handler.OAuth2AuthenticationSuccessHandler;
+import com.codestates.coco.user.auth.oauth.repository.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.codestates.coco.user.auth.oauth.service.PrincipalOAuth2UserService;
+import com.codestates.coco.user.auth.token.JwtProvider;
+import com.codestates.coco.user.config.properties.AppProperties;
+import com.codestates.coco.user.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -19,7 +28,13 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CorsFilter corsFilter;
     private final JwtProvider jwtProvider;
+
     private final RedisUtil redisUtil;
+
+    private final AppProperties appProperties;
+    private final PrincipalOAuth2UserService oAuth2UserService;
+
+    private final HttpCookieOAuth2AuthorizationRequestRepository authorizationRequestRepository;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -42,6 +57,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(new CustomDeniedHandler())
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
             .and()
+                .oauth2Login()
+                .authorizationEndpoint()
+                .baseUri("/oauth2/authorization")
+                .authorizationRequestRepository(authorizationRequestRepository)
+                .and()
+                .redirectionEndpoint()
+                .baseUri("/*/oauth2/code/*")
+                .and()
+                .userInfoEndpoint()
+                .userService(oAuth2UserService)
+                .and()
+                .successHandler(oAuth2AuthenticationSuccessHandler())
+                .failureHandler(oAuth2AuthenticationFailureHandler())
+            .and()
                 // 권한설정
                 .authorizeRequests()
                 // 로그인 및 회원가입 로직에 포함된 권한 설정
@@ -51,5 +80,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/userfavor/**").authenticated()
                 .antMatchers("/api/token").authenticated()
                 .anyRequest().permitAll();
+    }
+
+    @Bean
+    public OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
+        return new OAuth2AuthenticationSuccessHandler(appProperties, authorizationRequestRepository, jwtProvider);
+    }
+
+    @Bean
+    public OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler() {
+        return new OAuth2AuthenticationFailureHandler(authorizationRequestRepository);
     }
 }
