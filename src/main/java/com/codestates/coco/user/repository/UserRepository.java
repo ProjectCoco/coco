@@ -12,6 +12,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     Boolean existsByEmail(String email);
     Boolean existsByUsername(String username);
     User findByUsername(String username);
+    User findByProviderId(String providerId);
 
     @Query(value = "{ 'username' : ?0 , 'contentFavor' : ?1}", exists = true)
     Boolean existsByContentFavor(String username, ObjectId contentId);
