@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { UserState } from '../../lib/atom';
 import { UserStateType } from '../../lib/types/';
-
+import SocialLoginButton from '@components/SocialLoginButton/SocialLoginButton';
 const cookieOptions = {
   path: '/',
 };
@@ -39,7 +39,6 @@ function LoginForm() {
         'email 혹은 비밀번호를 잘못 입력하셨거나 등록되지 않은 email 입니다.'
       );
     } else if (result) {
-      console.log('sdsd');
       const token = await postLoginApi(formdata); // 1. 로그인 정보를 서버로 보내서 성공하면 token 받음
       const [AccessToken, RefreshToken] = token;
 
@@ -74,6 +73,10 @@ function LoginForm() {
     }));
   }
 
+  const HandleClick = async (mode: string) => {
+    window.location.href = `http://localhost:8080/oauth2/authorization/${mode}?redirect_uri=http://localhost:3000/oauth/redirect`;
+  };
+
   return (
     <S.LoginForm onSubmit={handleSubmit}>
       <S.EmailInputBox>
@@ -92,15 +95,35 @@ function LoginForm() {
       <S.ErrorText>{errorText}</S.ErrorText>
       <S.ButtonBox>
         <CustomButton
-          height="4rem"
+          height="5rem"
           bgColor="#5de0e6"
           color="white"
-          width="18rem"
+          width="23rem"
           weight="bold"
         >
           Login
         </CustomButton>
       </S.ButtonBox>
+      <S.SocialLoginButtons>
+        <SocialLoginButton
+          mode="google"
+          width={23}
+          height={5}
+          borderRadius={1}
+          onClick={() => HandleClick('google')}
+        >
+          구글 로그인
+        </SocialLoginButton>
+        <SocialLoginButton
+          mode="github"
+          width={23}
+          height={5}
+          borderRadius={1}
+          onClick={() => HandleClick('github')}
+        >
+          깃허브 로그인
+        </SocialLoginButton>
+      </S.SocialLoginButtons>
     </S.LoginForm>
   );
 }
