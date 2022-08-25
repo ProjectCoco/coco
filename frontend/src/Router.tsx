@@ -14,6 +14,7 @@ import MyFavorPage from './pages/MyFavorPage';
 import BoardEdit from './pages/BoardEdit';
 import NotFound from './pages/NotFound/NotFound';
 import MyCommentPage from '@pages/MyCommentPage';
+import TagSearchPage from '@pages/TagSearchPage';
 
 const Router = () => {
   const { pathname } = useLocation();
@@ -36,6 +37,7 @@ const Router = () => {
             <Route path=":id" element={<StudyBoardDetail />} />
             <Route path="write" element={<BoardWrite />} />
             <Route path="edit/:id" element={<BoardEdit />} />
+            <Route path="search" element={<TagSearchPage />} />
           </Route>
           <Route path="/free-board">
             <Route path="" element={<FreeBoard />} />
