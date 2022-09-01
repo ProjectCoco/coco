@@ -1,6 +1,8 @@
 package com.codestates.coco.contents.controller;
 
 import com.codestates.coco.studyBoard.contents.domain.ContentDTO;
+import com.codestates.coco.studyBoard.contents.domain.Tag;
+import com.codestates.coco.studyBoard.contents.domain.TagDTO;
 import com.codestates.coco.studyBoard.contents.service.ContentService;
 import com.codestates.coco.user.auth.domain.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -93,7 +95,11 @@ public class ContentController {
                                                                @RequestParam("page") int page,
                                                                @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return new ResponseEntity<>(contentService.getContentsWithTag(tag, page, principalDetails.getUser().getUsername()), HttpStatus.OK);
+    }
 
+    @GetMapping("/tag/rank")
+    public ResponseEntity<List<TagDTO>> getTagRank(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        return new ResponseEntity<>(contentService.getTagRank(), HttpStatus.OK);
     }
 
 }

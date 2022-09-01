@@ -6,11 +6,15 @@ import com.codestates.coco.common.CustomException;
 import com.codestates.coco.common.ErrorCode;
 import com.codestates.coco.studyBoard.contents.domain.Content;
 import com.codestates.coco.studyBoard.contents.domain.ContentDTO;
+import com.codestates.coco.studyBoard.contents.domain.Tag;
+import com.codestates.coco.studyBoard.contents.domain.TagDTO;
 import com.codestates.coco.studyBoard.contents.repository.ContentRepository;
+import com.codestates.coco.studyBoard.contents.repository.TagRepository;
 import com.codestates.coco.user.domain.User;
 import com.codestates.coco.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,7 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final TagRepository tagRepository;
 
     //todo
     public Slice<ContentDTO> getTitleContents(int page, String username) {
@@ -99,8 +104,9 @@ public class ContentService {
 
 
     public boolean putContents(String id, ContentDTO contentDTO, String username) {
-
         Content content = contentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CANNOT_FOUND_CONTENT));
+
+        contentDTO.getTag().forEach(t -> {if (!content.getTag().contains(t)) tagCount(t);});
 
         if (!content.getUsername().equals(username)) throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
 
@@ -122,6 +128,7 @@ public class ContentService {
         contentDTO.setFavorCount(0L);
         contentDTO.setCommentCount(0L);
         contentDTO.setViewCount(0L);
+        contentDTO.getTag().forEach(this::tagCount);
         Content content = contentRepository.save(contentDTO.toEntity());
         return ContentDTO.builder()
                 ._id(content.get_id())
@@ -167,4 +174,15 @@ public class ContentService {
         return contents;
     }
 
+    private void tagCount(String tag) {
+        if (tagRepository.existsByTagName(tag)){
+            tagRepository.save(tagRepository.findByTagName(tag).addCount());
+        } else {
+            tagRepository.save(new Tag(tag, 1L));
+        }
+    }
+
+    public List<TagDTO> getTagRank() {
+        return tagRepository.findBy(PageRequest.of(0, 10));
+    }
 }
